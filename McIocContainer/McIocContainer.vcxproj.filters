@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Header Files\Beans">
+      <UniqueIdentifier>{56013131-ef51-4484-ba8f-e126738ed35e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Beans">
+      <UniqueIdentifier>{d5b9a5f7-d3f8-4f38-8671-998dc022bc2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Beans\Definition">
+      <UniqueIdentifier>{bceabfcc-b160-4564-8b9a-e2459ddf4b4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Beans\Factory">
+      <UniqueIdentifier>{d521c794-b619-4cab-abd2-0faec4f0f106}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Beans\Factory">
+      <UniqueIdentifier>{21aa2e71-489c-4e7e-837d-b61d6fe42224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Beans\Parser">
+      <UniqueIdentifier>{cea52a8a-cdce-4519-8654-55447e8dc85f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Beans\Parser">
+      <UniqueIdentifier>{88a5aea2-f127-43cf-93b9-bced4e27dbfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Beans\Reader">
+      <UniqueIdentifier>{8cc45fe9-0291-478c-b545-af63c909ea66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Beans\Reader">
+      <UniqueIdentifier>{d4c26f40-0ac4-4451-8b8a-9217b7fdddbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Beans\Reference">
+      <UniqueIdentifier>{24d6430f-9d71-49a4-9dd1-ddf31d6aff2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Context">
+      <UniqueIdentifier>{93cc52d3-1d2c-4d55-b0fe-59155f3a172f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Context">
+      <UniqueIdentifier>{d0c399f1-4a6a-4d06-8a26-3165eb96e28d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Context\Support">
+      <UniqueIdentifier>{07a8d9a6-8bc6-4bfc-b6dd-a87471c2a50f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Global">
+      <UniqueIdentifier>{95093b80-6c72-4836-a351-aeb34ad253ef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\IMcBeanDefinition.h">
+      <Filter>Header Files\Beans\Definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IMcBeanFactory.h">
+      <Filter>Header Files\Beans\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IMcPropertyParserCollection.h">
+      <Filter>Header Files\Beans\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IMcPropertyParser.h">
+      <Filter>Header Files\Beans\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\McBeanGlobal.h">
+      <Filter>Header Files\Beans</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IMcApplicationContext.h">
+      <Filter>Header Files\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\McMacroGlobal.h">
+      <Filter>Header Files\Global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IMcBeanDefinitionRegistry.h">
+      <Filter>Header Files\Beans\Definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IMcConfigurableBeanFactory.h">
+      <Filter>Header Files\Beans\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IMcBeanReferenceResolver.h">
+      <Filter>Header Files\Beans\Reference</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IMcBeanDefinitionReader.h">
+      <Filter>Header Files\Beans\Reader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\include\McBeanReference.h">
+      <Filter>Header Files\Beans\Reference</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McContainer.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McXmlBeanFactory.h">
+      <Filter>Header Files\Beans\Factory</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McXmlBeanDefinitionReader.h">
+      <Filter>Header Files\Beans\Reader</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McXmlApplicationContext.h">
+      <Filter>Header Files\Context\Support</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McRootBeanDefinition.h">
+      <Filter>Header Files\Beans\Definition</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McDefaultBeanFactory.h">
+      <Filter>Header Files\Beans\Factory</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McAbstractBeanDefinitionReader.h">
+      <Filter>Header Files\Beans\Reader</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McPropertyParserPlugins.h">
+      <Filter>Header Files\Beans\Parser</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McAbstractApplicationContext.h">
+      <Filter>Header Files\Context\Support</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McDefaultApplicationContext.h">
+      <Filter>Header Files\Context\Support</Filter>
+    </QtMoc>
+    <QtMoc Include="..\include\McAbstractBeanFactory.h">
+      <Filter>Header Files\Beans\Factory</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="McXmlBeanFactory.cpp">
+      <Filter>Source Files\Beans\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="McAbstractBeanFactory.cpp">
+      <Filter>Source Files\Beans\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="McDefaultBeanFactory.cpp">
+      <Filter>Source Files\Beans\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="McPropertyParserPlugins.cpp">
+      <Filter>Source Files\Beans\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="McXmlBeanDefinitionReader.cpp">
+      <Filter>Source Files\Beans\Reader</Filter>
+    </ClCompile>
+    <ClCompile Include="McAbstractBeanDefinitionReader.cpp">
+      <Filter>Source Files\Beans\Reader</Filter>
+    </ClCompile>
+    <ClCompile Include="McXmlApplicationContext.cpp">
+      <Filter>Source Files\Context</Filter>
+    </ClCompile>
+    <ClCompile Include="McAbstractApplicationContext.cpp">
+      <Filter>Source Files\Context</Filter>
+    </ClCompile>
+    <ClCompile Include="McDefaultApplicationContext.cpp">
+      <Filter>Source Files\Context</Filter>
+    </ClCompile>
+    <ClCompile Include="McContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="McBeanGlobal.cpp">
+      <Filter>Source Files\Beans</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
