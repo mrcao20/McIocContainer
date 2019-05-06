@@ -2,12 +2,14 @@
 
 #include <qmap.h>
 #include <qdebug.h>
+#include <qmutex.h>
 
 #include "IMcBeanDefinition.h"
 #include "McBeanReference.h"
 
 struct McAbstractBeanFactoryData {
 	QMap<QString, IMcBeanDefinition *> map;			// ÈÝÆ÷
+	QMutex mtx{ QMutex::Recursive };				// µÝ¹é»¥³âËø
 
 	~McAbstractBeanFactoryData() {
 		// Çå³ýbeanDefinition
@@ -26,6 +28,7 @@ McAbstractBeanFactory::~McAbstractBeanFactory() {
 }
 
 QObject *McAbstractBeanFactory::getBean(const QString &name, QObject *parent) Q_DECL_NOEXCEPT {
+	QMutexLocker locker(&d->mtx);
 	auto beanDefinition = d->map.value(name);
 	if (beanDefinition == Q_NULLPTR) {
 		qCritical() << "No bean named " << name << " is defined";

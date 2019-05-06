@@ -26,6 +26,7 @@ public:
 
 	static McIocContainer *getInstance();
 
+	// 初始化容器，此函数非线程安全，请勿重复初始化
 	void initContainer();
 
 	void insertRegistry(const QString &typeName, const QString &beanName) {

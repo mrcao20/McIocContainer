@@ -39,8 +39,8 @@ void McIocContainer::initContainer() {
 		qInfo() << "The container has been initialized";
 		return;
 	}
-	mcInitContainer();
 	m_applicationContext = new McDefaultApplicationContext(this);
+	mcInitContainer();
 	for (auto itr = m_autowiredRegistry.cbegin(); itr != m_autowiredRegistry.cend(); ++itr) {
 		inject(itr.key().toLocal8Bit().data(), itr.value().toLocal8Bit().data());
 	}
