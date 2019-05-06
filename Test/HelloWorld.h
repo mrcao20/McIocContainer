@@ -14,6 +14,7 @@ class HelloWorld : public QObject, public IHelloWorld {
 	Q_PROPERTY(QMap<int, QString> map READ getMap WRITE setMap);
 	Q_PROPERTY(QSet<int> list READ getList WRITE setList);
 	MC_DECL_STATIC(HelloWorld);
+	Q_CLASSINFO("Component", "Controller");
 
 public:
 	Q_INVOKABLE explicit HelloWorld(QObject *parent = 0);

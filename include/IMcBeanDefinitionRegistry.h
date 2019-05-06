@@ -12,6 +12,7 @@
 #include "McMacroGlobal.h"
 
 #include <qstring.h>
+#include <qmap.h>
 
 class IMcBeanDefinition;
 
@@ -30,6 +31,15 @@ public:
 	 <时    间>		2019/4/3
 	**************************************************/
 	virtual void registerBeanDefinition(const QString &name, IMcBeanDefinition *bean) Q_DECL_NOEXCEPT = 0;
+	/*************************************************
+	 <函数名称>		getBeanDefinitions
+	 <函数说明>		获取所有bean定义
+	 <参数说明>		
+	 <返回值>		键为bean的名称，值为bean定义
+	 <作    者>		mrcao
+	 <时    间>		2019/5/6
+	**************************************************/
+	virtual QMap<QString, IMcBeanDefinition *> getBeanDefinitions() Q_DECL_NOEXCEPT = 0;
 };
 
 #endif // !_I_MC_BEAN_DEFINITION_REGISTRY_H_

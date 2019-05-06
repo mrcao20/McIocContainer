@@ -31,3 +31,7 @@ void McAbstractApplicationContext::registerBeanDefinition(const QString &name
 	, IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT {
 	d->configurableBeanFactory->registerBeanDefinition(name, beanDefinition);
 }
+
+QMap<QString, IMcBeanDefinition *> McAbstractApplicationContext::getBeanDefinitions() Q_DECL_NOEXCEPT {
+	return d->configurableBeanFactory->getBeanDefinitions();
+}

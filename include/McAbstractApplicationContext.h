@@ -48,6 +48,8 @@ public:
 	 <时    间>		2019/4/7
 	**************************************************/
 	void registerBeanDefinition(const QString &name, IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+	// 获取bean的定义集合
+	QMap<QString, IMcBeanDefinition *> getBeanDefinitions() Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 
 private:
 	QScopedPointer<McAbstractApplicationContextData> d;

@@ -52,6 +52,10 @@ void McAbstractBeanFactory::registerBeanDefinition(const QString &name, IMcBeanD
 	d->map.insert(name, beanDefinition);
 }
 
+QMap<QString, IMcBeanDefinition *> McAbstractBeanFactory::getBeanDefinitions() Q_DECL_NOEXCEPT {
+	return d->map;
+}
+
 QObject *McAbstractBeanFactory::resolveBeanReference(McBeanReference *beanRef) Q_DECL_NOEXCEPT {
 	if (!beanRef) {
 		qCritical() << "beanReference not exists";

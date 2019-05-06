@@ -1,4 +1,4 @@
-#include "McContainer.h"
+#include "McIocContainer.h"
 
 #include <QtCore/qcoreapplication.h>
 #include <qmutex.h>
@@ -10,22 +10,22 @@
 #include "McBeanReference.h"
 #include "McBeanGlobal.h"
 
-McContainer *McContainer::m_container = Q_NULLPTR;
+McIocContainer *McIocContainer::m_container = Q_NULLPTR;
 
-McContainer::McContainer(QObject *parent)
+McIocContainer::McIocContainer(QObject *parent)
 	: QObject(parent)
 {
 }
 
-McContainer::~McContainer(){
+McIocContainer::~McIocContainer(){
 }
 
-McContainer *McContainer::getInstance() {
+McIocContainer *McIocContainer::getInstance() {
 	static QMutex mtx;
 	if (!m_container) {
 		QMutexLocker locker(&mtx);
 		if (!m_container) {
-			m_container = new McContainer(qApp);
+			m_container = new McIocContainer(qApp);
 		}
 	}
 	if (qApp && !m_container->parent()) {
@@ -34,7 +34,7 @@ McContainer *McContainer::getInstance() {
 	return m_container;
 }
 
-void McContainer::initContainer() {
+void McIocContainer::initContainer() {
 	if (m_applicationContext) {
 		qInfo() << "The container has been initialized";
 		return;
@@ -46,7 +46,34 @@ void McContainer::initContainer() {
 	}
 }
 
-void McContainer::inject(const char *typeName, const char *beanName) {
+QList<QString> McIocContainer::getComponent(const QString &componentType) noexcept {
+	if (!m_applicationContext) {
+		qCritical() << "Please call initContainer to initialize container first";
+		return QList<QString>();
+	}
+	QList<QString> components;
+	QMap<QString, IMcBeanDefinition *> beanDefinitions = m_applicationContext->getBeanDefinitions();
+	for (auto itr = beanDefinitions.cbegin(); itr != beanDefinitions.cend(); ++itr) {
+		auto beanDefinition = itr.value();
+		if (!isComponentType(beanDefinition->getBeanMetaObject(), componentType))
+			continue;
+		components.append(itr.key());
+	}
+	return components;
+}
+
+bool McIocContainer::isComponentType(const QMetaObject *metaObj, const QString &type) noexcept {
+	int classInfoCount = metaObj->classInfoCount();
+	for (int i = 0; i < classInfoCount; ++i) {
+		auto classInfo = metaObj->classInfo(i);
+		if (qstrcmp(classInfo.name(), "Component") != 0)
+			continue;
+		return classInfo.value() == type;
+	}
+	return false;
+}
+
+void McIocContainer::inject(const char *typeName, const char *beanName) {
 	IMcBeanDefinition *beanDefinition = new McRootBeanDefinition(this);
 	beanDefinition->setClassName(typeName);
 	const QMetaObject *metaObj = beanDefinition->getBeanMetaObject();
@@ -55,7 +82,7 @@ void McContainer::inject(const char *typeName, const char *beanName) {
 	m_applicationContext->registerBeanDefinition(beanName, beanDefinition);
 }
 
-void McContainer::injectProperty(const QMetaObject *metaObj, IMcBeanDefinition *beanDefinition) {
+void McIocContainer::injectProperty(const QMetaObject *metaObj, IMcBeanDefinition *beanDefinition) {
 	int count = metaObj->propertyCount();
 	for (int i = 0; i < count; ++i) {
 		QMetaProperty prop = metaObj->property(i);

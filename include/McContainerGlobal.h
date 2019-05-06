@@ -2,13 +2,13 @@
 #define _MC_CONTAINER_GLOBAL_H
 
 #include "McBeanGlobal.h"
-#include "McContainer.h"
+#include "McIocContainer.h"
 
 // 需要自动注入的类，则需要调用此函数，否则直接调用mcRegisterBeanFactory
 template<typename T>
 int mcRegisterComponent(const QString &typeName, const QString &beanName) {
 	int typeId = mcRegisterBeanFactory<T>(typeName.toLocal8Bit().data());
-	McContainer::getInstance()->insertRegistry(typeName, beanName);
+	McIocContainer::getInstance()->insertRegistry(typeName, beanName);
 	return typeId;
 }
 
@@ -24,7 +24,7 @@ int mcRegisterComponent(const QString &typeName) {
 template<typename From, typename To>
 int mcRegisterComponent(const QString &typeName, const QString &beanName) {
 	int typeId = mcRegisterBeanFactory<From, To>(typeName.toLocal8Bit().data());
-	McContainer::getInstance()->insertRegistry(typeName, beanName);
+	McIocContainer::getInstance()->insertRegistry(typeName, beanName);
 	return typeId;
 }
 
