@@ -25,7 +25,6 @@ public:
 		: QObject(parent){}
 	virtual ~McRootBeanDefinition() {
 		MC_SAFE_DELETE(m_bean);
-		MC_SAFE_DELETE(m_beanMetaObject);
 	}
 
 	QObject *getBean() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_bean; }

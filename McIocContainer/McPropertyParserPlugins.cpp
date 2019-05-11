@@ -34,9 +34,10 @@ void McPropertyParserPlugins::loadPlugin() noexcept {
 	qDeleteAll(m_parsers);
 	m_parsers.clear();
 	QDir pluginDir(qApp->applicationDirPath() + "/plugins/McIocContainer");
-	QStringList pluginPaths = pluginDir.entryList(QDir::Files);
+	QStringList pluginNames = pluginDir.entryList(QDir::Files);
 	QPluginLoader loader;
-	for (const QString &pluginPath : pluginPaths) {
+	for (const QString &pluginName : pluginNames) {
+		QString pluginPath = pluginDir.absoluteFilePath(pluginName);
 		if (!QLibrary::isLibrary(pluginPath))
 			continue;
 		loader.setFileName(pluginPath);
