@@ -14,6 +14,7 @@
 #endif
 
 #define MC_SAFE_DELETE(p) (p) ? (delete p, p = Q_NULLPTR) : true
+#define MC_SAFE_DELETE_QPOINTER(p) (!p.isNull()) ? (p->deleteLater()) : true
 
 #define MC_INTERFACE class
 #define MC_ABSTRACT_CLASS class

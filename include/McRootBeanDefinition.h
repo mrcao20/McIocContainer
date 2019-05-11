@@ -12,6 +12,7 @@
 #include "IMcBeanDefinition.h"
 
 #include <qvariant.h>
+#include <qpointer.h>
 
 #include "McMacroGlobal.h"
 
@@ -24,7 +25,7 @@ public:
 	explicit McRootBeanDefinition(QObject *parent = 0)
 		: QObject(parent){}
 	virtual ~McRootBeanDefinition() {
-		MC_SAFE_DELETE(m_bean);
+		MC_SAFE_DELETE_QPOINTER(m_bean);
 	}
 
 	QObject *getBean() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_bean; }
@@ -45,7 +46,7 @@ public:
 	}
 
 private:
-	QObject *m_bean{ Q_NULLPTR };										// bean
+	QPointer<QObject> m_bean;											// bean
 	const QMetaObject *m_beanMetaObject{ Q_NULLPTR };					// bean的MetaObject对象
 	QString m_className;												// bean的类全限定名称
 	QVariantHash m_properties;											// bean的属性集合
