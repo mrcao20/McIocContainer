@@ -33,6 +33,8 @@ QObject *McDefaultBeanFactory::doCreate(IMcBeanDefinition *beanDefinition) Q_DEC
 
 bool McDefaultBeanFactory::addPropertyValue(QObject *bean, IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT {
 	if (!bean) {
+		qCritical() << QString("bean '%1' cannot instantiation, please make sure that have a non-parameter constructor and declared by Q_INVOKABLE")
+			.arg(beanDefinition->getClassName());
 		return false;
 	}
 	// 循环给定 bean 的属性集合
