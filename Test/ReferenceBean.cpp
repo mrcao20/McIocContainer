@@ -4,8 +4,8 @@
 
 MC_STATIC(ReferenceBean)
 mcRegisterComponent<ReferenceBean *>("ReferenceBean");
-mcRegisterListConverter<QList<IHelloWorld *>>();
-mcRegisterListConverter<QList<QList<QString>>>();
+mcRegisterQVariantListConverter<QList<IHelloWorld *>>();
+mcRegisterQVariantListConverter<QList<QList<QString>>>();
 MC_STATIC_END
 
 ReferenceBean::ReferenceBean(QObject *parent)

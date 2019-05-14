@@ -2,6 +2,7 @@
 #define _MC_BEAN_GLOBAL_H_
 
 #include <qmetatype.h>
+#include <QVariant>
 
 #define MC_DECL_STATIC(Class)	\
 	static const int Class##_Static_Init;
@@ -32,7 +33,7 @@ int mcRegisterBeanFactory(const char *typeName = Q_NULLPTR) {
 }
 
 template<typename From, typename To>
-To mcConverterList(const From &from) {
+To mcConverterQVariantList(const From &from) {
 	To to;
 	for (const auto &f : from) {
 		to << f.value<To::value_type>();
@@ -41,7 +42,40 @@ To mcConverterList(const From &from) {
 }
 
 template<typename From, typename To>
-To mcConverterMap(const From &from) {
+void mcRegisterQVariantListConverter() {
+	if (QMetaType::hasRegisteredConverterFunction(qMetaTypeId<From>(), qMetaTypeId<To>()))
+		return;
+	QMetaType::registerConverter<From, To>(mcConverterQVariantList<From, To>);
+}
+
+template<typename T>
+void mcRegisterQVariantListConverter() {
+	mcRegisterQVariantListConverter<QVariantList, T>();
+}
+
+template<typename From, typename To>
+To mcConverterList(const From &from) {
+	To to;
+	for (const auto &f : from) {
+		to << QVariant::fromValue(f).value<To::value_type>();
+	}
+	return to;
+}
+
+template<typename From, typename To>
+void mcRegisterListConverter() {
+	if (QMetaType::hasRegisteredConverterFunction(qMetaTypeId<From>(), qMetaTypeId<To>()))
+		return;
+	QMetaType::registerConverter<From, To>(mcConverterList<From, To>);
+}
+
+template<typename T>
+void mcRegisterListObjectConverter() {
+	mcRegisterListConverter<T, QList<QObject *>>();
+}
+
+template<typename From, typename To>
+To mcConverterQVariantMap(const From &from) {
 	To to;
 	using keyType = To::key_type;
 	using mappedType = To::mapped_type;
@@ -53,18 +87,16 @@ To mcConverterMap(const From &from) {
 	return to;
 }
 
-template<typename T>
-void mcRegisterListConverter() {
-	if (QMetaType::hasRegisteredConverterFunction(qMetaTypeId<QVariantList>(), qMetaTypeId<T>()))
+template<typename From, typename To>
+void mcRegisterQVariantMapConverter() {
+	if (QMetaType::hasRegisteredConverterFunction(qMetaTypeId<From>(), qMetaTypeId<To>()))
 		return;
-	QMetaType::registerConverter<QVariantList, T>(mcConverterList<QVariantList, T>);
+	QMetaType::registerConverter<From, To>(mcConverterQVariantMap<From, To>);
 }
 
 template<typename T>
-void mcRegisterMapConverter() {
-	if (QMetaType::hasRegisteredConverterFunction(qMetaTypeId<QMap<QVariant, QVariant>>(), qMetaTypeId<T>()))
-		return;
-	QMetaType::registerConverter<QMap<QVariant, QVariant>, T>(mcConverterMap<QMap<QVariant, QVariant>, T>);
+void mcRegisterQVariantMapConverter() {
+	mcRegisterQVariantMapConverter<QMap<QVariant, QVariant>, T>();
 }
 
 #endif // !_MC_BEAN_GLOBAL_H_
