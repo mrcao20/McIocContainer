@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>myspring.xml</file>
+    </qresource>
+</RCC>
