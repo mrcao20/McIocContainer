@@ -36,7 +36,7 @@ template<typename From, typename To>
 To mcConverterQVariantList(const From &from) {
 	To to;
 	for (const auto &f : from) {
-		to << f.value<To::value_type>();
+        to << f.template value<typename To::value_type>();
 	}
 	return to;
 }
@@ -57,7 +57,7 @@ template<typename From, typename To>
 To mcConverterList(const From &from) {
 	To to;
 	for (const auto &f : from) {
-		to << QVariant::fromValue(f).value<To::value_type>();
+        to << QVariant::fromValue(f).template value<typename To::value_type>();
 	}
 	return to;
 }
@@ -77,11 +77,11 @@ void mcRegisterListObjectConverter() {
 template<typename From, typename To>
 To mcConverterQVariantMap(const From &from) {
 	To to;
-	using keyType = To::key_type;
-	using mappedType = To::mapped_type;
+    using keyType = typename To::key_type;
+    using mappedType = typename To::mapped_type;
 	for (auto itr = from.cbegin(); itr != from.cend(); ++itr) {
-		keyType key = itr.key().value<keyType>();
-		mappedType value = itr.value().value<mappedType>();
+        keyType key = itr.key().template value<keyType>();
+        mappedType value = itr.value().template value<mappedType>();
 		to.insert(key, value);
 	}
 	return to;
