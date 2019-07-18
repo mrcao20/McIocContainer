@@ -32,6 +32,9 @@ public:
 	// 使用此函数设置className之后，会自动生成QMetaObject
 	virtual void setClassName(const QString &name) Q_DECL_NOEXCEPT = 0;
 
+    virtual QString getPluginPath() const Q_DECL_NOEXCEPT = 0;
+    virtual void setPluginPath(const QString &path) Q_DECL_NOEXCEPT = 0;
+
 	virtual QVariantHash getProperties() const Q_DECL_NOEXCEPT = 0;
 	// 由于QVariant在析构时会自动删除包含的对象，所以该对象不用设置父对象
 	virtual void addProperty(const QString &name, const QVariant &value) Q_DECL_NOEXCEPT = 0;

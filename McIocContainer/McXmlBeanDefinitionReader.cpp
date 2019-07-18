@@ -2,6 +2,7 @@
 
 #include <QFile>
 #include <qdom.h>
+#include <QLibrary>
 #include <qdebug.h>
 
 #include "../include/IMcBeanDefinitionRegistry.h"
@@ -77,8 +78,17 @@ void McXmlBeanDefinitionReader::readBeanDefinition(const QDomNodeList &nodes) no
 		if (ele.hasAttribute("class"))	// 如果指定的class，则通过class创建对象
 			// 设置bean 定义对象的 全限定类名
 			beanDefinition->setClassName(ele.attribute("class"));
-        else{}	// 如果未指定class，则指定的一定是plugin，则通过插件创建对象
-            //;
+        else if(ele.hasAttribute("plugin")){    // 如果指定的是plugin，则通过插件创建对象
+            QString pluginPath = ele.attribute("plugin");
+            if(!QLibrary::isLibrary(pluginPath)){
+                qCritical() << pluginPath << "is not a plugin. please check!!!";
+                return;
+            }
+            beanDefinition->setPluginPath(pluginPath);
+        }else{
+            qCritical() << "bean must be class or plugin, please check!!!";
+            return;
+        }
 		readBeanDefinition(ele.childNodes(), beanDefinition);
 		// 向注册容器 添加bean名称和bean定义
 		d->registry->registerBeanDefinition(name, beanDefinition);

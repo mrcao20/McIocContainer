@@ -40,6 +40,13 @@ public:
 		m_beanMetaObject = QMetaType::metaObjectForType(QMetaType::type(m_className.toLocal8Bit().data()));
 	}
 
+    QString getPluginPath() const Q_DECL_NOEXCEPT {
+        return m_pluginPath;
+    }
+    void setPluginPath(const QString &path) Q_DECL_NOEXCEPT {
+        m_pluginPath = path;
+    }
+
 	QVariantHash getProperties() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_properties; }
 	void addProperty(const QString &name, const QVariant &value) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
 		m_properties.insert(name, value);
@@ -49,6 +56,7 @@ private:
 	QPointer<QObject> m_bean;											// bean
 	const QMetaObject *m_beanMetaObject{ Q_NULLPTR };					// bean的MetaObject对象
 	QString m_className;												// bean的类全限定名称
+    QString m_pluginPath;                                               // bean的插件路径
 	QVariantHash m_properties;											// bean的属性集合
 };
 

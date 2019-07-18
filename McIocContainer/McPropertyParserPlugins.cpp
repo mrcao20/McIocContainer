@@ -35,7 +35,7 @@ void McPropertyParserPlugins::loadPlugin() noexcept {
 	m_parsers.clear();
 #ifdef Q_OS_ANDROID
     QDir pluginDir(qApp->applicationDirPath());
-#elif defined(Q_OS_WIN)
+#elif defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     QDir pluginDir(qApp->applicationDirPath() + "/plugins/McIocContainer");
 #endif
     QStringList pluginNames = pluginDir.entryList(QDir::Files);

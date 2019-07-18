@@ -51,7 +51,8 @@ HEADERS += \
     ReferenceBean.h \
     a.h
 
-unix:!macx: LIBS += -L$$PWD/../../build-McIocContainer-Android_for_armeabi_v7a_Clang_Qt_5_9_8_for_Android_ARMv7-Debug/McIocContainer/ -lMcIocContainer
+
+unix:!macx: LIBS += -L$$PWD/../build/build-McIocContainer-Qt_5_8_0_Qt_5_8_0-Debug/McIocContainer/ -lMcIocContainer
 
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include

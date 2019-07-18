@@ -3,8 +3,6 @@
 #include <qdom.h>
 #include <qdebug.h>
 
-#include "../include/IMcBeanDefinition.h"
-
 McValueParser::McValueParser(QObject *parent)
 	: QObject(parent)
 {

@@ -1,6 +1,7 @@
 #include "../include/McDefaultBeanFactory.h"
 
 #include <qmetaobject.h>
+#include <QPluginLoader>
 #include <qdebug.h>
 
 #include "../include/IMcBeanDefinition.h"
@@ -17,12 +18,23 @@ McDefaultBeanFactory::~McDefaultBeanFactory(){
 }
 
 QObject *McDefaultBeanFactory::doCreate(IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT {
-	auto beanMetaObj = beanDefinition->getBeanMetaObject();
-	if (!beanMetaObj) {
-		qCritical() << QString("the class '%1' is not in meta-object system").arg(beanDefinition->getClassName());
-		return Q_NULLPTR;
-	}
-	auto bean = beanMetaObj->newInstance();
+    QObject *bean = nullptr;
+    auto pluginPath = beanDefinition->getPluginPath();
+    if(!pluginPath.isEmpty()){
+        QPluginLoader loader(pluginPath);
+        if (!loader.load()) {
+            qWarning() << pluginPath << "cannot load!!";
+            return nullptr;
+        }
+        bean = loader.instance();
+    }else{
+        auto beanMetaObj = beanDefinition->getBeanMetaObject();
+        if (!beanMetaObj) {
+            qCritical() << QString("the class '%1' is not in meta-object system").arg(beanDefinition->getClassName());
+            return Q_NULLPTR;
+        }
+        bean = beanMetaObj->newInstance();
+    }
 	if (!addPropertyValue(bean, beanDefinition)) {
 		qCritical() << QString("failed to init definition '%1'").arg(beanDefinition->getClassName());
 		MC_SAFE_DELETE(bean);
