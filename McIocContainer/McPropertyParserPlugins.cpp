@@ -42,11 +42,13 @@ void McPropertyParserPlugins::loadPlugin() noexcept {
 	QPluginLoader loader;
 	for (const QString &pluginName : pluginNames) {
 		QString pluginPath = pluginDir.absoluteFilePath(pluginName);
-		if (!QLibrary::isLibrary(pluginPath))
-			continue;
+        if (!QLibrary::isLibrary(pluginPath)){
+            qInfo() << pluginPath << "is not a library";
+            continue;
+        }
 		loader.setFileName(pluginPath);
 		if (!loader.load()) {
-			qWarning() << pluginPath << "cannot load!!";
+            qWarning() << pluginPath << "cannot load!!" << "the error string is:" << loader.errorString();
 			continue;
 		}
 		QObject *obj = loader.instance();

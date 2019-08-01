@@ -51,7 +51,6 @@ HEADERS += \
     ReferenceBean.h \
     a.h
 
-
 unix:!macx: LIBS += -L$$PWD/../build/build-McIocContainer-Qt_5_8_0_Qt_5_8_0-Debug/McIocContainer/ -lMcIocContainer
 
 INCLUDEPATH += $$PWD/../include

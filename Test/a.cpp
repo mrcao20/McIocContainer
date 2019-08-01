@@ -1,5 +1,7 @@
 #include "a.h"
 
+#include <QPluginLoader>
+
 #include "McIocContainer.h"
 #include "McXmlApplicationContext.h"
 #include "ReferenceBean.h"
