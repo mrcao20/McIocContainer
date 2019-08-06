@@ -11,7 +11,7 @@
 
 class ReferenceBean : public QObject {
 	Q_OBJECT;
-	Q_PROPERTY(IHelloWorld *helloWorld READ getHello WRITE setHello USER true);
+    Q_PROPERTY(IHelloWorld *helloWorld READ getHello WRITE setHello USER true);
 	Q_PROPERTY(QList<IHelloWorld *> listData MEMBER m_list);
 	MC_DECL_STATIC(ReferenceBean);
 

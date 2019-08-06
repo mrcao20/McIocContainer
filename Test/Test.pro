@@ -51,7 +51,9 @@ HEADERS += \
     ReferenceBean.h \
     a.h
 
-unix:!macx: LIBS += -L$$PWD/../build/build-McIocContainer-Qt_5_8_0_Qt_5_8_0-Debug/McIocContainer/ -lMcIocContainer
+unix:!macx: LIBS += -L$$PWD/../build/build-McIocContainer-Qt5_8_0_static-Debug/McIocContainer/ -lMcIocContainer
 
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include
+
+unix:!macx: PRE_TARGETDEPS += $$PWD/../build/build-McIocContainer-Qt5_8_0_static-Debug/McIocContainer/libMcIocContainer.a

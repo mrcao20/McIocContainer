@@ -22,7 +22,11 @@ HEADERS += ../include/McContainerGlobal.h \
     ../include/McAbstractApplicationContext.h \
     ../include/McDefaultApplicationContext.h \
     ../include/McXmlApplicationContext.h \
-    ../include/McMacroGlobal.h
+    ../include/McMacroGlobal.h \
+    $$PWD/McParserPlugin/McListParser.h \
+    $$PWD/McParserPlugin/McPropertyParsers.h \
+    $$PWD/McParserPlugin/McRefParser.h \
+    $$PWD/McParserPlugin/McValueParser.h
 SOURCES += ./McIocContainer.cpp \
     ./McBeanGlobal.cpp \
     ./McAbstractBeanFactory.cpp \
@@ -33,4 +37,14 @@ SOURCES += ./McIocContainer.cpp \
     ./McXmlBeanDefinitionReader.cpp \
     ./McAbstractApplicationContext.cpp \
     ./McDefaultApplicationContext.cpp \
-    ./McXmlApplicationContext.cpp
+    ./McXmlApplicationContext.cpp \
+    $$PWD/McParserPlugin/McListParser.cpp \
+    $$PWD/McParserPlugin/McPropertyParsers.cpp \
+    $$PWD/McParserPlugin/McRefParser.cpp \
+    $$PWD/McParserPlugin/McValueParser.cpp
+
+SUBDIRS += \
+    $$PWD/McParserPlugin/McParserPlugin.pro
+
+DISTFILES += \
+    $$PWD/McParserPlugin/McParserPlugin.pri
