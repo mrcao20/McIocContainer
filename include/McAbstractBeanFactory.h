@@ -35,6 +35,17 @@ public:
 	 <时    间>		2019/4/3
 	**************************************************/
 	QObject *getBean(const QString &name, QObject *parent = Q_NULLPTR) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+        /*************************************************
+         <函数名称>		getBeanToVariant
+         <函数说明>		根据bean的名称获取包含bean实例的QVariant，如果没有，则返回无效值，并设置错误信息，
+                                        如果有，则从bean定义对象获取包含bean实例的QVariant。
+         <参数说明>		name bean 名称
+                                        parent bean的父对象
+         <返回值>
+         <作    者>		mrcao
+         <时    间>		2019/12/18
+        **************************************************/
+        QVariant getBeanToVariant(const QString &name, QObject *parent = Q_NULLPTR)  Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 	/*************************************************
 	 <函数名称>		containsBean
 	 <函数说明>		检测容器中是否存在该bean
@@ -75,7 +86,7 @@ protected:
 	 <作    者>		mrcao
 	 <时    间>		2019/4/3
 	**************************************************/
-	virtual QObject *doCreate(IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT = 0;
+    virtual QVariant doCreate(IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT = 0;
 
 private:
 	QScopedPointer<McAbstractBeanFactoryData> d;	// 用于存放数据，在cpp中实现

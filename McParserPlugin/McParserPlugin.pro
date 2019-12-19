@@ -33,9 +33,7 @@ unix {
 
 include(McParserPlugin.pri)
 
-
-
-unix:!macx: LIBS += -L$$PWD/../build/build-McIocContainer-Qt_5_8_0_Qt_5_8_0-Debug/McIocContainer/ -lMcIocContainer
-
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include
+
+unix:!macx: LIBS += -L$$PWD/../build/build-McIocContainer-Qt_5_8_0_Qt_5_8_0-Debug/McIocContainer/ -lMcIocContainer

@@ -17,7 +17,7 @@ McRefParser::~McRefParser(){
 }
 
 bool McRefParser::parseProperty(const QDomElement &propEle, const QList<IMcPropertyParser *> &parsers, QVariant &value) const noexcept {
-    Q_UNUSED(parsers);
+    Q_UNUSED(parsers)
     QDomElement childEle = propEle.firstChildElement("ref");
     if (propEle.elementsByTagName("ref").size() > 1 || (!propEle.hasAttribute("ref") && propEle.tagName() != "ref" && childEle.isNull()))
 		return false;		// 不存在ref，本对象不解析
@@ -44,7 +44,7 @@ bool McRefParser::parseProperty(const QDomElement &propEle, const QList<IMcPrope
 }
 
 bool McRefParser::convertProperty(QObject *bean, const char *propTypeName, const QList<IMcPropertyParser *> &parsers, IMcBeanReferenceResolver *refResolver, QVariant &value) const noexcept {
-    Q_UNUSED(parsers);
+    Q_UNUSED(parsers)
     // 判断属性值是否是一个beanReference
 	if (!value.canConvert<QObject *>())
 		return false;	// 本解析器无法解析，传递给其他解析器解析

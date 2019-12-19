@@ -17,30 +17,37 @@ McDefaultBeanFactory::McDefaultBeanFactory(QObject *parent)
 McDefaultBeanFactory::~McDefaultBeanFactory(){
 }
 
-QObject *McDefaultBeanFactory::doCreate(IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT {
+QVariant McDefaultBeanFactory::doCreate(IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT {
+    QVariant var;
     QObject *bean = nullptr;
     auto pluginPath = beanDefinition->getPluginPath();
     if(!pluginPath.isEmpty()){
         QPluginLoader loader(pluginPath);
         if (!loader.load()) {
             qWarning() << pluginPath << "cannot load!!";
-            return nullptr;
+            return QVariant();
         }
         bean = loader.instance();
     }else{
         auto beanMetaObj = beanDefinition->getBeanMetaObject();
         if (!beanMetaObj) {
             qCritical() << QString("the class '%1' is not in meta-object system").arg(beanDefinition->getClassName());
-            return Q_NULLPTR;
+            return QVariant();
         }
         bean = beanMetaObj->newInstance();
     }
 	if (!addPropertyValue(bean, beanDefinition)) {
 		qCritical() << QString("failed to init definition '%1'").arg(beanDefinition->getClassName());
 		MC_SAFE_DELETE(bean);
-		return Q_NULLPTR;
+        return QVariant();
 	}
-	return bean;
+    var.setValue(bean);
+    if(!var.convert(QMetaType::type(beanDefinition->getClassName().toLocal8Bit()))) {
+        qCritical() << QString("failed convert QObject to '%1'").arg(beanDefinition->getClassName());
+        MC_SAFE_DELETE(bean);
+        return QVariant();
+    }
+    return var;
 }
 
 bool McDefaultBeanFactory::addPropertyValue(QObject *bean, IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT {

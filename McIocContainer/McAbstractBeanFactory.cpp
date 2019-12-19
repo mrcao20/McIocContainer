@@ -28,23 +28,32 @@ McAbstractBeanFactory::~McAbstractBeanFactory() {
 }
 
 QObject *McAbstractBeanFactory::getBean(const QString &name, QObject *parent) Q_DECL_NOEXCEPT {
-	QMutexLocker locker(&d->mtx);
-	auto beanDefinition = d->map.value(name);
-	if (beanDefinition == Q_NULLPTR) {
-		qCritical() << "No bean named " << name << " is defined";
-		return Q_NULLPTR;
-	}
-	auto bean = beanDefinition->getBean();
-	if (bean == Q_NULLPTR) {	// 如果bean不存在
-		bean = doCreate(beanDefinition);	// 创建
-		if (!bean) {
-			qWarning() << QString("failed to create bean '%1'").arg(name);
-			return Q_NULLPTR;
-		}
-		beanDefinition->setBean(bean);		// 放进beanDefinition，由beanDefinition管理其生命周期
-	}
-	bean->setParent(parent);				// 设置父对象
-	return bean;
+    auto var = getBeanToVariant(name, parent);
+    if(!var.isValid())
+        return nullptr;
+    return var.value<QObject*>();
+}
+
+QVariant McAbstractBeanFactory::getBeanToVariant(const QString &name, QObject *parent)  Q_DECL_NOEXCEPT {
+    QMutexLocker locker(&d->mtx);
+    auto beanDefinition = d->map.value(name);
+    if (beanDefinition == Q_NULLPTR) {
+        qCritical() << "No bean named " << name << " is defined";
+        return QVariant();
+    }
+    auto beanVar = beanDefinition->getBean();
+    QObject* bean = nullptr;
+    if (!beanVar.isValid()) {	// 如果bean不存在
+        beanVar = doCreate(beanDefinition);	// 创建
+        if (!beanVar.isValid()) {
+            qWarning() << QString("failed to create bean '%1'").arg(name);
+            return QVariant();
+        }
+        beanDefinition->setBean(beanVar);		// 放进beanDefinition，以达到复用，后续单利时不需要设置进去
+    }
+    bean = beanVar.value<QObject*>();
+    bean->setParent(parent);				// 设置父对象
+    return beanVar;
 }
 
 bool McAbstractBeanFactory::containsBean(const QString &name) Q_DECL_NOEXCEPT {

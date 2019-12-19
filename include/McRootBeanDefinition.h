@@ -11,25 +11,19 @@
 #include <QObject>
 #include "IMcBeanDefinition.h"
 
-#include <qvariant.h>
-#include <qpointer.h>
-
 #include "McMacroGlobal.h"
 
 class McRootBeanDefinition 
 	: public QObject
 	, MC_IMPLEMENTS IMcBeanDefinition {
-	Q_OBJECT;
+    Q_OBJECT
 
 public:
 	explicit McRootBeanDefinition(QObject *parent = 0)
 		: QObject(parent){}
-	virtual ~McRootBeanDefinition() {
-		MC_SAFE_DELETE_QPOINTER(m_bean);
-	}
 
-	QObject *getBean() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_bean; }
-	void setBean(QObject *bean) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { m_bean = bean; }
+    QVariant getBean() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_bean; }
+    void setBean(const QVariant& bean) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { m_bean = bean; }
 
 	const QMetaObject *getBeanMetaObject() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_beanMetaObject; }
 	void setBeanMetaObject(QMetaObject *o) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { m_beanMetaObject = o; }
@@ -40,10 +34,10 @@ public:
 		m_beanMetaObject = QMetaType::metaObjectForType(QMetaType::type(m_className.toLocal8Bit().data()));
 	}
 
-    QString getPluginPath() const Q_DECL_NOEXCEPT {
+    QString getPluginPath() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
         return m_pluginPath;
     }
-    void setPluginPath(const QString &path) Q_DECL_NOEXCEPT {
+    void setPluginPath(const QString &path) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
         m_pluginPath = path;
     }
 
@@ -53,7 +47,7 @@ public:
 	}
 
 private:
-	QPointer<QObject> m_bean;											// bean
+    QVariant m_bean;                                                    // 包含bean的QVariant。此对象不再删除该bean
 	const QMetaObject *m_beanMetaObject{ Q_NULLPTR };					// bean的MetaObject对象
 	QString m_className;												// bean的类全限定名称
     QString m_pluginPath;                                               // bean的插件路径

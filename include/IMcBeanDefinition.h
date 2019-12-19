@@ -22,8 +22,8 @@ MC_INTERFACE IMcBeanDefinition {
 public:
 	virtual ~IMcBeanDefinition() = default;
 
-	virtual QObject *getBean() const Q_DECL_NOEXCEPT = 0;
-	virtual void setBean(QObject *bean) Q_DECL_NOEXCEPT = 0;
+    virtual QVariant getBean() const Q_DECL_NOEXCEPT = 0;
+    virtual void setBean(const QVariant& bean) Q_DECL_NOEXCEPT = 0;
 
 	virtual const QMetaObject *getBeanMetaObject() const Q_DECL_NOEXCEPT = 0;
 	virtual void setBeanMetaObject(QMetaObject *o) Q_DECL_NOEXCEPT = 0;

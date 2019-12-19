@@ -27,7 +27,7 @@ protected:
 	 <作    者>		mrcao
 	 <时    间>		2019/4/3
 	**************************************************/
-	QObject *doCreate(IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+        QVariant doCreate(IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 
 private:
 	/*************************************************

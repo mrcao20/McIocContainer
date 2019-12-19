@@ -12,7 +12,8 @@
 
 #include "McMacroGlobal.h"
 
-#include <qobject.h>
+#include <QObject>
+#include <QVariant>
 
 MC_INTERFACE IMcBeanFactory {
 
@@ -30,6 +31,17 @@ public:
 	 <时    间>		2019/4/3
 	**************************************************/
 	virtual QObject *getBean(const QString &name, QObject *parent = Q_NULLPTR) Q_DECL_NOEXCEPT = 0;
+    /*************************************************
+     <函数名称>		getBeanToVariant
+     <函数说明>		根据bean的名称从容器中获取bean对象，此函数是线程安全的。
+     <参数说明>		name bean名称
+     <返回值>		包含bean实例的QVariant。注意：由于工厂随时都可能被销毁，为防止实例化出的bean失效，
+                    该bean未设置父对象，故需手动delete；也可以指定第二个参数设置bean的父对象
+                    注意：此函数可能返回无效的QVariant
+     <作    者>		mrcao
+     <时    间>		2019/12/18
+    **************************************************/
+    virtual QVariant getBeanToVariant(const QString &name, QObject *parent = Q_NULLPTR)  Q_DECL_NOEXCEPT = 0;
 	/*************************************************
 	 <函数名称>		containsBean
 	 <函数说明>		检测容器中是否存在该bean

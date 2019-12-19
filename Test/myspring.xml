@@ -21,9 +21,9 @@ http://www.springframework.org/schema/beans ">
 		<vector>
 			<ref bean="hello"></ref>
 			<ref bean="hello"></ref>
-			<!-- <value>停封</value> -->
-			<!-- <value>薄纸</value> -->
-			<!-- <value>关系</value> -->
+			<value>停封</value>
+			<value>薄纸</value>
+			<value>关系</value>
 		</vector>
 	</property>
 

@@ -48,10 +48,11 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
 HEADERS += \
     HelloWorld.h \
     IHelloWorld.h \
+    IReferenceBean.h \
     ReferenceBean.h \
     a.h
 
-unix:!macx: LIBS += -L$$PWD/../build/build-McIocContainer-Qt_5_8_0_Qt_5_8_0-Debug/McIocContainer/ -lMcIocContainer
-
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include
+
+unix:!macx: LIBS += -L$$PWD/../build/build-McIocContainer-Qt_5_8_0_Qt_5_8_0-Debug/McIocContainer/ -lMcIocContainer

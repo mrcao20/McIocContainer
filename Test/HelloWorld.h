@@ -10,7 +10,7 @@
 
 class HelloWorld : public QObject, public IHelloWorld {
     Q_OBJECT
-    Q_PROPERTY(bool text READ getText WRITE setText USER false)
+    Q_PROPERTY(QString text READ getText WRITE setText USER false)
     Q_PROPERTY(QMap<int, QString> map READ getMap WRITE setMap)
     Q_PROPERTY(QSet<int> list READ getList WRITE setList)
     MC_DECL_STATIC(HelloWorld)
@@ -33,13 +33,13 @@ public:
 		m_map = text;
 	}
 
-	bool getText() { return m_text; }
-	void setText(const bool &text) {
+    QString getText() { return m_text; }
+    void setText(const QString &text) {
 		m_text = text;
 	}
 
 private:
-	bool m_text;
+    QString m_text;
 	QMap<int, QString> m_map;
 	QSet<int> m_list;
 

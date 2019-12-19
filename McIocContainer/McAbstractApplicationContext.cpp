@@ -23,6 +23,10 @@ QObject *McAbstractApplicationContext::getBean(const QString &name, QObject *par
 	return d->configurableBeanFactory->getBean(name, parent);
 }
 
+QVariant McAbstractApplicationContext::getBeanToVariant(const QString &name, QObject *parent) Q_DECL_NOEXCEPT {
+    return d->configurableBeanFactory->getBeanToVariant(name, parent);
+}
+
 bool McAbstractApplicationContext::containsBean(const QString &name) Q_DECL_NOEXCEPT {
 	return d->configurableBeanFactory->containsBean(name);
 }

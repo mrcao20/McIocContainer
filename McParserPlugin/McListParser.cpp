@@ -51,6 +51,9 @@ bool McListParser::convertProperty(QObject *bean, const char *propTypeName, cons
 	// 如果是就将其转换
 	QString childTypeName;
 	getChildTypeName(propTypeName, childTypeName);
+    if(childTypeName == "QVariant") {
+        return true;
+    }
 	auto list = value.value<QVariantList>();
 	value.clear();	// 清空value，使其无效
 	for (auto &var : list) {	// 此处遍历list中QVariant的引用，即直接修改list中的值
@@ -64,6 +67,10 @@ bool McListParser::convertProperty(QObject *bean, const char *propTypeName, cons
 }
 
 void McListParser::getChildTypeName(const QString &parentTypeName, QString &childTypeName) const noexcept {
+    if(parentTypeName == "QVariantList") {
+        childTypeName = "QVariant";
+        return;
+    }
 	QRegularExpression re(R"(.+\<(.+)\>)");
 	QRegularExpressionMatch match = re.match(parentTypeName);
 	Q_ASSERT(match.capturedTexts().size() == 2);
