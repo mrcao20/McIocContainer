@@ -5,8 +5,7 @@
  <日   期>		2019/4/3
 ********************************************************************/
 
-#ifndef _MC_BEAN_REFERENCE_H_
-#define _MC_BEAN_REFERENCE_H_
+#pragma once
 
 #include <qobject.h>
 #include "McMacroGlobal.h"
@@ -31,5 +30,3 @@ private:
     QString m_name;						// 被引用bean的名称
     QObject *m_bean{ Q_NULLPTR };		// 被引用bean的对象
 };
-
-#endif // !_MC_BEAN_REFERENCE_H_

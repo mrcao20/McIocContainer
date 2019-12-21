@@ -14,7 +14,7 @@ class ReferenceBean : public QObject, public IReferenceBean {
 	Q_OBJECT;
 	Q_PROPERTY(IHelloWorld *helloWorld READ getHello WRITE setHello USER true);
     Q_PROPERTY(QList<QVariant> listData MEMBER m_list);
-	MC_DECL_STATIC(ReferenceBean);
+    MC_DECL_STATIC(ReferenceBean);
 
 public:
 	Q_INVOKABLE explicit ReferenceBean(QObject *parent = 0);

@@ -1,5 +1,4 @@
-#ifndef _MC_PROPERTY_PARSER_PLUGIN_H_
-#define _MC_PROPERTY_PARSER_PLUGIN_H_
+#pragma once
 
 #include <QObject>
 
@@ -10,7 +9,7 @@ class IMcPropertyParser;
 class McPropertyParserPlugins : public QObject {
 	Q_OBJECT
 
-	explicit McPropertyParserPlugins(QObject *parent = 0);
+    explicit McPropertyParserPlugins(QObject *parent = nullptr);
 	Q_DISABLE_COPY(McPropertyParserPlugins)
 public:
 	~McPropertyParserPlugins();
@@ -27,5 +26,3 @@ private:
 
 	QList<IMcPropertyParser *> m_parsers;
 };
-
-#endif // !_MC_PROPERTY_PARSER_PLUGIN_H_

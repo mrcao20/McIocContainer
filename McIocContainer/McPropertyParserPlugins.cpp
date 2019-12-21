@@ -34,14 +34,17 @@ void McPropertyParserPlugins::loadPlugin() noexcept {
 	qDeleteAll(m_parsers);
 	m_parsers.clear();
 #ifdef Q_OS_ANDROID
-    QDir pluginDir(qApp->applicationDirPath());
+    QString pluginsPath = qApp->applicationDirPath();
 #elif defined(Q_OS_WIN) || defined(Q_OS_LINUX)
-    QDir pluginDir(qApp->applicationDirPath() + "/plugins/McIocContainer");
+    QString pluginsPath = qApp->applicationDirPath() + "/plugins/McIocContainer";
 #endif
+    qDebug() << "load plugins from:" << pluginsPath;
+    QDir pluginDir(pluginsPath);
     QStringList pluginNames = pluginDir.entryList(QDir::Files);
 	QPluginLoader loader;
 	for (const QString &pluginName : pluginNames) {
 		QString pluginPath = pluginDir.absoluteFilePath(pluginName);
+        qDebug() << "the bean parser plugin path:" << pluginPath;
         if (!QLibrary::isLibrary(pluginPath)){
             qInfo() << pluginPath << "is not a library";
             continue;

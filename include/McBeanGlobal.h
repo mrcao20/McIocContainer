@@ -1,8 +1,8 @@
-#ifndef _MC_BEAN_GLOBAL_H_
-#define _MC_BEAN_GLOBAL_H_
+#pragma once
 
 #include <qmetatype.h>
 #include <QVariant>
+#include <QSharedPointer>
 
 #define MC_DECL_STATIC(Class)	\
 	static const int Class##_Static_Init;
@@ -17,18 +17,28 @@ void mcInitContainer();
 
 template<typename T>
 int mcRegisterBeanFactory(const char *typeName = Q_NULLPTR) {
+    Q_STATIC_ASSERT_X(!std::is_pointer<T>::value, "mcRegisterBeanFactory's template type must not be a pointer type");
 	if (typeName == Q_NULLPTR) {
-		return qRegisterMetaType<T>();
+        return qRegisterMetaType<T*>();
 	}
 	else {
-		return qRegisterMetaType<T>(typeName);
+        return qRegisterMetaType<T*>(typeName);
 	}
 }
 
 template<typename From, typename To>
 int mcRegisterBeanFactory(const char *typeName = Q_NULLPTR) {
-	QMetaType::registerConverter<From, To>();
-	int typeId = mcRegisterBeanFactory<From>(typeName);
+    Q_STATIC_ASSERT_X(!std::is_pointer<To>::value, "mcRegisterBeanFactory's template type must not be a pointer type");
+    if (!QMetaType::hasRegisteredConverterFunction<From*, To*>()) {
+        QMetaType::registerConverter<From*, To*>();
+    }
+    if (!QMetaType::hasRegisteredConverterFunction<QSharedPointer<From>, QSharedPointer<To>>()) {
+        QMetaType::registerConverter<QSharedPointer<From>, QSharedPointer<To>>();
+    }
+    if (!QMetaType::hasRegisteredConverterFunction<QSharedPointer<From>, QSharedPointer<QObject>>()) {
+        QMetaType::registerConverter<QSharedPointer<From>, QSharedPointer<QObject>>();
+    }
+    int typeId = mcRegisterBeanFactory<From>(typeName);
 	return typeId;
 }
 
@@ -98,5 +108,3 @@ template<typename T>
 void mcRegisterQVariantMapConverter() {
 	mcRegisterQVariantMapConverter<QMap<QVariant, QVariant>, T>();
 }
-
-#endif // !_MC_BEAN_GLOBAL_H_

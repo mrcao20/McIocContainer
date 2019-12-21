@@ -55,4 +55,10 @@ HEADERS += \
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include
 
-unix:!macx: LIBS += -L$$PWD/../build/build-McIocContainer-Qt_5_8_0_Qt_5_8_0-Debug/McIocContainer/ -lMcIocContainer
+CONFIG(debug, debug|release) {
+    win32: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_3_MinGW_64_bit-Debug/McIocContainer/debug/ -lMcIocContainer
+    else:unix: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_3_MinGW_64_bit-Release/McIocContainer/ -lMcIocContainer
+} else {
+    win32: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_3_MinGW_64_bit-Release/McIocContainer/release/ -lMcIocContainer
+    else:unix: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_3_MinGW_64_bit-Release/McIocContainer/ -lMcIocContainer
+}

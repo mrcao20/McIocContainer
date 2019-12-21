@@ -41,9 +41,26 @@ void McIocContainer::initContainer() {
 	}
 	m_applicationContext = new McDefaultApplicationContext(this);
 	mcInitContainer();
-	for (auto itr = m_autowiredRegistry.cbegin(); itr != m_autowiredRegistry.cend(); ++itr) {
-		inject(itr.key().toLocal8Bit().data(), itr.value().toLocal8Bit().data());
-	}
+    QHashIterator<decltype (m_autowiredRegistry)::key_type, decltype (m_autowiredRegistry)::mapped_type> iterator(m_autowiredRegistry);
+    while (iterator.hasNext()) {
+        auto item = iterator.next();
+        auto key = item.key();
+        auto value = item.value();
+        inject(key, value);
+    }
+}
+
+void McIocContainer::insertRegistry(const QString &typeName, const QString &beanName, bool isSingleton) noexcept {
+    auto beanDefinition = m_autowiredRegistry.value(beanName);
+    if(beanDefinition) {
+        qCritical() << "injected fail. the beanName is exists. it's typeName is" << beanDefinition->getClassName()
+                    << ". want inject typeName:" << typeName << "beanName:" << beanName;
+        return;
+    }
+    beanDefinition = QSharedPointer<McRootBeanDefinition>::create();
+    beanDefinition->setClassName(typeName);
+    beanDefinition->setSingleton(isSingleton);
+    m_autowiredRegistry.insert(beanName, beanDefinition);
 }
 
 QList<QString> McIocContainer::getComponent(const QString &componentType) noexcept {
@@ -52,7 +69,7 @@ QList<QString> McIocContainer::getComponent(const QString &componentType) noexce
 		return QList<QString>();
 	}
 	QList<QString> components;
-	QMap<QString, IMcBeanDefinition *> beanDefinitions = m_applicationContext->getBeanDefinitions();
+    QMap<QString, QSharedPointer<IMcBeanDefinition>> beanDefinitions = m_applicationContext->getBeanDefinitions();
 	for (auto itr = beanDefinitions.cbegin(); itr != beanDefinitions.cend(); ++itr) {
 		auto beanDefinition = itr.value();
 		if (!isComponentType(beanDefinition->getBeanMetaObject(), componentType))
@@ -73,16 +90,14 @@ bool McIocContainer::isComponentType(const QMetaObject *metaObj, const QString &
 	return false;
 }
 
-void McIocContainer::inject(const char *typeName, const char *beanName) {
-	IMcBeanDefinition *beanDefinition = new McRootBeanDefinition(this);
-	beanDefinition->setClassName(typeName);
+void McIocContainer::inject(const QString& beanName, const QSharedPointer<IMcBeanDefinition>& beanDefinition) {
 	const QMetaObject *metaObj = beanDefinition->getBeanMetaObject();
 	Q_ASSERT(metaObj != Q_NULLPTR);
 	injectProperty(metaObj, beanDefinition);
 	m_applicationContext->registerBeanDefinition(beanName, beanDefinition);
 }
 
-void McIocContainer::injectProperty(const QMetaObject *metaObj, IMcBeanDefinition *beanDefinition) {
+void McIocContainer::injectProperty(const QMetaObject *metaObj, const QSharedPointer<IMcBeanDefinition>& beanDefinition) {
 	int count = metaObj->propertyCount();
 	for (int i = 0; i < count; ++i) {
 		QMetaProperty prop = metaObj->property(i);

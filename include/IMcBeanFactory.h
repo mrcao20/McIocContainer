@@ -7,8 +7,7 @@
  <ÈÕ   ÆÚ>		2019/4/3
 ********************************************************************/
 
-#ifndef _I_MC_BEAN_FACTORY_H_
-#define _I_MC_BEAN_FACTORY_H_
+#pragma once
 
 #include "McMacroGlobal.h"
 
@@ -52,6 +51,3 @@ public:
 	**************************************************/
 	virtual bool containsBean(const QString &name) Q_DECL_NOEXCEPT = 0;
 };
-
-#endif // !_I_MC_BEAN_FACTORY_H_
-

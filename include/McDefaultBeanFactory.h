@@ -5,8 +5,7 @@
  <日   期>		2019/4/5
 ********************************************************************/
 
-#ifndef _MC_DEFAULT_BEAN_FACTORY_H_
-#define _MC_DEFAULT_BEAN_FACTORY_H_
+#pragma once
 
 #include "McAbstractBeanFactory.h"
 
@@ -14,8 +13,8 @@ class McDefaultBeanFactory : public McAbstractBeanFactory {
     Q_OBJECT
 
 public:
-	explicit McDefaultBeanFactory(QObject *parent = 0);
-	virtual ~McDefaultBeanFactory();
+    explicit McDefaultBeanFactory(QObject *parent = nullptr);
+    virtual ~McDefaultBeanFactory() Q_DECL_OVERRIDE;
 
 protected:
 	/*************************************************
@@ -27,7 +26,7 @@ protected:
 	 <作    者>		mrcao
 	 <时    间>		2019/4/3
 	**************************************************/
-        QVariant doCreate(IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+        QVariant doCreate(const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 
 private:
 	/*************************************************
@@ -38,7 +37,5 @@ private:
 	 <作    者>		mrcao
 	 <时    间>		2019/4/3
 	**************************************************/
-	bool addPropertyValue(QObject *bean, IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT;
+        bool addPropertyValue(QObject *bean, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT;
 };
-
-#endif // !_MC_DEFAULT_BEAN_FACTORY_H_

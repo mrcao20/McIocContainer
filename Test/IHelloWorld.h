@@ -11,3 +11,4 @@ public:
 };
 
 Q_DECLARE_METATYPE(IHelloWorld *);
+Q_DECLARE_METATYPE(QSharedPointer<IHelloWorld>);

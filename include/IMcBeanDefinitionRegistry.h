@@ -6,13 +6,13 @@
  <日   期>		2019/4/3
 ********************************************************************/
 
-#ifndef _I_MC_BEAN_DEFINITION_REGISTRY_H_
-#define _I_MC_BEAN_DEFINITION_REGISTRY_H_
+#pragma once
 
 #include "McMacroGlobal.h"
 
 #include <qstring.h>
 #include <qmap.h>
+#include <QSharedPointer>
 
 class IMcBeanDefinition;
 
@@ -30,7 +30,7 @@ public:
 	 <作    者>		mrcao
 	 <时    间>		2019/4/3
 	**************************************************/
-	virtual void registerBeanDefinition(const QString &name, IMcBeanDefinition *bean) Q_DECL_NOEXCEPT = 0;
+    virtual void registerBeanDefinition(const QString &name, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT = 0;
 	/*************************************************
 	 <函数名称>		getBeanDefinitions
 	 <函数说明>		获取所有bean定义
@@ -39,7 +39,5 @@ public:
 	 <作    者>		mrcao
 	 <时    间>		2019/5/6
 	**************************************************/
-	virtual QMap<QString, IMcBeanDefinition *> getBeanDefinitions() Q_DECL_NOEXCEPT = 0;
+    virtual QMap<QString, QSharedPointer<IMcBeanDefinition>> getBeanDefinitions() Q_DECL_NOEXCEPT = 0;
 };
-
-#endif // !_I_MC_BEAN_DEFINITION_REGISTRY_H_

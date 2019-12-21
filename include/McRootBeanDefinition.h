@@ -5,8 +5,7 @@
  <日   期>		2019/4/3
 ********************************************************************/
 
-#ifndef _MC_BEAN_DEFINITION_H_
-#define _MC_BEAN_DEFINITION_H_
+#pragma once
 
 #include <QObject>
 #include "IMcBeanDefinition.h"
@@ -19,20 +18,34 @@ class McRootBeanDefinition
     Q_OBJECT
 
 public:
-	explicit McRootBeanDefinition(QObject *parent = 0)
+    explicit McRootBeanDefinition(QObject *parent = nullptr)
 		: QObject(parent){}
+
+    ~McRootBeanDefinition() override {
+        QHashIterator<decltype (m_properties)::key_type, decltype (m_properties)::mapped_type> iterator(m_properties);
+        while (iterator.hasNext()) {
+            auto item = iterator.next();
+            auto value = item.value();
+            auto obj = value.value<QObject*>();
+            if(obj)
+                obj->deleteLater();
+        }
+    }
 
     QVariant getBean() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_bean; }
     void setBean(const QVariant& bean) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { m_bean = bean; }
 
-	const QMetaObject *getBeanMetaObject() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_beanMetaObject; }
-	void setBeanMetaObject(QMetaObject *o) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { m_beanMetaObject = o; }
+    bool isSingleton() const noexcept override {return m_isSingleton;}
+    void setSingleton(bool val) noexcept override {m_isSingleton = val;}
 
-	QString getClassName() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_className; }
-	void setClassName(const QString &name) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
-		m_className = name;
-		m_beanMetaObject = QMetaType::metaObjectForType(QMetaType::type(m_className.toLocal8Bit().data()));
-	}
+    const QMetaObject *getBeanMetaObject() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_beanMetaObject; }
+    void setBeanMetaObject(QMetaObject *o) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { m_beanMetaObject = o; }
+
+    QString getClassName() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_className; }
+    void setClassName(const QString &name) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
+            m_className = name;
+            m_beanMetaObject = QMetaType::metaObjectForType(QMetaType::type(m_className.toLocal8Bit().data()));
+    }
 
     QString getPluginPath() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
         return m_pluginPath;
@@ -41,17 +54,16 @@ public:
         m_pluginPath = path;
     }
 
-	QVariantHash getProperties() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_properties; }
-	void addProperty(const QString &name, const QVariant &value) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
-		m_properties.insert(name, value);
-	}
+    QVariantHash getProperties() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_properties; }
+    void addProperty(const QString &name, const QVariant &value) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
+            m_properties.insert(name, value);
+    }
 
 private:
     QVariant m_bean;                                                    // 包含bean的QVariant。此对象不再删除该bean
-	const QMetaObject *m_beanMetaObject{ Q_NULLPTR };					// bean的MetaObject对象
-	QString m_className;												// bean的类全限定名称
+    bool m_isSingleton{true};                                           // 该bean是否是单例，默认是
+    const QMetaObject *m_beanMetaObject{ Q_NULLPTR };                   // bean的MetaObject对象
+    QString m_className;												// bean的类全限定名称
     QString m_pluginPath;                                               // bean的插件路径
-	QVariantHash m_properties;											// bean的属性集合
+    QVariantHash m_properties;											// bean的属性集合
 };
-
-#endif // !_MC_BEAN_DEFINITION_H_

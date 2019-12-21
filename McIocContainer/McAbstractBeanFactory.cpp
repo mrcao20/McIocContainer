@@ -8,14 +8,8 @@
 #include "../include/McBeanReference.h"
 
 struct McAbstractBeanFactoryData {
-	QMap<QString, IMcBeanDefinition *> map;			// 容器
+    QMap<QString, QSharedPointer<IMcBeanDefinition>> map;			// 容器
 	QMutex mtx{ QMutex::Recursive };				// 递归互斥锁
-
-	~McAbstractBeanFactoryData() {
-		// 清除beanDefinition
-		qDeleteAll(map);
-		map.clear();
-	}
 };
 
 McAbstractBeanFactory::McAbstractBeanFactory(QObject *parent)
@@ -49,7 +43,8 @@ QVariant McAbstractBeanFactory::getBeanToVariant(const QString &name, QObject *p
             qWarning() << QString("failed to create bean '%1'").arg(name);
             return QVariant();
         }
-        beanDefinition->setBean(beanVar);		// 放进beanDefinition，以达到复用，后续单利时不需要设置进去
+        if(beanDefinition->isSingleton())
+            beanDefinition->setBean(beanVar);		// 如果为单例时，则放进beanDefinition，以达到复用。
     }
     bean = beanVar.value<QObject*>();
     bean->setParent(parent);				// 设置父对象
@@ -60,11 +55,11 @@ bool McAbstractBeanFactory::containsBean(const QString &name) Q_DECL_NOEXCEPT {
 	return d->map.contains(name);
 }
 
-void McAbstractBeanFactory::registerBeanDefinition(const QString &name, IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT {
+void McAbstractBeanFactory::registerBeanDefinition(const QString &name, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT {
 	d->map.insert(name, beanDefinition);
 }
 
-QMap<QString, IMcBeanDefinition *> McAbstractBeanFactory::getBeanDefinitions() Q_DECL_NOEXCEPT {
+QMap<QString, QSharedPointer<IMcBeanDefinition>> McAbstractBeanFactory::getBeanDefinitions() Q_DECL_NOEXCEPT {
 	return d->map;
 }
 

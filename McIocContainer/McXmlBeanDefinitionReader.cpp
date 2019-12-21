@@ -73,8 +73,8 @@ void McXmlBeanDefinitionReader::readBeanDefinition(const QDomNodeList &nodes) no
 		}
 		// 获取给定元素的 name 属性
 		QString name = ele.attribute("name");
-		// 创建一个bean定义对象
-		IMcBeanDefinition *beanDefinition = new McRootBeanDefinition();
+        // 创建一个bean定义对象
+        QSharedPointer<IMcBeanDefinition> beanDefinition = QSharedPointer<McRootBeanDefinition>::create();
 		if (ele.hasAttribute("class"))	// 如果指定的class，则通过class创建对象
 			// 设置bean 定义对象的 全限定类名
 			beanDefinition->setClassName(ele.attribute("class"));
@@ -95,7 +95,7 @@ void McXmlBeanDefinitionReader::readBeanDefinition(const QDomNodeList &nodes) no
 	}
 }
 
-void McXmlBeanDefinitionReader::readBeanDefinition(const QDomNodeList &propNodes, IMcBeanDefinition *beanDefinition) noexcept {
+void McXmlBeanDefinitionReader::readBeanDefinition(const QDomNodeList &propNodes, const QSharedPointer<IMcBeanDefinition>& beanDefinition) noexcept {
 	for (int i = 0; i < propNodes.size(); ++i) {
 		QDomElement propEle = propNodes.at(i).toElement();
 		if (propEle.isNull())

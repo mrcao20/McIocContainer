@@ -1,5 +1,4 @@
-#ifndef _I_MC_PROPERTY_PARSER_COLLECTION_H_
-#define _I_MC_PROPERTY_PARSER_COLLECTION_H_
+#pragma once
 
 #include <qplugin.h>
 
@@ -15,6 +14,3 @@ public:
 #define PropertyParserCollectionIId "mc.mrcao.interface.IMcPropertyParserCollection/1.0"
 
 Q_DECLARE_INTERFACE(IMcPropertyParserCollection, PropertyParserCollectionIId)
-
-#endif // !_I_MC_PROPERTY_PARSER_COLLECTION_H_
-

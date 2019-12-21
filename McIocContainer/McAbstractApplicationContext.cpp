@@ -32,10 +32,10 @@ bool McAbstractApplicationContext::containsBean(const QString &name) Q_DECL_NOEX
 }
 
 void McAbstractApplicationContext::registerBeanDefinition(const QString &name
-	, IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT {
+    , const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT {
 	d->configurableBeanFactory->registerBeanDefinition(name, beanDefinition);
 }
 
-QMap<QString, IMcBeanDefinition *> McAbstractApplicationContext::getBeanDefinitions() Q_DECL_NOEXCEPT {
+QMap<QString, QSharedPointer<IMcBeanDefinition>> McAbstractApplicationContext::getBeanDefinitions() Q_DECL_NOEXCEPT {
 	return d->configurableBeanFactory->getBeanDefinitions();
 }

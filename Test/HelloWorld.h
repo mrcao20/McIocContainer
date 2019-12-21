@@ -19,7 +19,7 @@ class HelloWorld : public QObject, public IHelloWorld {
 public:
 	Q_INVOKABLE explicit HelloWorld(QObject *parent = 0);
 
-	Q_INVOKABLE MC_AUTOWIRED void say() {
+    Q_INVOKABLE MC_AUTOWIRED void say() {
 		qDebug() << m_text;
 	}
 

@@ -1,5 +1,4 @@
-#ifndef _I_MC_APPLICATION_CONTEXT_H_
-#define _I_MC_APPLICATION_CONTEXT_H_
+#pragma once
 
 #include "IMcConfigurableBeanFactory.h"
 
@@ -11,6 +10,4 @@ public:
 
 
 };
-
-#endif // !_I_MC_APPLICATION_CONTEXT_H_
 

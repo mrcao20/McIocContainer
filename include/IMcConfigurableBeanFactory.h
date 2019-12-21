@@ -5,8 +5,7 @@
  <ÈÕ   ÆÚ>		2019/4/7
 ********************************************************************/
 
-#ifndef _I_MC_CONFIGURABLE_BEAN_FACTORY_H_
-#define _I_MC_CONFIGURABLE_BEAN_FACTORY_H_
+#pragma once
 
 #include "IMcBeanFactory.h"
 #include "IMcBeanDefinitionRegistry.h"
@@ -18,6 +17,3 @@ MC_INTERFACE IMcConfigurableBeanFactory
 public:
 	virtual ~IMcConfigurableBeanFactory() = default;
 };
-
-#endif // !_I_MC_CONFIGURABLE_BEAN_FACTORY_H_
-

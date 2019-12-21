@@ -17,7 +17,7 @@ McDefaultBeanFactory::McDefaultBeanFactory(QObject *parent)
 McDefaultBeanFactory::~McDefaultBeanFactory(){
 }
 
-QVariant McDefaultBeanFactory::doCreate(IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT {
+QVariant McDefaultBeanFactory::doCreate(const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT {
     QVariant var;
     QObject *bean = nullptr;
     auto pluginPath = beanDefinition->getPluginPath();
@@ -50,7 +50,7 @@ QVariant McDefaultBeanFactory::doCreate(IMcBeanDefinition *beanDefinition) Q_DEC
     return var;
 }
 
-bool McDefaultBeanFactory::addPropertyValue(QObject *bean, IMcBeanDefinition *beanDefinition) Q_DECL_NOEXCEPT {
+bool McDefaultBeanFactory::addPropertyValue(QObject *bean, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT {
 	if (!bean) {
 		qCritical() << QString("bean '%1' cannot instantiation, please make sure that have a non-parameter constructor and declared by Q_INVOKABLE")
 			.arg(beanDefinition->getClassName());

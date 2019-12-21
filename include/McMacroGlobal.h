@@ -1,5 +1,4 @@
-#ifndef _MC_MACRO_GLOBAL_H_
-#define _MC_MACRO_GLOBAL_H_
+#pragma once
 
 #include <QtCore/qglobal.h>
 
@@ -23,6 +22,3 @@
 #ifndef Q_MOC_RUN			// 这行语句必须加，只有包围在这行语句之中的宏才能被识别为tag
 #define MC_AUTOWIRED		// 用于表示函数是否需要自动注入
 #endif // !Q_MOC_RUN
-
-#endif // !_MC_MACRO_GLOBAL_H_
-

@@ -5,8 +5,7 @@
  <ÈÕ   ÆÚ>		2019/4/6
 ********************************************************************/
 
-#ifndef _MC_XML_BEAN_DEFINITION_READER_H_
-#define _MC_XML_BEAN_DEFINITION_READER_H_
+#pragma once
 
 #include "McAbstractBeanDefinitionReader.h"
 
@@ -23,22 +22,20 @@ class IMcBeanDefinition;
 struct McXmlBeanDefinitionReaderData;
 
 class MCIOCCONTAINER_EXPORT McXmlBeanDefinitionReader : public McAbstractBeanDefinitionReader {
-	Q_OBJECT;
+    Q_OBJECT
 
 public:
-	explicit McXmlBeanDefinitionReader(const QString &location, QObject *parent = 0);
-	virtual ~McXmlBeanDefinitionReader();
+    explicit McXmlBeanDefinitionReader(const QString &location, QObject *parent = nullptr);
+    virtual ~McXmlBeanDefinitionReader() Q_DECL_OVERRIDE;
 
-	void readBeanDefinition(IMcBeanDefinitionRegistry *registry) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    void readBeanDefinition(IMcBeanDefinitionRegistry *registry) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 
 private:
-	void readBeanDefinition(QIODevice *source) noexcept;
-	void readBeanDefinition(const QDomDocument &doc) noexcept;
-	void readBeanDefinition(const QDomNodeList &nodes) noexcept;
-	void readBeanDefinition(const QDomNodeList &propNodes, IMcBeanDefinition *beanDefinition) noexcept;
+    void readBeanDefinition(QIODevice *source) noexcept;
+    void readBeanDefinition(const QDomDocument &doc) noexcept;
+    void readBeanDefinition(const QDomNodeList &nodes) noexcept;
+    void readBeanDefinition(const QDomNodeList &propNodes,const QSharedPointer<IMcBeanDefinition>& beanDefinition) noexcept;
 
 private:
 	QScopedPointer<McXmlBeanDefinitionReaderData> d;
 };
-
-#endif // !_MC_XML_BEAN_DEFINITION_READER_H_

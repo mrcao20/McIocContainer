@@ -12,5 +12,6 @@ public:
 };
 
 Q_DECLARE_METATYPE(IReferenceBean *);
+Q_DECLARE_METATYPE(QSharedPointer<IReferenceBean>)
 
 #endif // IREFERENCEBEAN_H

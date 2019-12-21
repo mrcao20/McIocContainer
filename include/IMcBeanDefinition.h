@@ -5,8 +5,7 @@
  <日   期>		2019/4/3
 ********************************************************************/
 
-#ifndef _I_MC_BEAN_DEFINITION_H_
-#define _I_MC_BEAN_DEFINITION_H_
+#pragma once
 
 #include "McMacroGlobal.h"
 
@@ -25,6 +24,9 @@ public:
     virtual QVariant getBean() const Q_DECL_NOEXCEPT = 0;
     virtual void setBean(const QVariant& bean) Q_DECL_NOEXCEPT = 0;
 
+    virtual bool isSingleton() const noexcept = 0;
+    virtual void setSingleton(bool val) noexcept = 0;
+
 	virtual const QMetaObject *getBeanMetaObject() const Q_DECL_NOEXCEPT = 0;
 	virtual void setBeanMetaObject(QMetaObject *o) Q_DECL_NOEXCEPT = 0;
 
@@ -39,6 +41,3 @@ public:
 	// 由于QVariant在析构时会自动删除包含的对象，所以该对象不用设置父对象
 	virtual void addProperty(const QString &name, const QVariant &value) Q_DECL_NOEXCEPT = 0;
 };
-
-#endif // !_I_MC_BEAN_DEFINITION_H_
-

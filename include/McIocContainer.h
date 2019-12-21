@@ -7,53 +7,48 @@
  <日   期>		2019/4/7
 ********************************************************************/
 
-#ifndef _MC_IOC_CONTAINER_H_
-#define _MC_IOC_CONTAINER_H_
+#pragma once
 
 #include <QObject>
 #include "McMacroGlobal.h"
 
-#include <qmap.h>
+#include <QHash>
 
 class IMcApplicationContext;
 class IMcBeanDefinition;
 
 class MCIOCCONTAINER_EXPORT McIocContainer : public QObject {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	~McIocContainer();
+    ~McIocContainer();
 
-	static McIocContainer *getInstance();
+    static McIocContainer *getInstance();
 
-	// 初始化容器，此函数非线程安全，请勿重复初始化
-	void initContainer();
+    // 初始化容器，此函数非线程安全，请勿重复初始化
+    void initContainer();
 
-	void insertRegistry(const QString &typeName, const QString &beanName) {
-		m_autowiredRegistry.insert(typeName, beanName);
-	}
+    void insertRegistry(const QString &typeName, const QString &beanName, bool isSingleton = true) noexcept;
 
-	// 获取所有组建类型为componentType的bean的名称
-	QList<QString> getComponent(const QString &componentType) noexcept;
-	// 传入的元对象的组件类型是否为type
-	bool isComponentType(const QMetaObject *metaObj, const QString &type) noexcept;
+    // 获取所有组建类型为componentType的bean的名称
+    QList<QString> getComponent(const QString &componentType) noexcept;
+    // 传入的元对象的组件类型是否为type
+    bool isComponentType(const QMetaObject *metaObj, const QString &type) noexcept;
 
-	IMcApplicationContext *getApplicationContext() {
-		return m_applicationContext;
-	}
+    IMcApplicationContext *getApplicationContext() {
+            return m_applicationContext;
+    }
 
 private:
-	void inject(const char *typeName, const char *beanName);
-	void injectProperty(const QMetaObject *metaObj, IMcBeanDefinition *beanDefinition);
+    void inject(const QString& beanName, const QSharedPointer<IMcBeanDefinition>& beanDefinition);
+    void injectProperty(const QMetaObject *metaObj, const QSharedPointer<IMcBeanDefinition>& beanDefinition);
 
 private:
-	static McIocContainer *m_container;
+    static McIocContainer *m_container;
 
-	IMcApplicationContext *m_applicationContext{ Q_NULLPTR };
-	QMap<QString, QString> m_autowiredRegistry;	// 用来保存需要自动注入的bean的typeName和beanName
+    IMcApplicationContext *m_applicationContext{ Q_NULLPTR };
+    QHash<QString, QSharedPointer<IMcBeanDefinition>> m_autowiredRegistry;	// 用来保存需要自动注入的bean的beanName和BeanDefinition
 
 private:
-	explicit McIocContainer(QObject *parent = 0);
+    explicit McIocContainer(QObject *parent = nullptr);
 };
-
-#endif // !_MC_IOC_CONTAINER_H_

@@ -5,8 +5,7 @@
  <ÈÕ   ÆÚ>		2019/4/6
 ********************************************************************/
 
-#ifndef _I_MC_BEAN_DEFINITION_READER_H_
-#define _I_MC_BEAN_DEFINITION_READER_H_
+#pragma once
 
 #include "McMacroGlobal.h"
 
@@ -27,6 +26,3 @@ public:
 	**************************************************/
 	virtual void readBeanDefinition(IMcBeanDefinitionRegistry *registry) Q_DECL_NOEXCEPT = 0;
 };
-
-#endif // !_I_MC_BEAN_DEFINITION_READER_H_
-
