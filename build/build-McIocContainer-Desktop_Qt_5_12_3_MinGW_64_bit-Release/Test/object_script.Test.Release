@@ -1,0 +1,10 @@
+release/HelloWorld.o
+release/ReferenceBean.o
+release/a.o
+release/main.o
+release/qrc_qml_qmlcache.o
+release/main_qml.o
+release/qmlcache_loader.o
+release/moc_HelloWorld.o
+release/moc_ReferenceBean.o
+release/moc_a.o

@@ -1,0 +1,10 @@
+debug/HelloWorld.o
+debug/ReferenceBean.o
+debug/a.o
+debug/main.o
+debug/qrc_qml_qmlcache.o
+debug/main_qml.o
+debug/qmlcache_loader.o
+debug/moc_HelloWorld.o
+debug/moc_ReferenceBean.o
+debug/moc_a.o
