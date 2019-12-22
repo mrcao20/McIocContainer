@@ -8,7 +8,7 @@ class IMcPropertyParserCollection {
 public:
 	virtual ~IMcPropertyParserCollection() = default;
 
-	virtual QList<IMcPropertyParser *> customParsers() const noexcept = 0;
+    virtual QList<QSharedPointer<IMcPropertyParser>> customParsers() const noexcept = 0;
 };
 
 #define PropertyParserCollectionIId "mc.mrcao.interface.IMcPropertyParserCollection/1.0"

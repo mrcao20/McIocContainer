@@ -56,7 +56,7 @@ public:
 
     QVariantHash getProperties() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_properties; }
     void addProperty(const QString &name, const QVariant &value) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
-            m_properties.insert(name, value);
+        m_properties.insert(name, value);
     }
 
 private:

@@ -7,6 +7,6 @@ class McDefaultApplicationContext : public McAbstractApplicationContext {
 
 public:
     explicit McDefaultApplicationContext(QObject *parent = nullptr);
-    McDefaultApplicationContext(IMcConfigurableBeanFactory *factory, QObject *parent = nullptr);
-	virtual ~McDefaultApplicationContext();
+    McDefaultApplicationContext(const QSharedPointer<IMcConfigurableBeanFactory>& factory, QObject *parent = nullptr);
+    virtual ~McDefaultApplicationContext();
 };

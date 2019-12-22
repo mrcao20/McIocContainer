@@ -3,8 +3,10 @@
 #include "McContainerGlobal.h"
 
 MC_STATIC(ReferenceBean)
-mcRegisterComponent<ReferenceBean, IReferenceBean>("ReferenceBean");
-mcRegisterComponent<ReferenceBean, IReferenceBean>("ReferenceBean", "aaa", false);
+mcRegisterBeanFactory<ReferenceBean, IReferenceBean>("ReferenceBean");
+mcRegisterBeanFactory<ReferenceBean, IReferenceBean>("ReferenceBean");
+//mcRegisterComponent<ReferenceBean, IReferenceBean>("ReferenceBean");
+//mcRegisterComponent<ReferenceBean, IReferenceBean>("ReferenceBean", "aaa", false);
 //mcRegisterQVariantListConverter<QList<QVariant>>();
 mcRegisterQVariantListConverter<QList<QList<QString>>>();
 MC_STATIC_END

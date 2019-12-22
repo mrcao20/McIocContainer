@@ -12,8 +12,8 @@
 # define MCIOCCONTAINER_EXPORT
 #endif
 
-#define MC_SAFE_DELETE(p) (p) ? (delete p, p = Q_NULLPTR) : static_cast<decltype(p)>(nullptr)
-#define MC_SAFE_DELETE_QPOINTER(p) (!p.isNull()) ? (p->deleteLater()) : void()
+//#define MC_SAFE_DELETE(p) (p) ? (delete p, p = Q_NULLPTR) : static_cast<decltype(p)>(nullptr)
+//#define MC_SAFE_DELETE_QPOINTER(p) (!p.isNull()) ? (p->deleteLater()) : void()
 
 #define MC_INTERFACE class
 #define MC_ABSTRACT_CLASS class

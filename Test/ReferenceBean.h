@@ -12,8 +12,9 @@
 
 class ReferenceBean : public QObject, public IReferenceBean {
 	Q_OBJECT;
-	Q_PROPERTY(IHelloWorld *helloWorld READ getHello WRITE setHello USER true);
+    Q_PROPERTY(QSharedPointer<IHelloWorld> helloWorld READ getHello WRITE setHello USER true);
     Q_PROPERTY(QList<QVariant> listData MEMBER m_list);
+    Q_PROPERTY(QVariant text MEMBER m_text);
     MC_DECL_STATIC(ReferenceBean);
 
 public:
@@ -21,8 +22,14 @@ public:
 	~ReferenceBean();
 
     void say() override {
-        qDebug() << m_hello << m_list;
-        m_hello->say();
+        qDebug() << m_hello << m_list << m_text;
+        if(!m_list.isEmpty()) {
+            auto i1 = m_list.at(0);
+            auto h = i1.value<QSharedPointer<IHelloWorld>>();
+            qDebug() << h;
+            h->say();
+        }
+        //m_hello->say();
 	}
 
 	/*QList<int> getList() { return m_list; }
@@ -31,15 +38,16 @@ public:
 		m_list = hello;
 	}*/
 
-	IHelloWorld *getHello() { return m_hello; }
-	void setHello(IHelloWorld *hello) {
+    QSharedPointer<IHelloWorld> getHello() { return m_hello; }
+    void setHello(const QSharedPointer<IHelloWorld>& hello) {
 		m_hello = hello;
 	}
 
 private:
-	IHelloWorld *m_hello{ Q_NULLPTR };
+    QSharedPointer<IHelloWorld> m_hello{ Q_NULLPTR };
     //QList<IHelloWorld *> m_list;
     QList<QVariant> m_list;
+    QVariant m_text;
 };
 
 Q_DECLARE_METATYPE(ReferenceBean *);

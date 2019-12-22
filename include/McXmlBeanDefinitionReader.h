@@ -28,7 +28,7 @@ public:
     explicit McXmlBeanDefinitionReader(const QString &location, QObject *parent = nullptr);
     virtual ~McXmlBeanDefinitionReader() Q_DECL_OVERRIDE;
 
-    void readBeanDefinition(IMcBeanDefinitionRegistry *registry) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    void readBeanDefinition(const QSharedPointer<IMcBeanDefinitionRegistry>& registry) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 
 private:
     void readBeanDefinition(QIODevice *source) noexcept;

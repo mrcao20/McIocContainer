@@ -9,6 +9,8 @@
 
 #include "McMacroGlobal.h"
 
+#include <QSharedPointer>
+
 class IMcBeanDefinitionRegistry;
 
 MC_INTERFACE IMcBeanDefinitionReader {
@@ -24,5 +26,5 @@ public:
 	 <作    者>		mrcao
 	 <时    间>		2019/4/6
 	**************************************************/
-	virtual void readBeanDefinition(IMcBeanDefinitionRegistry *registry) Q_DECL_NOEXCEPT = 0;
+    virtual void readBeanDefinition(const QSharedPointer<IMcBeanDefinitionRegistry>& registry) Q_DECL_NOEXCEPT = 0;
 };

@@ -26,25 +26,23 @@ public:
     /*************************************************
      <函数名称>		getBean
      <函数说明>		根据bean的名称获取bean，如果没有，则返回空，并设置错误信息，
-                                    如果有，则从bean定义对象获取bean实例。
+                        如果有，则从bean定义对象获取bean实例。
      <参数说明>		name bean 名称
-                                    parent bean的父对象
      <返回值>
      <作    者>		mrcao
-     <时    间>		2019/4/3
+     <时    间>		2019/12/22
     **************************************************/
-    QObject *getBean(const QString &name, QObject *parent = Q_NULLPTR) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    QSharedPointer<QObject> getBean(const QString &name) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
     /*************************************************
      <函数名称>		getBeanToVariant
      <函数说明>		根据bean的名称获取包含bean实例的QVariant，如果没有，则返回无效值，并设置错误信息，
-                                    如果有，则从bean定义对象获取包含bean实例的QVariant。
-     <参数说明>		name bean 名称
-                                    parent bean的父对象
+                        如果有，则从bean定义对象获取包含bean实例的QVariant。
+     <参数说明>		name bean 名称parent bean的父对象
      <返回值>
      <作    者>		mrcao
-     <时    间>		2019/12/18
+     <时    间>		2019/12/2
     **************************************************/
-    QVariant getBeanToVariant(const QString &name, QObject *parent = Q_NULLPTR)  Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    QVariant getBeanToVariant(const QString &name)  Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
     /*************************************************
      <函数名称>		containsBean
      <函数说明>		检测容器中是否存在该bean
@@ -74,7 +72,17 @@ public:
      <作    者>		mrcao
      <时    间>		2019/4/3
     **************************************************/
-    QObject *resolveBeanReference(McBeanReference *beanRef) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    QSharedPointer<QObject> resolveBeanReference(const QSharedPointer<McBeanReference>& beanRef) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    /*************************************************
+     <函数名称>		resolveBeanReferenceToQVariant
+     <函数说明>		根据beanReference生成包含实例对象的QVariant。
+     <参数说明>		beanRef beanReference
+     <返回值>		生成包含reference实例的QVariant
+                        注：QVariant中包含的类型为QSharedPointer<McBeanReference::getName()>，即最底层类型
+     <作    者>		mrcao
+     <时    间>		2019/12/22
+    **************************************************/
+    QVariant resolveBeanReferenceToQVariant(const QSharedPointer<McBeanReference>& beanRef) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 
 protected:
     /*************************************************
@@ -88,5 +96,5 @@ protected:
     virtual QVariant doCreate(const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT = 0;
 
 private:
-	QScopedPointer<McAbstractBeanFactoryData> d;	// 用于存放数据，在cpp中实现
+    QScopedPointer<McAbstractBeanFactoryData> d;	// 用于存放数据，在cpp中实现
 };

@@ -15,9 +15,20 @@
 
 void mcInitContainer();
 
+template<typename From, typename To>
+To mcConverterQSharedPointerObject(const From &from) {
+    return from.template objectCast<typename To::Type>();
+}
+
 template<typename T>
 int mcRegisterBeanFactory(const char *typeName = Q_NULLPTR) {
     Q_STATIC_ASSERT_X(!std::is_pointer<T>::value, "mcRegisterBeanFactory's template type must not be a pointer type");
+    if (!QMetaType::hasRegisteredConverterFunction<QSharedPointer<T>, QSharedPointer<QObject>>()) {
+        QMetaType::registerConverter<QSharedPointer<T>, QSharedPointer<QObject>>();
+    }
+    if (!QMetaType::hasRegisteredConverterFunction<QSharedPointer<QObject>, QSharedPointer<T>>()) {
+        QMetaType::registerConverter<QSharedPointer<QObject>, QSharedPointer<T>>(mcConverterQSharedPointerObject<QSharedPointer<QObject>, QSharedPointer<T>>);
+    }
 	if (typeName == Q_NULLPTR) {
         return qRegisterMetaType<T*>();
 	}
@@ -34,9 +45,6 @@ int mcRegisterBeanFactory(const char *typeName = Q_NULLPTR) {
     }
     if (!QMetaType::hasRegisteredConverterFunction<QSharedPointer<From>, QSharedPointer<To>>()) {
         QMetaType::registerConverter<QSharedPointer<From>, QSharedPointer<To>>();
-    }
-    if (!QMetaType::hasRegisteredConverterFunction<QSharedPointer<From>, QSharedPointer<QObject>>()) {
-        QMetaType::registerConverter<QSharedPointer<From>, QSharedPointer<QObject>>();
     }
     int typeId = mcRegisterBeanFactory<From>(typeName);
 	return typeId;

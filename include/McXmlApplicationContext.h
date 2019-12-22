@@ -2,6 +2,8 @@
 
 #include "McDefaultApplicationContext.h"
 
+#include <QSharedPointer>
+
 class IMcBeanDefinitionReader;
 class McXmlBeanFactory;
 
@@ -10,7 +12,7 @@ class MCIOCCONTAINER_EXPORT McXmlApplicationContext : public McDefaultApplicatio
 
 public:
     McXmlApplicationContext(const QString &location, QObject *parent = nullptr);
-    McXmlApplicationContext(IMcBeanDefinitionReader *reader, QObject *parent = nullptr);
-    McXmlApplicationContext(McXmlBeanFactory *factory, QObject *parent = nullptr);
-	virtual ~McXmlApplicationContext();
+    McXmlApplicationContext(const QSharedPointer<IMcBeanDefinitionReader>& reader, QObject *parent = nullptr);
+    McXmlApplicationContext(const QSharedPointer<IMcConfigurableBeanFactory>& factory, const QSharedPointer<IMcBeanDefinitionReader>& reader, QObject *parent = nullptr);
+    virtual ~McXmlApplicationContext();
 };

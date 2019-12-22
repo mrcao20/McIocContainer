@@ -23,10 +23,8 @@ public:
     QString getName() { return m_name; }
     void setName(const QString &name) { m_name = name; }
 
-    QObject *getBean() { return m_bean; }
-    void setBean(QObject *bean) { m_bean = bean; }
-
 private:
     QString m_name;						// 被引用bean的名称
-    QObject *m_bean{ Q_NULLPTR };		// 被引用bean的对象
 };
+
+Q_DECLARE_METATYPE(McBeanReference*)

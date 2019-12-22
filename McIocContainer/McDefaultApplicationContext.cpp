@@ -3,11 +3,11 @@
 #include "../include/McDefaultBeanFactory.h"
 
 McDefaultApplicationContext::McDefaultApplicationContext(QObject *parent)
-	: McDefaultApplicationContext(new McDefaultBeanFactory(), parent)
+    : McDefaultApplicationContext(QSharedPointer<IMcConfigurableBeanFactory>(new McDefaultBeanFactory()), parent)
 {
 }
 
-McDefaultApplicationContext::McDefaultApplicationContext(IMcConfigurableBeanFactory *factory
+McDefaultApplicationContext::McDefaultApplicationContext(const QSharedPointer<IMcConfigurableBeanFactory>& factory
 	, QObject *parent)
 	: McAbstractApplicationContext(factory, parent)
 {

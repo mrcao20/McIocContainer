@@ -14,7 +14,7 @@ public:
     /*	构造函数，需要一个configurableBeanFactory来提供bean的操作功能
             本类析构时会自动析构configurableBeanFactory，故无需为其指定父对象
     */
-    McAbstractApplicationContext(IMcConfigurableBeanFactory *factory, QObject *parent = nullptr);
+    McAbstractApplicationContext(const QSharedPointer<IMcConfigurableBeanFactory>& factory, QObject *parent = nullptr);
     virtual ~McAbstractApplicationContext() Q_DECL_OVERRIDE;
 
     /*************************************************
@@ -27,7 +27,7 @@ public:
      <作    者>		mrcao
      <时    间>		2019/4/77
     **************************************************/
-    QObject *getBean(const QString &name, QObject *parent = Q_NULLPTR) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    QSharedPointer<QObject> getBean(const QString &name) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
     /*************************************************
      <函数名称>		getBeanToVariant
      <函数说明>		根据bean的名称获取包含bean实例的QVariant，如果没有，则返回无效值，并设置错误信息，
@@ -38,7 +38,7 @@ public:
      <作    者>		mrcao
      <时    间>		2019/12/18
     **************************************************/
-    QVariant getBeanToVariant(const QString &name, QObject *parent = Q_NULLPTR)  Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    QVariant getBeanToVariant(const QString &name)  Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
     /*************************************************
      <函数名称>		containsBean
      <函数说明>		检测容器中是否存在该bean

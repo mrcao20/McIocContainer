@@ -39,6 +39,7 @@ void McIocContainer::initContainer() {
 		qInfo() << "The container has been initialized";
 		return;
 	}
+    mcRegisterBeanFactory<McBeanReference>();
 	m_applicationContext = new McDefaultApplicationContext(this);
 	mcInitContainer();
     QHashIterator<decltype (m_autowiredRegistry)::key_type, decltype (m_autowiredRegistry)::mapped_type> iterator(m_autowiredRegistry);
@@ -105,7 +106,7 @@ void McIocContainer::injectProperty(const QMetaObject *metaObj, const QSharedPoi
 			continue;
 		}
 		QString typeName = prop.name();
-		McBeanReference *beanRef = new McBeanReference(typeName);
+        QSharedPointer<McBeanReference> beanRef = QSharedPointer<McBeanReference>::create(typeName);
 		beanDefinition->addProperty(prop.name(), QVariant::fromValue(beanRef));
 	}
 }

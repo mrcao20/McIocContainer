@@ -12,7 +12,7 @@
 #include "../include/IMcPropertyParser.h"
 
 struct McXmlBeanDefinitionReaderData {
-	IMcBeanDefinitionRegistry *registry{ Q_NULLPTR };
+    QSharedPointer<IMcBeanDefinitionRegistry> registry;
 	QString location;
 };
 
@@ -26,7 +26,7 @@ McXmlBeanDefinitionReader::McXmlBeanDefinitionReader(const QString &location, QO
 McXmlBeanDefinitionReader::~McXmlBeanDefinitionReader(){
 }
 
-void McXmlBeanDefinitionReader::readBeanDefinition(IMcBeanDefinitionRegistry *registry) Q_DECL_NOEXCEPT {
+void McXmlBeanDefinitionReader::readBeanDefinition(const QSharedPointer<IMcBeanDefinitionRegistry>& registry) Q_DECL_NOEXCEPT {
 	d->registry = registry;
 
 	QFile file(d->location);
@@ -89,6 +89,10 @@ void McXmlBeanDefinitionReader::readBeanDefinition(const QDomNodeList &nodes) no
             qCritical() << "bean must be class or plugin, please check!!!";
             return;
         }
+        if(ele.hasAttribute("isSingleton") && ele.attribute("isSingleton") == "false")
+            beanDefinition->setSingleton(false);
+        else
+            beanDefinition->setSingleton(true);
 		readBeanDefinition(ele.childNodes(), beanDefinition);
 		// 向注册容器 添加bean名称和bean定义
 		d->registry->registerBeanDefinition(name, beanDefinition);
@@ -106,7 +110,7 @@ void McXmlBeanDefinitionReader::readBeanDefinition(const QDomNodeList &propNodes
 			qCritical() << "property name no be able null!!";
 			continue;
 		}
-		const QList<IMcPropertyParser *> &parsers = McPropertyParserPlugins::getInstance()->getParsers();
+        const auto& parsers = McPropertyParserPlugins::getInstance()->getParsers();
 		QVariant value;
 		int j = 0;
         for (j = 0; j < parsers.size(); ++j) {

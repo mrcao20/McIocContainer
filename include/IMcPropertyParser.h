@@ -24,7 +24,7 @@ public:
 	 <作    者>		mrcao
 	 <时    间>		2019/4/25
 	**************************************************/
-	virtual bool parseProperty(const QDomElement &propEle, const QList<IMcPropertyParser *> &parsers, QVariant &value) const noexcept = 0;
+    virtual bool parseProperty(const QDomElement &propEle, const QList<QSharedPointer<IMcPropertyParser>>& parsers, QVariant &value) const noexcept = 0;
 	/*************************************************
 	 <函数名称>		convertProperty
 	 <函数说明>		将传入属性值转换为对应属性的属性类型
@@ -37,7 +37,7 @@ public:
 	 <作    者>		mrcao
 	 <时    间>		2019/4/25
 	**************************************************/
-	virtual bool convertProperty(QObject *bean, const char *propTypeName, const QList<IMcPropertyParser *> &parsers, IMcBeanReferenceResolver *refResolver, QVariant &value) const noexcept = 0;
+    virtual bool convertProperty(const QSharedPointer<QObject>& bean, const char *propTypeName, const QList<QSharedPointer<IMcPropertyParser>>& parsers, IMcBeanReferenceResolver* refResolver, QVariant &value) const noexcept = 0;
 };
 
 #define PropertyParserIId "mc.mrcao.interface.IMcPropertyParser/1.0"

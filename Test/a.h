@@ -2,6 +2,9 @@
 #define A_H
 
 #include <QObject>
+#include <QSharedPointer>
+
+class ReferenceBean;
 
 class A: public QObject
 {
@@ -9,6 +12,7 @@ class A: public QObject
 public:
     A();
     Q_INVOKABLE QString a();
+    QVariant bbb();
 };
 
 #endif // A_H

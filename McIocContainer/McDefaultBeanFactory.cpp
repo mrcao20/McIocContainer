@@ -19,7 +19,7 @@ McDefaultBeanFactory::~McDefaultBeanFactory(){
 
 QVariant McDefaultBeanFactory::doCreate(const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT {
     QVariant var;
-    QObject *bean = nullptr;
+    QSharedPointer<QObject> bean;
     auto pluginPath = beanDefinition->getPluginPath();
     if(!pluginPath.isEmpty()){
         QPluginLoader loader(pluginPath);
@@ -27,30 +27,29 @@ QVariant McDefaultBeanFactory::doCreate(const QSharedPointer<IMcBeanDefinition>&
             qWarning() << pluginPath << "cannot load!!";
             return QVariant();
         }
-        bean = loader.instance();
+        bean.reset(loader.instance());
     }else{
         auto beanMetaObj = beanDefinition->getBeanMetaObject();
         if (!beanMetaObj) {
             qCritical() << QString("the class '%1' is not in meta-object system").arg(beanDefinition->getClassName());
             return QVariant();
         }
-        bean = beanMetaObj->newInstance();
+        bean.reset(beanMetaObj->newInstance());
     }
 	if (!addPropertyValue(bean, beanDefinition)) {
 		qCritical() << QString("failed to init definition '%1'").arg(beanDefinition->getClassName());
-		MC_SAFE_DELETE(bean);
         return QVariant();
 	}
     var.setValue(bean);
-    if(!var.convert(QMetaType::type(beanDefinition->getClassName().toLocal8Bit()))) {
-        qCritical() << QString("failed convert QObject to '%1'").arg(beanDefinition->getClassName());
-        MC_SAFE_DELETE(bean);
+    QString typeName = QString("QSharedPointer<%1>").arg(beanDefinition->getClassName());
+    if(!var.convert(QMetaType::type(typeName.toLocal8Bit()))) {
+        qCritical() << QString("failed convert QSharedPointer<QObject> to '%1'").arg(typeName);
         return QVariant();
     }
     return var;
 }
 
-bool McDefaultBeanFactory::addPropertyValue(QObject *bean, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT {
+bool McDefaultBeanFactory::addPropertyValue(const QSharedPointer<QObject>& bean, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT {
 	if (!bean) {
 		qCritical() << QString("bean '%1' cannot instantiation, please make sure that have a non-parameter constructor and declared by Q_INVOKABLE")
 			.arg(beanDefinition->getClassName());
@@ -66,13 +65,13 @@ bool McDefaultBeanFactory::addPropertyValue(QObject *bean, const QSharedPointer<
 		auto value = itr.value();
 
 		// ½âÎövalue
-		const QList<IMcPropertyParser *> &parsers = McPropertyParserPlugins::getInstance()->getParsers();
+        const auto& parsers = McPropertyParserPlugins::getInstance()->getParsers();
 		for (auto parser : parsers) {
 			if (parser->convertProperty(bean, metaProperty.typeName(), parsers, this, value))
 				break;
 		}
 
-		metaProperty.write(bean, value);
+        metaProperty.write(bean.data(), value);
 	}
 	return true;
 }

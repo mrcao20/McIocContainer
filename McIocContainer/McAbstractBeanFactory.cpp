@@ -21,14 +21,14 @@ McAbstractBeanFactory::McAbstractBeanFactory(QObject *parent)
 McAbstractBeanFactory::~McAbstractBeanFactory() {
 }
 
-QObject *McAbstractBeanFactory::getBean(const QString &name, QObject *parent) Q_DECL_NOEXCEPT {
-    auto var = getBeanToVariant(name, parent);
+QSharedPointer<QObject> McAbstractBeanFactory::getBean(const QString &name) Q_DECL_NOEXCEPT {
+    auto var = getBeanToVariant(name);
     if(!var.isValid())
-        return nullptr;
-    return var.value<QObject*>();
+        return QSharedPointer<QObject>();
+    return var.value<QSharedPointer<QObject>>();
 }
 
-QVariant McAbstractBeanFactory::getBeanToVariant(const QString &name, QObject *parent)  Q_DECL_NOEXCEPT {
+QVariant McAbstractBeanFactory::getBeanToVariant(const QString &name)  Q_DECL_NOEXCEPT {
     QMutexLocker locker(&d->mtx);
     auto beanDefinition = d->map.value(name);
     if (beanDefinition == Q_NULLPTR) {
@@ -36,7 +36,6 @@ QVariant McAbstractBeanFactory::getBeanToVariant(const QString &name, QObject *p
         return QVariant();
     }
     auto beanVar = beanDefinition->getBean();
-    QObject* bean = nullptr;
     if (!beanVar.isValid()) {	// 如果bean不存在
         beanVar = doCreate(beanDefinition);	// 创建
         if (!beanVar.isValid()) {
@@ -46,8 +45,6 @@ QVariant McAbstractBeanFactory::getBeanToVariant(const QString &name, QObject *p
         if(beanDefinition->isSingleton())
             beanDefinition->setBean(beanVar);		// 如果为单例时，则放进beanDefinition，以达到复用。
     }
-    bean = beanVar.value<QObject*>();
-    bean->setParent(parent);				// 设置父对象
     return beanVar;
 }
 
@@ -63,15 +60,18 @@ QMap<QString, QSharedPointer<IMcBeanDefinition>> McAbstractBeanFactory::getBeanD
 	return d->map;
 }
 
-QObject *McAbstractBeanFactory::resolveBeanReference(McBeanReference *beanRef) Q_DECL_NOEXCEPT {
-	if (!beanRef) {
-		qCritical() << "beanReference not exists";
-		return Q_NULLPTR;
-	}
-	if (beanRef->getBean()) {	// 如果bean已经被实例化过，则直接返回
-		return beanRef->getBean();
-	}
-	// 调用getBean方法，根据bean引用的名称获取实例
-	beanRef->setBean(getBean(beanRef->getName()));
-	return beanRef->getBean();
+QSharedPointer<QObject> McAbstractBeanFactory::resolveBeanReference(const QSharedPointer<McBeanReference>& beanRef) Q_DECL_NOEXCEPT {
+    auto var = resolveBeanReferenceToQVariant(beanRef);
+    if(!var.isValid())
+        return QSharedPointer<QObject>();
+    return var.value<QSharedPointer<QObject>>();
+}
+
+QVariant McAbstractBeanFactory::resolveBeanReferenceToQVariant(const QSharedPointer<McBeanReference>& beanRef) Q_DECL_NOEXCEPT {
+    if (!beanRef) {
+        qCritical() << "beanReference not exists";
+        return QVariant();
+    }
+    // 调用getBeanToVariant方法，根据bean引用的名称获取实例
+    return getBeanToVariant(beanRef->getName());
 }

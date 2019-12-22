@@ -3,6 +3,7 @@
 #include <QObject>
 
 #include <qlist.h>
+#include <QSharedPointer>
 
 class IMcPropertyParser;
 
@@ -17,12 +18,12 @@ public:
 	static McPropertyParserPlugins *getInstance() noexcept;
 
 	void loadPlugin() noexcept;
-	const QList<IMcPropertyParser *> &getParsers() const noexcept {
+    const QList<QSharedPointer<IMcPropertyParser>>& getParsers() const noexcept {
 		return m_parsers;
 	}
 
 private:
 	static McPropertyParserPlugins *instance;
 
-	QList<IMcPropertyParser *> m_parsers;
+    QList<QSharedPointer<IMcPropertyParser>> m_parsers;
 };

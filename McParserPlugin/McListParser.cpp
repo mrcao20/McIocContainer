@@ -17,7 +17,7 @@ McListParser::McListParser(QObject *parent)
 McListParser::~McListParser(){
 }
 
-bool McListParser::parseProperty(const QDomElement &propEle, const QList<IMcPropertyParser *> &parsers, QVariant &value) const noexcept {
+bool McListParser::parseProperty(const QDomElement &propEle, const QList<QSharedPointer<IMcPropertyParser>> &parsers, QVariant &value) const noexcept {
 	QDomNode childNode = propEle.firstChild();
 	if (m_listType.contains(propEle.nodeName()))
 		childNode = propEle;
@@ -44,16 +44,13 @@ bool McListParser::parseProperty(const QDomElement &propEle, const QList<IMcProp
 	return true;
 }
 
-bool McListParser::convertProperty(QObject *bean, const char *propTypeName, const QList<IMcPropertyParser *> &parsers, IMcBeanReferenceResolver *refResolver, QVariant &value) const noexcept {
+bool McListParser::convertProperty(const QSharedPointer<QObject>& bean, const char *propTypeName, const QList<QSharedPointer<IMcPropertyParser>>& parsers, IMcBeanReferenceResolver* refResolver, QVariant &value) const noexcept {
 	// 判断属性值是否是一个list
 	if (!value.canConvert<QVariantList>())
 		return false;	// 本解析器无法解析，传递给其他解析器解析
 	// 如果是就将其转换
 	QString childTypeName;
 	getChildTypeName(propTypeName, childTypeName);
-    if(childTypeName == "QVariant") {
-        return true;
-    }
 	auto list = value.value<QVariantList>();
 	value.clear();	// 清空value，使其无效
 	for (auto &var : list) {	// 此处遍历list中QVariant的引用，即直接修改list中的值

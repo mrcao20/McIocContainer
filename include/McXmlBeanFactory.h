@@ -17,12 +17,12 @@ class MCIOCCONTAINER_EXPORT McXmlBeanFactory : public McDefaultBeanFactory {
     Q_OBJECT
 
 public:
-	/*	构造函数，传入一个reader，并调用read方法注册bean
-		本对象析构时会自动析构reader，故无需为为reader指定父对象
-	*/
-    explicit McXmlBeanFactory(IMcBeanDefinitionReader *reader, QObject *parent = nullptr);
-	virtual ~McXmlBeanFactory();
+    /*	构造函数，传入一个reader，并调用read方法注册bean
+            本对象析构时会自动析构reader，故无需为为reader指定父对象
+    */
+    explicit McXmlBeanFactory(QObject *parent = nullptr);
+    virtual ~McXmlBeanFactory();
 
 private:
-	QScopedPointer<McXmlBeanFactoryData> d;
+    QScopedPointer<McXmlBeanFactoryData> d;
 };

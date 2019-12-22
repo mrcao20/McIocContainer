@@ -31,7 +31,6 @@ McPropertyParserPlugins *McPropertyParserPlugins::getInstance() noexcept {
 }
 
 void McPropertyParserPlugins::loadPlugin() noexcept {
-	qDeleteAll(m_parsers);
 	m_parsers.clear();
 #ifdef Q_OS_ANDROID
     QString pluginsPath = qApp->applicationDirPath();
@@ -66,7 +65,8 @@ void McPropertyParserPlugins::loadPlugin() noexcept {
 		else {
 			IMcPropertyParser *parser = qobject_cast<IMcPropertyParser *>(obj);
 			if(parser)
-				m_parsers.append(parser);
+                m_parsers.append(QSharedPointer<IMcPropertyParser>(parser));
 		}
+        loader.unload();    // Ð¶ÔØ²¢Îö¹¹²å¼þ
 	}
 }

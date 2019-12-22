@@ -23,9 +23,19 @@ public:
 	 <函数名称>		resolveBeanReference
 	 <函数说明>		根据beanReference生成实例对象。
 	 <参数说明>		beanRef beanReference
-	 <返回值>		生成的reference实例
+     <返回值>        生成的reference实例
 	 <作    者>		mrcao
 	 <时    间>		2019/4/3
 	**************************************************/
-	virtual QObject *resolveBeanReference(McBeanReference *beanRef) Q_DECL_NOEXCEPT = 0;
+    virtual QSharedPointer<QObject> resolveBeanReference(const QSharedPointer<McBeanReference>& beanRef) Q_DECL_NOEXCEPT = 0;
+    /*************************************************
+     <函数名称>		resolveBeanReferenceToQVariant
+     <函数说明>		根据beanReference生成包含实例对象的QVariant。
+     <参数说明>		beanRef beanReference
+     <返回值>        生成包含reference实例的QVariant
+                    注：QVariant中包含的类型为QSharedPointer<McBeanReference::getName()>，即最底层类型
+     <作    者>		mrcao
+     <时    间>		2019/12/22
+    **************************************************/
+    virtual QVariant resolveBeanReferenceToQVariant(const QSharedPointer<McBeanReference>& beanRef) Q_DECL_NOEXCEPT = 0;
 };
