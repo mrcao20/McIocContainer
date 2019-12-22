@@ -13,6 +13,7 @@
 #include "McMacroGlobal.h"
 
 #include <QHash>
+#include <QSharedPointer>
 
 class IMcApplicationContext;
 class IMcBeanDefinition;
@@ -35,7 +36,7 @@ public:
     // 传入的元对象的组件类型是否为type
     bool isComponentType(const QMetaObject *metaObj, const QString &type) noexcept;
 
-    IMcApplicationContext *getApplicationContext() {
+    QSharedPointer<IMcApplicationContext> getApplicationContext() {
             return m_applicationContext;
     }
 
@@ -46,7 +47,7 @@ private:
 private:
     static McIocContainer *m_container;
 
-    IMcApplicationContext *m_applicationContext{ Q_NULLPTR };
+    QSharedPointer<IMcApplicationContext> m_applicationContext;
     QHash<QString, QSharedPointer<IMcBeanDefinition>> m_autowiredRegistry;	// 用来保存需要自动注入的bean的beanName和BeanDefinition
 
 private:

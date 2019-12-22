@@ -31,15 +31,15 @@ http://www.springframework.org/schema/beans ">
             </vector>
     </property>
 
-    <!-- <property name="mapData"> -->
-            <!-- <map> -->
-                    <!-- <entry key="jack" value="杰克"></entry> -->
-                    <!-- <entry> -->
-                            <!-- <key><value>rose</value></key> -->
-                            <!-- <value>肉丝</value> -->
-                    <!-- </entry> -->
-            <!-- </map> -->
-    <!-- </property> -->
+     <property name="mapData">
+         <map>
+             <entry key="jack" value="杰克"></entry>
+             <entry>
+                 <key><value>rose</value></key>
+                 <value>肉丝</value>
+             </entry>
+         </map>
+     </property>
     <!-- <property name="hashData"> -->
             <!-- <hash> -->
                     <!-- <entry key="zero" value="凌"></entry> -->

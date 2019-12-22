@@ -40,7 +40,7 @@ void McIocContainer::initContainer() {
 		return;
 	}
     mcRegisterBeanFactory<McBeanReference>();
-	m_applicationContext = new McDefaultApplicationContext(this);
+    m_applicationContext = QSharedPointer<IMcApplicationContext>::create();
 	mcInitContainer();
     QHashIterator<decltype (m_autowiredRegistry)::key_type, decltype (m_autowiredRegistry)::mapped_type> iterator(m_autowiredRegistry);
     while (iterator.hasNext()) {

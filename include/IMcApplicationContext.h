@@ -7,7 +7,5 @@ MC_INTERFACE IMcApplicationContext
 
 public:
 	virtual ~IMcApplicationContext() = default;
-
-
 };
 
