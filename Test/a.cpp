@@ -29,6 +29,7 @@ QString A::a(){
 //    ReferenceBean *f = qobject_cast<ReferenceBean *>(appCtx->getBean("referenceBean"));
 //    f != nullptr ? f->say() : void();
     QVariant var = appCtx->getBeanToVariant("referenceBean");
+    var.value<QSharedPointer<IReferenceBean>>();
     auto f = appCtx->getBeanToVariant("referenceBean").value<QSharedPointer<IReferenceBean>>();
     auto f1 = appCtx->getBeanToVariant("referenceBean").value<QSharedPointer<IReferenceBean>>();
     auto b = appCtx->getBeanToVariant("aaa").value<QSharedPointer<IReferenceBean>>();
