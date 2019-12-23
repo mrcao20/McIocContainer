@@ -4,8 +4,11 @@
 #include <QVariant>
 #include <QSharedPointer>
 
+#define MC_DECLARE_METATYPE(Class)  \
+    Q_DECLARE_METATYPE(QSharedPointer<Class>)
+
 #define MC_DECL_STATIC(Class)	\
-	static const int Class##_Static_Init;
+    static const int Class##_Static_Init;
 
 #define MC_STATIC(Class)	\
 	const int Class::Class##_Static_Init = []() -> int {
@@ -13,7 +16,63 @@
 #define MC_STATIC_END	\
 	return 0;}();
 
+#define MC_DEFINE_TYPELIST(...)    \
+public: \
+    using McPrivateTypeList = McPrivate::McTypeList<__VA_ARGS__>;    \
+private:
+
+#define MC_TYPELIST(Class)   \
+    Class, Class::McPrivateTypeList
+
+#define MC_DECL_TYPELIST(Class) MC_TYPELIST(Class)
+
 void mcInitContainer();
+
+namespace McPrivate {
+
+template <typename...> struct McTypeList;
+
+template <typename T, typename... U>
+struct McTypeList<T, U...> {
+    using Head = T;
+    using Tails = McTypeList<U...>;
+};
+
+// 针对空list的特化
+template <>
+struct McTypeList<> {};
+
+template<typename From, typename To>
+struct McRegisterConverterHelper {
+    static void registerConverter(){
+        if (!QMetaType::hasRegisteredConverterFunction<QSharedPointer<From>, QSharedPointer<To>>()) {
+            QMetaType::registerConverter<QSharedPointer<From>, QSharedPointer<To>>();
+        }
+    }
+};
+
+template<typename From, typename... Tos>
+struct McRegisterConverterHelper<From, McPrivate::McTypeList<Tos...>> {
+    static void registerConverter(){
+        using TypeList = McPrivate::McTypeList<Tos...>;
+        McRegisterConverterHelper<From, typename TypeList::Head>::registerConverter();
+        McRegisterConverterHelper<From, typename TypeList::Tails>::registerConverter();
+    }
+};
+
+template<typename From>
+struct McRegisterConverterHelper<From, QObject> {
+    static void registerConverter(){
+    }
+};
+
+template<typename From>
+struct McRegisterConverterHelper<From, McPrivate::McTypeList<>> {
+    static void registerConverter(){
+    }
+};
+
+}
 
 template<typename From, typename To>
 To mcConverterQSharedPointerObject(const From &from) {
@@ -39,14 +98,9 @@ int mcRegisterBeanFactory(const char *typeName = Q_NULLPTR) {
 
 template<typename From, typename To>
 int mcRegisterBeanFactory(const char *typeName = Q_NULLPTR) {
-    Q_STATIC_ASSERT_X(!std::is_pointer<To>::value, "mcRegisterBeanFactory's template type must not be a pointer type");
-    if (!QMetaType::hasRegisteredConverterFunction<From*, To*>()) {
-        QMetaType::registerConverter<From*, To*>();
-    }
-    if (!QMetaType::hasRegisteredConverterFunction<QSharedPointer<From>, QSharedPointer<To>>()) {
-        QMetaType::registerConverter<QSharedPointer<From>, QSharedPointer<To>>();
-    }
     int typeId = mcRegisterBeanFactory<From>(typeName);
+    Q_STATIC_ASSERT_X(!std::is_pointer<To>::value, "mcRegisterBeanFactory's template type must not be a pointer type");
+    McPrivate::McRegisterConverterHelper<From, To>::registerConverter();
 	return typeId;
 }
 

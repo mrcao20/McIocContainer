@@ -13,7 +13,78 @@ A::A()
 
 }
 
+namespace McPrivate {
+
+template <typename...> struct TypeList;
+
+template <typename T, typename... U>
+struct TypeList<T, U...> {
+    using Head = T;
+    using Tails = TypeList<U...>;
+};
+
+// 针对空list的特化
+template <>
+struct TypeList<> {};
+
+}
+
+class P {
+public:
+    virtual ~P() = default;
+    using TypeList = McPrivate::TypeList<>;
+};
+
+class I {
+public:
+    virtual ~I() = default;
+    using TypeList = McPrivate::TypeList<>;
+};
+
+class O : public QObject, public I {
+    Q_OBJECT
+public:
+    using TypeList = McPrivate::TypeList<QObject, I, I::TypeList>;
+};
+
+class D : public O, public P {
+public:
+    using TypeList = McPrivate::TypeList<O::TypeList, P, O, P::TypeList>;
+};
+
+template<typename From, typename To>
+struct Converter {
+    static void converter(){
+        qDebug() << "mmmmmmmmmmm";
+    }
+};
+
+template<typename T, typename... U>
+struct Converter<T, McPrivate::TypeList<U...>> {
+    static void converter(){
+        qDebug() << "aaaaaaaa";
+        using TypeList = McPrivate::TypeList<U...>;
+        Converter<T, typename TypeList::Head>::converter();
+        Converter<T, typename TypeList::Tails>::converter();
+    }
+};
+
+template<typename From>
+struct Converter<From, QObject> {
+    static void converter(){
+        qDebug() << "llllllllll";
+    }
+};
+
+template<typename T>
+struct Converter<T, McPrivate::TypeList<>> {
+    static void converter(){
+        qDebug() << "bbbbbbbbbb";
+    }
+};
+
 QString A::a(){
+    //Converter<D, D::TypeList>::converter();
 //    QMultiHash<QString, QString> hash;
 //    hash.insert("a", "fff");
 //    hash.insert("a", "eeee");
@@ -30,7 +101,7 @@ QString A::a(){
 //    f != nullptr ? f->say() : void();
     QVariant var = appCtx->getBeanToVariant("referenceBean");
     var.value<QSharedPointer<IReferenceBean>>();
-    auto f = appCtx->getBeanToVariant("referenceBean").value<QSharedPointer<IReferenceBean>>();
+    auto f = appCtx->getBeanToVariant("referenceBean").value<QSharedPointer<IRR>>();
     auto f1 = appCtx->getBeanToVariant("referenceBean").value<QSharedPointer<IReferenceBean>>();
     auto b = appCtx->getBeanToVariant("aaa").value<QSharedPointer<IReferenceBean>>();
     auto b1 = appCtx->getBeanToVariant("aaa").value<QSharedPointer<IReferenceBean>>();

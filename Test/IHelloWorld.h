@@ -1,6 +1,7 @@
 #pragma once
 
 #include <qmetaobject.h>
+#include "McBeanGlobal.h"
 
 class IHelloWorld {
 
@@ -10,5 +11,4 @@ public:
 	virtual void say() = 0;
 };
 
-Q_DECLARE_METATYPE(IHelloWorld *);
-Q_DECLARE_METATYPE(QSharedPointer<IHelloWorld>);
+MC_DECLARE_METATYPE(IHelloWorld)

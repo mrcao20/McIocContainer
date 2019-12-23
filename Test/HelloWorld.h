@@ -6,7 +6,7 @@
 #include <qdebug.h>
 
 #include "McMacroGlobal.h"
-#include "McBeanGlobal.h"
+
 
 class HelloWorld : public QObject, public IHelloWorld {
     Q_OBJECT
@@ -45,4 +45,4 @@ private:
 
 };
 
-Q_DECLARE_METATYPE(HelloWorld *)
+MC_DECLARE_METATYPE(HelloWorld)

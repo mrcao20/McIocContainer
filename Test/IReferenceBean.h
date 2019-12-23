@@ -3,15 +3,16 @@
 
 #include <qmetaobject.h>
 
-class IReferenceBean {
+#include "McBeanGlobal.h"
 
+class IReferenceBean {
+    MC_DEFINE_TYPELIST()
 public:
     virtual ~IReferenceBean() = default;
 
     virtual void say() = 0;
 };
 
-Q_DECLARE_METATYPE(IReferenceBean *);
-Q_DECLARE_METATYPE(QSharedPointer<IReferenceBean>)
+MC_DECLARE_METATYPE(IReferenceBean)
 
 #endif // IREFERENCEBEAN_H

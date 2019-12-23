@@ -8,14 +8,15 @@
 #include <qlist.h>
 
 #include "McBeanGlobal.h"
-#include "IReferenceBean.h"
+#include "IRR.h"
 
-class ReferenceBean : public QObject, public IReferenceBean {
-	Q_OBJECT;
+class ReferenceBean : public QObject, public IRR {
+    Q_OBJECT
     Q_PROPERTY(QSharedPointer<IHelloWorld> helloWorld READ getHello WRITE setHello USER true);
     Q_PROPERTY(QList<QVariant> listData MEMBER m_list);
     Q_PROPERTY(QVariant text MEMBER m_text);
-    MC_DECL_STATIC(ReferenceBean);
+    MC_DECL_STATIC(ReferenceBean)
+    MC_DEFINE_TYPELIST(QObject, MC_TYPELIST(IRR))
 
 public:
 	Q_INVOKABLE explicit ReferenceBean(QObject *parent = 0);
@@ -50,4 +51,4 @@ private:
     QVariant m_text;
 };
 
-Q_DECLARE_METATYPE(ReferenceBean *);
+MC_DECLARE_METATYPE(ReferenceBean)

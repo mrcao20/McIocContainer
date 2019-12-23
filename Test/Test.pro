@@ -48,6 +48,7 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
 HEADERS += \
     HelloWorld.h \
     IHelloWorld.h \
+    IRR.h \
     IReferenceBean.h \
     ReferenceBean.h \
     a.h
