@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "McMacroGlobal.h"
+#include "../McMacroGlobal.h"
 
 #include <qstring.h>
 #include <qvariant.h>

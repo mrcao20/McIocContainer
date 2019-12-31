@@ -8,7 +8,7 @@
 #pragma once
 
 #include <qobject.h>
-#include "McMacroGlobal.h"
+#include "../McMacroGlobal.h"
 
 class MCIOCCONTAINER_EXPORT McBeanReference : public QObject {
     Q_OBJECT

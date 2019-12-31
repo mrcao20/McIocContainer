@@ -1,6 +1,6 @@
 #include "HelloWorld.h"
 
-#include "McContainerGlobal.h"
+#include "ApplicationContext/McContainerGlobal.h"
 
 MC_STATIC(HelloWorld)
 mcRegisterBeanFactory<HelloWorld, IHelloWorld>("HelloWorld");

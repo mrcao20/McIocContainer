@@ -6,11 +6,12 @@
 
 #include <qdebug.h>
 #include <qlist.h>
+#include <QEnableSharedFromThis>
 
-#include "McBeanGlobal.h"
+#include "BeanFactory/McBeanGlobal.h"
 #include "IRR.h"
 
-class ReferenceBean : public QObject, public IRR {
+class ReferenceBean : public QObject, public IRR, public QEnableSharedFromThis<ReferenceBean> {
     Q_OBJECT
     Q_PROPERTY(QSharedPointer<IHelloWorld> helloWorld READ getHello WRITE setHello USER true);
     Q_PROPERTY(QList<QVariant> listData MEMBER m_list);

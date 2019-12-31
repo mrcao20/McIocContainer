@@ -1,6 +1,6 @@
-#include "../include/McDefaultApplicationContext.h"
+#include "include/ApplicationContext/McDefaultApplicationContext.h"
 
-#include "../include/McDefaultBeanFactory.h"
+#include "include/BeanFactory/McDefaultBeanFactory.h"
 
 McDefaultApplicationContext::McDefaultApplicationContext(QObject *parent)
     : McDefaultApplicationContext(QSharedPointer<IMcConfigurableBeanFactory>(new McDefaultBeanFactory()), parent)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <qmetaobject.h>
-#include "McBeanGlobal.h"
+#include "BeanFactory/McBeanGlobal.h"
 
 class IHelloWorld {
 

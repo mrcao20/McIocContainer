@@ -3,7 +3,7 @@
 
 #include <qmetaobject.h>
 
-#include "McBeanGlobal.h"
+#include "BeanFactory/McBeanGlobal.h"
 
 class IReferenceBean {
     MC_DEFINE_TYPELIST()

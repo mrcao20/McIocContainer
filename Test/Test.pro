@@ -53,8 +53,8 @@ HEADERS += \
     ReferenceBean.h \
     a.h
 
-INCLUDEPATH += $$PWD/../include
-DEPENDPATH += $$PWD/../include
+INCLUDEPATH += $$PWD/../McIocContainer/include
+DEPENDPATH += $$PWD/../McIocContainer/include
 
 CONFIG(debug, debug|release) {
     win32: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_3_MinGW_64_bit-Debug/McIocContainer/debug/ -lMcIocContainer

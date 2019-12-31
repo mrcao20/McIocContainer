@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IMcConfigurableBeanFactory.h"
+#include "../BeanFactory/IMcConfigurableBeanFactory.h"
 
 MC_INTERFACE IMcApplicationContext
 	: public IMcConfigurableBeanFactory{

@@ -10,7 +10,7 @@
 #include <QObject>
 #include "IMcBeanDefinition.h"
 
-#include "McMacroGlobal.h"
+#include "../McMacroGlobal.h"
 
 class McRootBeanDefinition 
 	: public QObject

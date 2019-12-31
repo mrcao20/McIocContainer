@@ -1,14 +1,14 @@
-#include "../include/McIocContainer.h"
+#include "include/McIocContainer.h"
 
 #include <QtCore/qcoreapplication.h>
 #include <qmutex.h>
 #include <qmetaobject.h>
 #include <qdebug.h>
 
-#include "../include/McDefaultApplicationContext.h"
-#include "../include/McRootBeanDefinition.h"
-#include "../include/McBeanReference.h"
-#include "../include/McBeanGlobal.h"
+#include "include/ApplicationContext/McDefaultApplicationContext.h"
+#include "include/BeanDefinition/McRootBeanDefinition.h"
+#include "include/BeanFactory/McBeanReference.h"
+#include "include/BeanFactory/McBeanGlobal.h"
 
 McIocContainer *McIocContainer::m_container = Q_NULLPTR;
 

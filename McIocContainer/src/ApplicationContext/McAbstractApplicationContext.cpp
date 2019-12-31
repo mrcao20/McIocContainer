@@ -1,4 +1,4 @@
-#include "../include/McAbstractApplicationContext.h"
+#include "include/ApplicationContext/McAbstractApplicationContext.h"
 
 struct McAbstractApplicationContextData {
     QSharedPointer<IMcConfigurableBeanFactory> configurableBeanFactory;

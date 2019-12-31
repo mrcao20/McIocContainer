@@ -1,6 +1,6 @@
 #include "ReferenceBean.h"
 
-#include "McContainerGlobal.h"
+#include "ApplicationContext/McContainerGlobal.h"
 
 MC_STATIC(ReferenceBean)
 mcRegisterBeanFactory<MC_DECL_TYPELIST(ReferenceBean)>("ReferenceBean");

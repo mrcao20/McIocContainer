@@ -1,6 +1,6 @@
-#include "../include/McXmlBeanFactory.h"
+#include "include/BeanFactory/McXmlBeanFactory.h"
 
-#include "../include/IMcBeanDefinitionReader.h"
+#include "include/BeanDefinitionReader/IMcBeanDefinitionReader.h"
 
 struct McXmlBeanFactoryData {
 };

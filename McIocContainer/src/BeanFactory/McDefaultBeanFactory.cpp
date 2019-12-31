@@ -1,13 +1,13 @@
-#include "../include/McDefaultBeanFactory.h"
+#include "include/BeanFactory/McDefaultBeanFactory.h"
 
 #include <qmetaobject.h>
 #include <QPluginLoader>
 #include <qdebug.h>
 
-#include "../include/IMcBeanDefinition.h"
-#include "../include/McBeanReference.h"
-#include "../include/McPropertyParserPlugins.h"
-#include "../include/IMcPropertyParser.h"
+#include "include/BeanDefinition/IMcBeanDefinition.h"
+#include "include/BeanFactory/McBeanReference.h"
+#include "include/PropertyParser/McPropertyParserPlugins.h"
+#include "include/PropertyParser/IMcPropertyParser.h"
 
 McDefaultBeanFactory::McDefaultBeanFactory(QObject *parent)
 	: McAbstractBeanFactory(parent)

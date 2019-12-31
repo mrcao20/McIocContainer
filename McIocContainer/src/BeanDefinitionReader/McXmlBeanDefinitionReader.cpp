@@ -1,15 +1,15 @@
-#include "../include/McXmlBeanDefinitionReader.h"
+#include "include/BeanDefinitionReader/McXmlBeanDefinitionReader.h"
 
 #include <QFile>
 #include <qdom.h>
 #include <QLibrary>
 #include <qdebug.h>
 
-#include "../include/IMcBeanDefinitionRegistry.h"
-#include "../include/McRootBeanDefinition.h"
-#include "../include/McBeanReference.h"
-#include "../include/McPropertyParserPlugins.h"
-#include "../include/IMcPropertyParser.h"
+#include "include/BeanFactory/IMcBeanDefinitionRegistry.h"
+#include "include/BeanDefinition/McRootBeanDefinition.h"
+#include "include/BeanFactory/McBeanReference.h"
+#include "include/PropertyParser/McPropertyParserPlugins.h"
+#include "include/PropertyParser/IMcPropertyParser.h"
 
 struct McXmlBeanDefinitionReaderData {
     QSharedPointer<IMcBeanDefinitionRegistry> registry;

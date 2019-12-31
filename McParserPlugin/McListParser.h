@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include "../include/IMcPropertyParser.h"
+#include "PropertyParser/IMcPropertyParser.h"
 
 #include <qvector.h>
 

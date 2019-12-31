@@ -1,4 +1,4 @@
-#include "../include/McAbstractBeanDefinitionReader.h"
+#include "include/BeanDefinitionReader/McAbstractBeanDefinitionReader.h"
 
 McAbstractBeanDefinitionReader::McAbstractBeanDefinitionReader(QObject *parent)
 	: QObject(parent)

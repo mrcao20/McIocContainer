@@ -3,10 +3,11 @@
 //#include <QPluginLoader>
 
 #include "McIocContainer.h"
-#include "McXmlApplicationContext.h"
+#include "ApplicationContext/McXmlApplicationContext.h"
 #include "ReferenceBean.h"
 //#include <QMultiHash>
-#include "McContainerGlobal.h"
+#include "ApplicationContext/McContainerGlobal.h"
+#include <QMutexLocker>
 
 A::A()
 {
@@ -95,21 +96,24 @@ QString A::a(){
 //        auto item = i.next();
 //        qDebug() << item.key() << item.value();
 //    }
+    QSharedPointer<ReferenceBean> r;
+    r.reset(new ReferenceBean());
+    qDebug() << r->sharedFromThis();
     McIocContainer::getInstance()->initContainer();
     IMcApplicationContext *appCtx = /*McIocContainer::getInstance()->getApplicationContext();*/new McXmlApplicationContext(":/myspring.xml");
 //    ReferenceBean *f = qobject_cast<ReferenceBean *>(appCtx->getBean("referenceBean"));
 //    f != nullptr ? f->say() : void();
-    QVariant var = appCtx->getBeanToVariant("referenceBean");
-    var.value<QSharedPointer<IReferenceBean>>();
-    auto f = appCtx->getBeanToVariant("referenceBean").value<QSharedPointer<IRR>>();
-    auto f1 = appCtx->getBeanToVariant("referenceBean").value<QSharedPointer<IReferenceBean>>();
-    auto b = appCtx->getBeanToVariant("aaa").value<QSharedPointer<IReferenceBean>>();
-    auto b1 = appCtx->getBeanToVariant("aaa").value<QSharedPointer<IReferenceBean>>();
-    qDebug() << f << f1 << b << b1;
-    f->say();
-    f1->say();
-    b->say();
-    b1->say();
+//    QVariant var = appCtx->getBeanToVariant("referenceBean");
+//    var.value<QSharedPointer<IReferenceBean>>();
+//    auto f = appCtx->getBeanToVariant("referenceBean").value<QSharedPointer<IRR>>();
+//    auto f1 = appCtx->getBeanToVariant("referenceBean").value<QSharedPointer<IReferenceBean>>();
+//    auto b = appCtx->getBeanToVariant("aaa").value<QSharedPointer<IReferenceBean>>();
+//    auto b1 = appCtx->getBeanToVariant("aaa").value<QSharedPointer<IReferenceBean>>();
+//    qDebug() << f << f1 << b << b1;
+//    f->say();
+//    f1->say();
+//    b->say();
+//    b1->say();
 //    QSharedPointer<ReferenceBean> r = QSharedPointer<ReferenceBean>::create();
 //    auto metaobj = r->metaObject();
 //    qDebug() << metaobj->className();

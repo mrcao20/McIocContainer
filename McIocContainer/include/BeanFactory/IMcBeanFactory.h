@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "McMacroGlobal.h"
+#include "../McMacroGlobal.h"
 
 #include <QObject>
 #include <QVariant>

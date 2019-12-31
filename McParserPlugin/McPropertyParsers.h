@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include "../include/IMcPropertyParserCollection.h"
+#include "PropertyParser/IMcPropertyParserCollection.h"
 
 class McPropertyParsers : public QObject, public IMcPropertyParserCollection {
 	Q_OBJECT

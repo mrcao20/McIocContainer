@@ -1,7 +1,7 @@
-#include "../include/McXmlApplicationContext.h"
+#include "include/ApplicationContext/McXmlApplicationContext.h"
 
-#include "../include/McXmlBeanFactory.h"
-#include "../include/McXmlBeanDefinitionReader.h"
+#include "include/BeanFactory/McXmlBeanFactory.h"
+#include "include/BeanDefinitionReader/McXmlBeanDefinitionReader.h"
 
 McXmlApplicationContext::McXmlApplicationContext(const QString &location, QObject *parent)
     : McXmlApplicationContext(QSharedPointer<IMcBeanDefinitionReader>(new McXmlBeanDefinitionReader(location)), parent)

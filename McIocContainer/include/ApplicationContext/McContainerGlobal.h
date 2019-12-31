@@ -1,7 +1,7 @@
 #pragma once
 
-#include "McBeanGlobal.h"
-#include "McIocContainer.h"
+#include "../BeanFactory/McBeanGlobal.h"
+#include "../McIocContainer.h"
 
 // 需要自动注入的类，则需要调用此函数，否则直接调用mcRegisterBeanFactory
 template<typename T>

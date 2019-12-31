@@ -1,4 +1,4 @@
-#include "../include/McPropertyParserPlugins.h"
+#include "include/PropertyParser/McPropertyParserPlugins.h"
 
 #include <QtCore/qcoreapplication.h>
 #include <qmutex.h>
@@ -6,8 +6,8 @@
 #include <qpluginloader.h>
 #include <qdebug.h>
 
-#include "../include/IMcPropertyParser.h"
-#include "../include/IMcPropertyParserCollection.h"
+#include "include/PropertyParser/IMcPropertyParser.h"
+#include "include/PropertyParser/IMcPropertyParserCollection.h"
 
 McPropertyParserPlugins *McPropertyParserPlugins::instance = nullptr;
 

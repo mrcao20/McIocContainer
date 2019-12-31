@@ -4,7 +4,7 @@
 #include <qregularexpression.h>
 #include <qdebug.h>
 
-#include "../include/IMcBeanDefinition.h"
+#include "BeanDefinition/IMcBeanDefinition.h"
 
 McListParser::McListParser(QObject *parent)
 	: QObject(parent)
