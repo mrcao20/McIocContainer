@@ -58,8 +58,8 @@ DEPENDPATH += $$PWD/../include
 
 CONFIG(debug, debug|release) {
     win32: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_3_MinGW_64_bit-Debug/McIocContainer/debug/ -lMcIocContainer
-    else:unix: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_3_MinGW_64_bit-Release/McIocContainer/ -lMcIocContainer
+    else:unix: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_6_GCC_64bit-Debug/McIocContainer/ -lMcIocContainer
 } else {
     win32: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_3_MinGW_64_bit-Release/McIocContainer/release/ -lMcIocContainer
-    else:unix: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_3_MinGW_64_bit-Release/McIocContainer/ -lMcIocContainer
+    else:unix: LIBS += -L$$PWD/../build/build-McIocContainer-Desktop_Qt_5_12_6_GCC_64bit-Release/McIocContainer/ -lMcIocContainer
 }

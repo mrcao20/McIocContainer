@@ -22,7 +22,8 @@ HEADERS += ../include/McContainerGlobal.h \
     ../include/McAbstractApplicationContext.h \
     ../include/McDefaultApplicationContext.h \
     ../include/McXmlApplicationContext.h \
-    ../include/McMacroGlobal.h
+    ../include/McMacroGlobal.h \
+    ../include/McIocVersion.h
 SOURCES += ./McIocContainer.cpp \
     ./McBeanGlobal.cpp \
     ./McAbstractBeanFactory.cpp \
