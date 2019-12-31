@@ -8,8 +8,8 @@
 #pragma once
 
 #include <qobject.h>
-#include "IMcConfigurableBeanFactory.h"
-#include "IMcBeanReferenceResolver.h"
+#include "../IMcConfigurableBeanFactory.h"
+#include "../IMcBeanReferenceResolver.h"
 
 struct McAbstractBeanFactoryData;
 

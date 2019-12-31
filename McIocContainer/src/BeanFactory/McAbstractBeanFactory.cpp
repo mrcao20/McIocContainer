@@ -1,11 +1,11 @@
-#include "include/BeanFactory/McAbstractBeanFactory.h"
+#include "include/BeanFactory/impl/McAbstractBeanFactory.h"
 
 #include <qmap.h>
 #include <qdebug.h>
 #include <qmutex.h>
 
 #include "include/BeanDefinition/IMcBeanDefinition.h"
-#include "include/BeanFactory/McBeanReference.h"
+#include "include/BeanFactory/impl/McBeanReference.h"
 
 struct McAbstractBeanFactoryData {
     QMap<QString, QSharedPointer<IMcBeanDefinition>> map;			// ÈÝÆ÷

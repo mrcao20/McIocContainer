@@ -1,4 +1,4 @@
-#include "include/BeanDefinitionReader/McXmlBeanDefinitionReader.h"
+#include "include/BeanDefinitionReader/impl/McXmlBeanDefinitionReader.h"
 
 #include <QFile>
 #include <qdom.h>
@@ -6,9 +6,9 @@
 #include <qdebug.h>
 
 #include "include/BeanFactory/IMcBeanDefinitionRegistry.h"
-#include "include/BeanDefinition/McRootBeanDefinition.h"
-#include "include/BeanFactory/McBeanReference.h"
-#include "include/PropertyParser/McPropertyParserPlugins.h"
+#include "include/BeanDefinition/impl/McRootBeanDefinition.h"
+#include "include/BeanFactory/impl/McBeanReference.h"
+#include "include/PropertyParser/impl/McPropertyParserPlugins.h"
 #include "include/PropertyParser/IMcPropertyParser.h"
 
 struct McXmlBeanDefinitionReaderData {

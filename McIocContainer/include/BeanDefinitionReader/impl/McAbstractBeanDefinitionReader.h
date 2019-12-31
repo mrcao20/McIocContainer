@@ -8,7 +8,7 @@
 #pragma once
 
 #include <qobject.h>
-#include "IMcBeanDefinitionReader.h"
+#include "../IMcBeanDefinitionReader.h"
 
 MC_ABSTRACT_CLASS McAbstractBeanDefinitionReader 
 	: public QObject

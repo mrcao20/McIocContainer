@@ -1,4 +1,4 @@
-#include "include/BeanFactory/McXmlBeanFactory.h"
+#include "include/BeanFactory/impl/McXmlBeanFactory.h"
 
 #include "include/BeanDefinitionReader/IMcBeanDefinitionReader.h"
 

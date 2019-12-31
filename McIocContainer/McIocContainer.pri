@@ -1,29 +1,29 @@
 HEADERS += \
     $$PWD/include/ApplicationContext/IMcApplicationContext.h \
-    $$PWD/include/ApplicationContext/McAbstractApplicationContext.h \
-    $$PWD/include/ApplicationContext/McContainerGlobal.h \
-    $$PWD/include/ApplicationContext/McDefaultApplicationContext.h \
-    $$PWD/include/ApplicationContext/McXmlApplicationContext.h \
+    $$PWD/include/ApplicationContext/IMcReadableApplicationContext.h \
+    $$PWD/include/ApplicationContext/impl/McAbstractApplicationContext.h \
+    $$PWD/include/ApplicationContext/impl/McDefaultApplicationContext.h \
+    $$PWD/include/ApplicationContext/impl/McReadableApplicationContext.h \
+    $$PWD/include/ApplicationContext/impl/McXmlApplicationContext.h \
     $$PWD/include/BeanDefinition/IMcBeanDefinition.h \
-    $$PWD/include/BeanDefinition/McRootBeanDefinition.h \
+    $$PWD/include/BeanDefinition/impl/McRootBeanDefinition.h \
     $$PWD/include/BeanDefinitionReader/IMcBeanDefinitionReader.h \
-    $$PWD/include/BeanDefinitionReader/McAbstractBeanDefinitionReader.h \
-    $$PWD/include/BeanDefinitionReader/McXmlBeanDefinitionReader.h \
+    $$PWD/include/BeanDefinitionReader/impl/McAbstractBeanDefinitionReader.h \
+    $$PWD/include/BeanDefinitionReader/impl/McXmlBeanDefinitionReader.h \
     $$PWD/include/BeanFactory/IMcBeanDefinitionRegistry.h \
     $$PWD/include/BeanFactory/IMcBeanFactory.h \
     $$PWD/include/BeanFactory/IMcBeanReferenceResolver.h \
     $$PWD/include/BeanFactory/IMcConfigurableBeanFactory.h \
-    $$PWD/include/BeanFactory/McAbstractBeanFactory.h \
-    $$PWD/include/BeanFactory/McBeanGlobal.h \
-    $$PWD/include/BeanFactory/McBeanReference.h \
-    $$PWD/include/BeanFactory/McDefaultBeanFactory.h \
-    $$PWD/include/BeanFactory/McXmlBeanFactory.h \
+    $$PWD/include/BeanFactory/impl/McAbstractBeanFactory.h \
+    $$PWD/include/BeanFactory/impl/McBeanReference.h \
+    $$PWD/include/BeanFactory/impl/McDefaultBeanFactory.h \
+    $$PWD/include/BeanFactory/impl/McXmlBeanFactory.h \
     $$PWD/include/McIocContainer.h \
     $$PWD/include/McIocVersion.h \
     $$PWD/include/McMacroGlobal.h \
     $$PWD/include/PropertyParser/IMcPropertyParser.h \
-    $$PWD/include/PropertyParser/IMcPropertyParserCollection.h \
-    $$PWD/include/PropertyParser/McPropertyParserPlugins.h
+    $$PWD/include/PropertyParser/IMcPropertyParserCollection.h \ \
+    $$PWD/include/PropertyParser/impl/McPropertyParserPlugins.h
 
 SOURCES += \
     $$PWD/src/ApplicationContext/McAbstractApplicationContext.cpp \
