@@ -3,7 +3,7 @@
 //#include <QPluginLoader>
 
 #include "McIocContainer.h"
-#include "ApplicationContext/McXmlApplicationContext.h"
+#include "ApplicationContext/impl/McXmlApplicationContext.h"
 #include "ReferenceBean.h"
 //#include <QMultiHash>
 #include "ApplicationContext/McContainerGlobal.h"

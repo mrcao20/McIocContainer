@@ -1,22 +1,21 @@
-#include "include/ApplicationContext/McXmlApplicationContext.h"
+#include "include/ApplicationContext/impl/McXmlApplicationContext.h"
 
-#include "include/BeanFactory/McXmlBeanFactory.h"
-#include "include/BeanDefinitionReader/McXmlBeanDefinitionReader.h"
+#include "include/BeanFactory/impl/McDefaultBeanFactory.h"
+#include "include/BeanDefinitionReader/impl/McXmlBeanDefinitionReader.h"
 
 McXmlApplicationContext::McXmlApplicationContext(const QString &location, QObject *parent)
-    : McXmlApplicationContext(QSharedPointer<IMcBeanDefinitionReader>(new McXmlBeanDefinitionReader(location)), parent)
+    : McXmlApplicationContext(IMcBeanDefinitionReaderPtr(new McXmlBeanDefinitionReader(location)), parent)
 {
 }
 
-McXmlApplicationContext::McXmlApplicationContext(const QSharedPointer<IMcBeanDefinitionReader>& reader, QObject *parent)
-    : McXmlApplicationContext(QSharedPointer<IMcConfigurableBeanFactory>(new McXmlBeanFactory()), reader, parent)
+McXmlApplicationContext::McXmlApplicationContext(IMcBeanDefinitionReaderConstPtrRef reader, QObject *parent)
+    : McXmlApplicationContext(IMcConfigurableBeanFactoryPtr(new McDefaultBeanFactory()), reader, parent)
 {
 }
 
-McXmlApplicationContext::McXmlApplicationContext(const QSharedPointer<IMcConfigurableBeanFactory>& factory, const QSharedPointer<IMcBeanDefinitionReader>& reader, QObject *parent)
-	: McDefaultApplicationContext(factory, parent)
+McXmlApplicationContext::McXmlApplicationContext(IMcConfigurableBeanFactoryConstPtrRef factory, IMcBeanDefinitionReaderConstPtrRef reader, QObject *parent)
+    : McReadableApplicationContext(factory, reader, parent)
 {
-    reader->readBeanDefinition(factory);
 }
 
 McXmlApplicationContext::~McXmlApplicationContext(){

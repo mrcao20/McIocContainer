@@ -17,3 +17,5 @@ MC_INTERFACE IMcConfigurableBeanFactory
 public:
 	virtual ~IMcConfigurableBeanFactory() = default;
 };
+
+MC_DECLARE_POINTER(IMcConfigurableBeanFactory)

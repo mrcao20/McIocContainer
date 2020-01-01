@@ -28,3 +28,5 @@ public:
 	**************************************************/
     virtual void readBeanDefinition(const QSharedPointer<IMcBeanDefinitionRegistry>& registry) Q_DECL_NOEXCEPT = 0;
 };
+
+MC_DECLARE_POINTER(IMcBeanDefinitionReader)

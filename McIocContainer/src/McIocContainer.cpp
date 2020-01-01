@@ -5,9 +5,9 @@
 #include <qmetaobject.h>
 #include <qdebug.h>
 
-#include "include/ApplicationContext/McDefaultApplicationContext.h"
-#include "include/BeanDefinition/McRootBeanDefinition.h"
-#include "include/BeanFactory/McBeanReference.h"
+#include "include/ApplicationContext/impl/McDefaultApplicationContext.h"
+#include "include/BeanDefinition/impl/McRootBeanDefinition.h"
+#include "include/BeanFactory/impl/McBeanReference.h"
 #include "include/BeanFactory/McBeanGlobal.h"
 
 McIocContainer *McIocContainer::m_container = Q_NULLPTR;

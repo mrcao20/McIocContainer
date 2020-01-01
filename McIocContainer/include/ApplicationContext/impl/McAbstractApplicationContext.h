@@ -3,9 +3,9 @@
 #include "../IMcApplicationContext.h"
 #include <qobject.h>
 
-struct McAbstractApplicationContextData;
+#include <QSharedPointer>
 
-class IMcConfigurableBeanFactory;
+struct McAbstractApplicationContextData;
 
 MC_ABSTRACT_CLASS MCIOCCONTAINER_EXPORT McAbstractApplicationContext
 	: public QObject
@@ -50,6 +50,18 @@ public:
      <时    间>		2019/4/7
     **************************************************/
     bool containsBean(const QString &name) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    /*************************************************
+     <函数名称>		registerBeanDefinition
+     <函数说明>		注册 bean定义的抽象方法实现。
+     <参数说明>		name bean名称
+                    beandefinition bean定义实例
+     <返回值>
+     <作    者>		mrcao
+     <时    间>		2019/4/3
+    **************************************************/
+    void registerBeanDefinition(const QString &name, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    // 获取bean的定义集合
+    QMap<QString, QSharedPointer<IMcBeanDefinition>> getBeanDefinitions() Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 
 private:
     QScopedPointer<McAbstractApplicationContextData> d;

@@ -1,15 +1,15 @@
 /*******************************************************************
  @Filename  IMcApplicationContext
- @Brief     注意: 为了避免直接将this指针传递给BeanDefinitionReader，所以此处不继承IMcBeanDefinitionRegistry
+ @Brief
  @Author    mrcao
  @Date      2019-12-31
 ********************************************************************/
 #pragma once
 
-#include "../BeanFactory/IMcBeanFactory.h"
+#include "../BeanFactory/IMcConfigurableBeanFactory.h"
 
 MC_INTERFACE IMcApplicationContext
-    : public IMcBeanFactory{
+    : public IMcConfigurableBeanFactory {
 
 public:
 	virtual ~IMcApplicationContext() = default;

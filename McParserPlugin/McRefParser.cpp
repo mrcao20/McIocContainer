@@ -5,7 +5,7 @@
 #include <qmetaobject.h>
 
 #include "BeanDefinition/IMcBeanDefinition.h"
-#include "BeanFactory/McBeanReference.h"
+#include "BeanFactory/impl/McBeanReference.h"
 #include "BeanFactory/IMcBeanReferenceResolver.h"
 
 McRefParser::McRefParser(QObject *parent)

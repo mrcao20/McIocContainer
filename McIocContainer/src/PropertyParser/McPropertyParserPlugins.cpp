@@ -1,4 +1,4 @@
-#include "include/PropertyParser/McPropertyParserPlugins.h"
+#include "include/PropertyParser/impl/McPropertyParserPlugins.h"
 
 #include <QtCore/qcoreapplication.h>
 #include <qmutex.h>
