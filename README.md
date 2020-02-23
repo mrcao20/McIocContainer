@@ -25,4 +25,7 @@ MC_STATIC_END
 - 在程序运行之前需要调用McContainer::getInstance()->initContainer();来初始化，所有自动注入的bean都在这个容器中
 - 可以通过实现IMcPropertyParser或IMcPropertyParserCollection接口来实现对解析器的扩展，插件放在程序运行目录下plugins/McIocContainer目录中
 - 如果类A实现了一个接口IA，而类B中使用的IA接口，则需要使用mcRegisterBeanFactory<A *, IA *>来注册A的转换，对应的组件方式注册为mcRegisterComponent<A *, IA *>
+
+# 注意
+- 不能存在一样的bean name，如果存在，则只会保留最后一个。在XML文件中最后面的为最后一个，但是用声明式方法时无法确保先后
   
