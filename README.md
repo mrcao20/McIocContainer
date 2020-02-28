@@ -29,3 +29,28 @@ MC_STATIC_END
 # 注意
 - 不能存在一样的bean name，如果存在，则只会保留最后一个。在XML文件中最后面的为最后一个，但是用声明式方法时无法确保先后
   
+# 2020-2-28
+- 将原IOCContainer中的业务提取到AnnotationApplicationContext中
+- 提供IocBoot和其静态函数run，以提供一个默认的QML到C++交互的方式：
+   1. 在QML中提供一个名为$的请求器，并提供invoke函数的两种重载函数来请求Controller，invoke函数为C++函数，不可重写
+   2. 在$中又提供了get和post两个函数以此封装invoke函数，这两个函数时js函数，可以重新赋值
+   3. 以上函数的请求方式均为异步请求
+   4. 以上函数的返回值为Response，可以调用then方法来获取请求结果。then方法接收一个js function，并通过一个参数表现其返回值
+   5. 通过以上方法请求Controller时可以传递包括QObject\*在内的任何QT元对象能获取到的类型。QObject\*对应js中的object。必须使用QSharedPointer\<QObject\>。同时返回值亦为所有类型，但建议只是用QString、QJsonObject、QObject*
+   6. 请求方式为
+   ~~~
+   $.get("beanName.funcName?param1=1&param2=2")
+   ~~~
+   或者
+   ~~~
+   $.post("beanName.funcName", {
+       param1: 1,
+       param2: "2",
+       param3: {
+           param1: 1
+       }
+   })
+   ~~~
+   上面beanName为mcRegisterBeanFactory注册时的参数，funcName为Controller的函数，param1、param2、param3为函数的参数名，其后的值为将要赋值的参数值，其中param3将会被构造成一个QSharedPointer\<QObject\>
+   
+   7. Controller需要使用Q_CLASSINFO(MC_COMPONENT, MC_CONTROLLER)来声明
