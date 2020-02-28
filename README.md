@@ -28,6 +28,7 @@ MC_STATIC_END
 
 # 注意
 - 不能存在一样的bean name，如果存在，则只会保留最后一个。在XML文件中最后面的为最后一个，但是用声明式方法时无法确保先后
+- 不要声明一个beanName为this的bean
   
 # 2020-2-28
 - 将原IOCContainer中的业务提取到AnnotationApplicationContext中
@@ -54,3 +55,33 @@ MC_STATIC_END
    上面beanName为mcRegisterBeanFactory注册时的参数，funcName为Controller的函数，param1、param2、param3为函数的参数名，其后的值为将要赋值的参数值，其中param3将会被构造成一个QSharedPointer\<QObject\>
    
    7. Controller需要使用Q_CLASSINFO(MC_COMPONENT, MC_CONTROLLER)来声明
+
+# 2020-2-29
+1. 增加QObject信号槽的自动连接方式：
+   - 使用声明式方法为Mc::Ioc::connect("property", "signal", "property", "slot")。使用方法和QObject::connect一致，只不过将具体的信号和槽换成字符串。但需要注意的是，如果某一个property指定为this，则代表当前对象本身。
+   - 使用XML注入则可以使用多种格式：
+   ~~~
+   <connect>
+     <sender>this</sender>
+     <signal>signal_bean(QSharedPointer&lt;A&gt;)</signal>
+     <receiver>helloWorld</receiver>
+     <slot>slot_hello(QSharedPointer&gt;A&gt;)</slot>
+     <ConnectionType>Qt::AutoConnection | Qt::UniqueConnection</ConnectionType>
+   </connect>
+   ~~~
+   或者
+   ~~~
+   <connect>
+     <sender name="this">this</sender>
+     <signal name="signal_bean(QSharedPointer&lt;A&gt;)"></signal>
+     <receiver name="helloWorld"></receiver>
+     <slot name="slot_hello(QSharedPointer&gt;A&gt;)"></slot>
+     <ConnectionType name="Qt::AutoConnection | Qt::UniqueConnection"></ConnectionType>
+   </connect>
+   ~~~
+   甚至可以使用
+   ~~~
+   <connect sender="" signal="" receiver="" slot="" ConnectionType=""></connect>
+   ~~~
+   或者组合使用
+
