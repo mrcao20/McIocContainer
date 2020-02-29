@@ -84,4 +84,4 @@ MC_STATIC_END
    <connect sender="" signal="" receiver="" slot="" ConnectionType=""></connect>
    ~~~
    或者组合使用
-
+2. 注意，无论使用哪种方式连接信号槽，都只能连接对象本身或者其拥有的属性
