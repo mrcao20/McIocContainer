@@ -85,3 +85,9 @@ MC_STATIC_END
    ~~~
    或者组合使用
 2. 注意，无论使用哪种方式连接信号槽，都只能连接对象本身或者其拥有的属性
+3. 同时，如果既指定了connect的属性，connect子节点的属性和connect子节点的包裹文本，那么优先级为connect子节点的包裹文本 \> connect子节点的属性 \> connect的属性。即如果使用以下形式，那么最终获得的值为bbb
+~~~
+<connect name="this">
+   <sender name="aaa">bbb</sender>
+ </connect>
+~~~
