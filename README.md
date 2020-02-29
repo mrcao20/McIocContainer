@@ -58,7 +58,7 @@ MC_STATIC_END
 
 # 2020-2-29
 1. 增加QObject信号槽的自动连接方式：
-   - 使用声明式方法为Mc::Ioc::connect("property", "signal", "property", "slot")。使用方法和QObject::connect一致，只不过将具体的信号和槽换成字符串。但需要注意的是，如果某一个property指定为this，则代表当前对象本身。
+   - 使用声明式方法为Mc::Ioc::connect("beanName", "property", "signal", "property", "slot")。第一个参数为某一个bean的beanName，其他参数使用方法和QObject::connect一致，只不过将具体的信号和槽换成字符串。值得注意的是，如果某一个property指定为this，则表示指定bean自身。
    - 使用XML注入则可以使用多种格式：
    ~~~
    <connect>
