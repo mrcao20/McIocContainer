@@ -39,6 +39,7 @@ MC_STATIC_END
 <list plugins="包含文件p1的路径"></list>
 ~~~
 即上面的用法是错误的，因为QT的插件在同一个程序中是单例的，这会造成多次析构同一个插件。但可以将同一个插件bean多处使用。
+- 框架提供返回单个model的方法，但是返回的类型只能为QObject\*或者QAbstractItemModel\*，如果你需要一次性返回多个model，那么可以使用QT内建类型QVariantList或者QVariantMap来实现，即函数的返回值使用这两个中的任意一种。如果使用QVariantList，那么可以当做JS中的Array，如果使用QVariantMap，则可当做JS中的object
   
 # 2020-2-28
 - 将原IOCContainer中的业务提取到AnnotationApplicationContext中
