@@ -46,7 +46,7 @@ MC_STATIC_END
    1. 在QML中提供一个名为$的请求器，并提供invoke函数的两种重载函数来请求Controller，invoke函数为C++函数，不可重写
    2. 在$中又提供了get和post两个函数以此封装invoke函数，这两个函数时js函数，可以重新赋值
    3. 以上函数的请求方式均为异步请求
-   4. 以上函数的返回值为Response，可以调用then方法来获取请求结果。then方法接收一个js function，并通过一个参数表现其返回值
+   4. 以上函数的返回值为Response，可以调用then方法来获取请求结果。then方法接收一个js function，并通过一个参数表现其返回值。同时，由于QML自身性质限制，部分操作不能在其它线程，所以提供了一个同步版本的syncThen函数来让线程所有权回到主线程时再调用回调函数
    5. 通过以上方法请求Controller时可以传递包括QObject\*在内的任何QT元对象能获取到的类型。QObject\*对应js中的object。必须使用QSharedPointer\<QObject\>。同时返回值亦为所有类型，但建议只是用QString、QJsonObject、QObject*
    6. 请求方式为
    ~~~
