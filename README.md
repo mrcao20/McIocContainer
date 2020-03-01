@@ -29,6 +29,16 @@ MC_STATIC_END
 # 注意
 - 不能存在一样的bean name，如果存在，则只会保留最后一个。在XML文件中最后面的为最后一个，但是用声明式方法时无法确保先后
 - 不要声明一个beanName为this的bean
+- 受QT自身插件系统性质影响，同一个插件在同一个程序中只能创建一次，即不能将同一个插件声明两次bean：
+~~~
+<bean plugin="p1"></bean>
+<bean plugin="p1"></bean>
+~~~
+~~~
+<bean plugin="p1"></bean>
+<list plugins="包含文件p1的路径"></list>
+~~~
+即上面的用法是错误的，因为QT的插件在同一个程序中是单例的，这会造成多次析构同一个插件。但可以将同一个插件bean多处使用。
   
 # 2020-2-28
 - 将原IOCContainer中的业务提取到AnnotationApplicationContext中
