@@ -101,3 +101,6 @@ MC_STATIC_END
    <sender name="aaa">bbb</sender>
 </connect>
 ~~~
+
+# 另
+- 现发现C++Model赋值到QML中的View的model并不是单纯的赋值操作，猜测这一步赋值其实是连接QML View和C++ Model相应的信号和槽，因为就算C++的Model处于另一个线程时亦可完成赋值操作，而且赋值完成后如果把C++的Model删除掉亦不会对QML的View造成崩溃性错误，就像QT/C++中的信号槽自然断开一样。
