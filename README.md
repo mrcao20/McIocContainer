@@ -8,3 +8,9 @@ QtCreator项目,可直接跨平台编译
 - getBean返回QSharedPointer\<QObject\>类型，同时增加getBeanToQVariant接口，返回QVariant类型，QVariant中包含的对象为QSharedPointer\<Class\>类型，可以直接转换到QSharedPointer\<I\>类型。但是getBean返回的对象只能调用QSharedPointer::dynamicCast函数来转换到QSharedPointer\<I\>
 - 增加注入QVariant功能，即可以使用QList\<QVariant\> m_list;或QVariant m_text;来注入QVariant类型。
 - 增加指定单例的功能，如果使用声明式方式，则使用mcRegisterComponent函数的最后一个参数来指定，默认为true，表示该bean为单例。XML文件中同样提供此功能，在bean元素中指定isSingleton属性即可，如果不指定默认为true。例：\<bean name="hello" class="HelloWorld" isSingleton="false"\>
+
+# 2020/3/3
+- 增加QML到C++的长连接QmlSocket通信方式：
+   1. C++端声明一个Component，并使用Q_CLASSINFO(MC_COMPONENT, MC_QML_SOCKET)附加额外属性。然后按照需求实现最多四个函数，并使用四种宏标志四个函数以接收各种消息，具体参照QmlSocketTest或者Java Spring WebSocket。注意：每一个函数的执行都是在另外的线程。
+   2. QML端可以使用$.qs("beanName")来发起一个请求，该函数会返回一个对象，参照JS WebSocket。同时$.qs函数拥有第二个参数，可以直接指定onOpen等回调函数。同时因为部分界面操作不能在其他线程执行，所以$.qs的第二个参数中可以指定isOpenSync等参数来让某一个回调函数回到主线程后再执行。具体参照main.qml
+   
