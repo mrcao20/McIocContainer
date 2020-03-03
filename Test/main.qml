@@ -64,14 +64,18 @@ Window {
                 text: "text1"
             }
         };
-        ws = $.qs("qmlSocketTest");
-        ws.onOpen(function(){
-            console.log("aaaaaaaaa");
-            ws.send("bbbbbbbb");
-        });
-        ws.onMessage(function(msg){
-            console.log(msg);
-        });
+        var data = {
+            onOpen: function(){
+                console.log("aaaaaaaaa");
+                ws.send("bbbbbbbb");
+            },
+            isOpenSync: true,
+            onMessage: function(msg){
+                console.log(msg);
+            },
+            isMessageSync: true
+        };
+        ws = $.qs("qmlSocketTest", data);
 //        $.get("referenceBean.getModel").syncThen(function(result){
 //            console.log(result);
 //            listView.model = result;
