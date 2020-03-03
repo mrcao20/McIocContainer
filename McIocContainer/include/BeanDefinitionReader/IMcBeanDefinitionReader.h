@@ -1,15 +1,13 @@
 /*******************************************************************
- <ÎÄ¼şÃû>		IMcBeanDefinitionReader.h
- <ÏêÏ¸ËµÃ÷>		½Ó¿Ú£¬¶¨ÒåbeanDefinitionµÄ¶ÁÈ¡¹¦ÄÜ
- <×÷   Õß>		mrcao
- <ÈÕ   ÆÚ>		2019/4/6
+ <æ–‡ä»¶å>		IMcBeanDefinitionReader.h
+ <è¯¦ç»†è¯´æ˜>		æ¥å£ï¼Œå®šä¹‰beanDefinitionçš„è¯»å–åŠŸèƒ½
+ <ä½œ   è€…>		mrcao
+ <æ—¥   æœŸ>		2019/4/6
 ********************************************************************/
 
 #pragma once
 
 #include "../McMacroGlobal.h"
-
-#include <QSharedPointer>
 
 class IMcBeanDefinitionRegistry;
 
@@ -19,12 +17,12 @@ public:
 	virtual ~IMcBeanDefinitionReader() = default;
 
 	/*************************************************
-	 <º¯ÊıÃû³Æ>		readBeanDefinition
-	 <º¯ÊıËµÃ÷>		¶ÁÈ¡beanDefinition£¬²¢½«Æä×¢²á½ø¹¤³§¡£
-	 <²ÎÊıËµÃ÷>		registry beanDefinitionµÄ×¢²áÆ÷£¬½«¶Á³öµÄbeanDefinition×¢²á½ø¹¤³§ÖĞ
-	 <·µ»ØÖµ>		
-	 <×÷    Õß>		mrcao
-	 <Ê±    ¼ä>		2019/4/6
+	 <å‡½æ•°åç§°>		readBeanDefinition
+	 <å‡½æ•°è¯´æ˜>		è¯»å–beanDefinitionï¼Œå¹¶å°†å…¶æ³¨å†Œè¿›å·¥å‚ã€‚
+	 <å‚æ•°è¯´æ˜>		registry beanDefinitionçš„æ³¨å†Œå™¨ï¼Œå°†è¯»å‡ºçš„beanDefinitionæ³¨å†Œè¿›å·¥å‚ä¸­
+	 <è¿”å›å€¼>		
+	 <ä½œ    è€…>		mrcao
+	 <æ—¶    é—´>		2019/4/6
 	**************************************************/
     virtual void readBeanDefinition(const QSharedPointer<IMcBeanDefinitionRegistry>& registry) Q_DECL_NOEXCEPT = 0;
 };

@@ -4,12 +4,12 @@
 #include <qdebug.h>
 #include <qmutex.h>
 
-#include "include/BeanDefinition/IMcBeanDefinition.h"
+#include "include/BeanDefinition/impl/McRootBeanDefinition.h"
 #include "include/BeanFactory/impl/McBeanReference.h"
 
 struct McAbstractBeanFactoryData {
-    QMap<QString, QSharedPointer<IMcBeanDefinition>> map;			// ÈİÆ÷
-	QMutex mtx{ QMutex::Recursive };				// µİ¹é»¥³âËø
+    QMap<QString, QSharedPointer<IMcBeanDefinition>> map;			// å®¹å™¨
+	QMutex mtx{ QMutex::Recursive };				// é€’å½’äº’æ–¥é”
 };
 
 McAbstractBeanFactory::McAbstractBeanFactory(QObject *parent)
@@ -36,14 +36,14 @@ QVariant McAbstractBeanFactory::getBeanToVariant(const QString &name)  Q_DECL_NO
         return QVariant();
     }
     auto beanVar = beanDefinition->getBean();
-    if (!beanVar.isValid()) {	// Èç¹ûbean²»´æÔÚ
-        beanVar = doCreate(beanDefinition);	// ´´½¨
+    if (!beanVar.isValid()) {	// å¦‚æœbeanä¸å­˜åœ¨
+        beanVar = doCreate(beanDefinition);	// åˆ›å»º
         if (!beanVar.isValid()) {
             qWarning() << QString("failed to create bean '%1'").arg(name);
             return QVariant();
         }
         if(beanDefinition->isSingleton())
-            beanDefinition->setBean(beanVar);		// Èç¹ûÎªµ¥ÀıÊ±£¬Ôò·Å½øbeanDefinition£¬ÒÔ´ïµ½¸´ÓÃ¡£
+            beanDefinition->setBean(beanVar);		// å¦‚æœä¸ºå•ä¾‹æ—¶ï¼Œåˆ™æ”¾è¿›beanDefinitionï¼Œä»¥è¾¾åˆ°å¤ç”¨ã€‚
     }
     return beanVar;
 }
@@ -53,7 +53,12 @@ bool McAbstractBeanFactory::containsBean(const QString &name) Q_DECL_NOEXCEPT {
 }
 
 void McAbstractBeanFactory::registerBeanDefinition(const QString &name, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT {
+    // å¦‚æœå­˜åœ¨åˆ™æ›¿æ¢
 	d->map.insert(name, beanDefinition);
+}
+
+bool McAbstractBeanFactory::isContained(const QString &name) noexcept {
+    return d->map.contains(name);
 }
 
 QMap<QString, QSharedPointer<IMcBeanDefinition>> McAbstractBeanFactory::getBeanDefinitions() Q_DECL_NOEXCEPT {
@@ -72,6 +77,18 @@ QVariant McAbstractBeanFactory::resolveBeanReferenceToQVariant(const QSharedPoin
         qCritical() << "beanReference not exists";
         return QVariant();
     }
-    // µ÷ÓÃgetBeanToVariant·½·¨£¬¸ù¾İbeanÒıÓÃµÄÃû³Æ»ñÈ¡ÊµÀı
-    return getBeanToVariant(beanRef->getName());
+    auto pluginPath = beanRef->getPluginPath();
+    if(!pluginPath.isEmpty()) {
+        McRootBeanDefinitionPtr def = McRootBeanDefinitionPtr::create();
+        def->setPluginPath(pluginPath);
+        auto beanVar = doCreate(def);
+        if (!beanVar.isValid()) {
+            qWarning() << QString("failed to create bean of plugin '%1'").arg(pluginPath);
+            return QVariant();
+        }
+        return beanVar;
+    }else{
+        // è°ƒç”¨getBeanToVariantæ–¹æ³•ï¼Œæ ¹æ®beanå¼•ç”¨çš„åç§°è·å–å®ä¾‹
+        return getBeanToVariant(beanRef->getName());
+    }
 }

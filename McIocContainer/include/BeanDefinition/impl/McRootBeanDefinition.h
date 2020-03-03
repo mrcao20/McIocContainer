@@ -1,8 +1,8 @@
 /*******************************************************************
- <ÎÄ¼şÃû>		McRootBeanDefinition.h
- <ÏêÏ¸ËµÃ÷>		ÓÃÓÚ´æ·ÅbeanµÄÏà¹ØÊı¾İ
- <×÷   Õß>		mrcao
- <ÈÕ   ÆÚ>		2019/4/3
+ <æ–‡ä»¶å>		McRootBeanDefinition.h
+ <è¯¦ç»†è¯´æ˜>		ç”¨äºå­˜æ”¾beançš„ç›¸å…³æ•°æ®
+ <ä½œ   è€…>		mrcao
+ <æ—¥   æœŸ>		2019/4/3
 ********************************************************************/
 
 #pragma once
@@ -22,14 +22,15 @@ public:
 		: QObject(parent){}
 
     ~McRootBeanDefinition() override {
-        QHashIterator<decltype (m_properties)::key_type, decltype (m_properties)::mapped_type> iterator(m_properties);
-        while (iterator.hasNext()) {
-            auto item = iterator.next();
-            auto value = item.value();
-            auto obj = value.value<QObject*>();
-            if(obj)
-                obj->deleteLater();
-        }
+        // ç°åœ¨beanDefinitionçš„æ‰€æœ‰å±æ€§å‡ä½¿ç”¨æ ˆå¯¹è±¡æˆ–QSharedPointerï¼Œæ‰€ä»¥ä¸å†éœ€è¦æ‰‹åŠ¨ææ„
+//        QHashIterator<decltype (m_properties)::key_type, decltype (m_properties)::mapped_type> iterator(m_properties);
+//        while (iterator.hasNext()) {
+//            auto item = iterator.next();
+//            auto value = item.value();
+//            auto obj = value.value<QObject*>();
+//            if(obj)
+//                obj->deleteLater();
+//        }
     }
 
     QVariant getBean() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE { return m_bean; }
@@ -58,12 +59,20 @@ public:
     void addProperty(const QString &name, const QVariant &value) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
         m_properties.insert(name, value);
     }
+    
+    QVariantList getConnectors() const Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {return m_connectors;}
+    void addConnector(const QVariant &val) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE {
+        m_connectors.append(val);
+    }
 
 private:
-    QVariant m_bean;                                                    // °üº¬beanµÄQVariant¡£´Ë¶ÔÏó²»ÔÙÉ¾³ı¸Ãbean
-    bool m_isSingleton{true};                                           // ¸ÃbeanÊÇ·ñÊÇµ¥Àı£¬Ä¬ÈÏÊÇ
-    const QMetaObject *m_beanMetaObject{ Q_NULLPTR };                   // beanµÄMetaObject¶ÔÏó
-    QString m_className;												// beanµÄÀàÈ«ÏŞ¶¨Ãû³Æ
-    QString m_pluginPath;                                               // beanµÄ²å¼şÂ·¾¶
-    QVariantHash m_properties;											// beanµÄÊôĞÔ¼¯ºÏ
+    QVariant m_bean;                                                    // åŒ…å«beançš„QVariantã€‚æ­¤å¯¹è±¡ä¸å†åˆ é™¤è¯¥bean
+    bool m_isSingleton{true};                                           // è¯¥beanæ˜¯å¦æ˜¯å•ä¾‹ï¼Œé»˜è®¤æ˜¯
+    const QMetaObject *m_beanMetaObject{ Q_NULLPTR };                   // beançš„MetaObjectå¯¹è±¡
+    QString m_className;												// beançš„ç±»å…¨é™å®šåç§°
+    QString m_pluginPath;                                               // beançš„æ’ä»¶è·¯å¾„
+    QVariantHash m_properties;											// beançš„å±æ€§é›†åˆ
+    QVariantList m_connectors;                                          // beanä¸­éœ€è¦è¿æ¥çš„ä¿¡å·æ§½
 };
+
+MC_DECLARE_POINTER(McRootBeanDefinition)

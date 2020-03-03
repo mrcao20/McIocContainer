@@ -1,4 +1,4 @@
-QT += quick xml core
+QT += quick xml core concurrent
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -14,6 +14,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         HelloWorld.cpp \
+        ListModel.cpp \
+        QmlSocketTest.cpp \
         ReferenceBean.cpp \
         a.cpp \
         main.cpp
@@ -38,7 +40,8 @@ DISTFILES += \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
     android/gradlew.bat \
-    android/res/values/libs.xml
+    android/res/values/libs.xml \
+    xmltest2.xml
 
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_PACKAGE_SOURCE_DIR = \
@@ -50,6 +53,8 @@ HEADERS += \
     IHelloWorld.h \
     IRR.h \
     IReferenceBean.h \
+    ListModel.h \
+    QmlSocketTest.h \
     ReferenceBean.h \
     a.h
 

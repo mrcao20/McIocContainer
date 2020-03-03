@@ -68,12 +68,20 @@ void McPropertyParserPlugins::loadPlugin() noexcept {
         IMcPropertyParserCollection *parsers = qobject_cast<IMcPropertyParserCollection *>(obj);
         if (parsers) {
             m_parsers.append(parsers->customParsers());
+            /* 卸载并析构插件
+             * 但需要注意的是只有当插件类型为IMcPropertyParserCollection才能析构
+             * 因为我们使用的是这个对象customParsers函数的返回值，就算该对象析构，获取的值
+             * 也不会受到影响，但是如果类型是下面IMcPropertyParser，则不能手动调用此函数，
+             * 因为这会直接让该对象无效
+             */
+            loader.unload();
         }
         else {
             IMcPropertyParser *parser = qobject_cast<IMcPropertyParser *>(obj);
             if(parser)
                 m_parsers.append(QSharedPointer<IMcPropertyParser>(parser));
+            else
+                loader.unload();    // 插件不能被使用，直接卸载析构掉
         }
-        loader.unload();    // ж�ز��������
     }
 }

@@ -8,5 +8,8 @@ class McDefaultApplicationContext : public McAbstractApplicationContext {
 public:
     explicit McDefaultApplicationContext(QObject *parent = nullptr);
     McDefaultApplicationContext(const QSharedPointer<IMcConfigurableBeanFactory>& factory, QObject *parent = nullptr);
-    virtual ~McDefaultApplicationContext();
+    ~McDefaultApplicationContext() override;
+    
+protected:
+    void doRefresh() noexcept override;
 };

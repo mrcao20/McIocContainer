@@ -1,17 +1,17 @@
 #pragma once
 
 #include "../BeanFactory/McBeanGlobal.h"
-#include "../McIocContainer.h"
+#include "../ApplicationContext/impl/McAnnotationApplicationContext.h"
 
-// ĞèÒª×Ô¶¯×¢ÈëµÄÀà£¬ÔòĞèÒªµ÷ÓÃ´Ëº¯Êı£¬·ñÔòÖ±½Óµ÷ÓÃmcRegisterBeanFactory
+// éœ€è¦è‡ªåŠ¨æ³¨å…¥çš„ç±»ï¼Œåˆ™éœ€è¦è°ƒç”¨æ­¤å‡½æ•°ï¼Œå¦åˆ™ç›´æ¥è°ƒç”¨mcRegisterBeanFactory
 template<typename T>
 int mcRegisterComponent(const QString &typeName, const QString &beanName, bool isSingleton = true) {
 	int typeId = mcRegisterBeanFactory<T>(typeName.toLocal8Bit().data());
-    McIocContainer::getInstance()->insertRegistry(typeName, beanName, isSingleton);
+    McAnnotationApplicationContext::insertRegistry(typeName, beanName, isSingleton);
 	return typeId;
 }
 
-// ÖØÔØµÄ°æ±¾£¬Èç¹ûÎ´ÉèÖÃbeanName£¬ÔòÄ¬ÈÏÎª½«Ê××ÖÄ¸Ğ¡Ğ´µÄÀàĞÍÃû
+// é‡è½½çš„ç‰ˆæœ¬ï¼Œå¦‚æœæœªè®¾ç½®beanNameï¼Œåˆ™é»˜è®¤ä¸ºå°†é¦–å­—æ¯å°å†™çš„ç±»å‹å
 template<typename T>
 int mcRegisterComponent(const QString &typeName, bool isSingleton = true) {
 	Q_ASSERT(!typeName.isEmpty());
@@ -21,15 +21,15 @@ int mcRegisterComponent(const QString &typeName, bool isSingleton = true) {
                                   , isSingleton);
 }
 
-// ĞèÒª×Ô¶¯×¢ÈëµÄÀà£¬ÔòĞèÒªµ÷ÓÃ´Ëº¯Êı£¬·ñÔòÖ±½Óµ÷ÓÃmcRegisterBeanFactory
+// éœ€è¦è‡ªåŠ¨æ³¨å…¥çš„ç±»ï¼Œåˆ™éœ€è¦è°ƒç”¨æ­¤å‡½æ•°ï¼Œå¦åˆ™ç›´æ¥è°ƒç”¨mcRegisterBeanFactory
 template<typename From, typename To>
 int mcRegisterComponent(const QString &typeName, const QString &beanName, bool isSingleton = true) {
 	int typeId = mcRegisterBeanFactory<From, To>(typeName.toLocal8Bit().data());
-    McIocContainer::getInstance()->insertRegistry(typeName, beanName, isSingleton);
+    McAnnotationApplicationContext::insertRegistry(typeName, beanName, isSingleton);
 	return typeId;
 }
 
-// ÖØÔØµÄ°æ±¾£¬Èç¹ûÎ´ÉèÖÃbeanName£¬ÔòÄ¬ÈÏÎª½«Ê××ÖÄ¸Ğ¡Ğ´µÄÀàĞÍÃû
+// é‡è½½çš„ç‰ˆæœ¬ï¼Œå¦‚æœæœªè®¾ç½®beanNameï¼Œåˆ™é»˜è®¤ä¸ºå°†é¦–å­—æ¯å°å†™çš„ç±»å‹å
 template<typename From, typename To>
 int mcRegisterComponent(const QString &typeName, bool isSingleton = true) {
 	Q_ASSERT(!typeName.isEmpty());

@@ -15,7 +15,14 @@ public:
     McReadableApplicationContext(const QSharedPointer<IMcConfigurableBeanFactory> &factory
                                  , const QSharedPointer<IMcBeanDefinitionReader> &reader
                                  , QObject *parent = nullptr);
+    McReadableApplicationContext(const QSharedPointer<IMcBeanDefinitionReader> &reader
+                                 , QObject *parent = nullptr);
     ~McReadableApplicationContext() override;
+    
+    void readBeans() noexcept override;
+    
+protected:
+    void doRefresh() noexcept override;
 
 private:
     QScopedPointer<McReadableApplicationContextData> d;

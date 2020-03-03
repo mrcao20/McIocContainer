@@ -7,9 +7,11 @@
 #pragma once
 
 #include "../BeanFactory/IMcConfigurableBeanFactory.h"
+#include "../ApplicationContext/IMcRefreshableApplicationContext.h"
 
 MC_INTERFACE IMcApplicationContext
-    : public IMcConfigurableBeanFactory {
+    : public IMcConfigurableBeanFactory
+    , public IMcRefreshableApplicationContext {
 
 public:
 	virtual ~IMcApplicationContext() = default;

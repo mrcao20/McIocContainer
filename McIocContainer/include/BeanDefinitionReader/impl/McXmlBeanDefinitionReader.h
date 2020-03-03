@@ -1,8 +1,8 @@
 /*******************************************************************
- <Œƒº˛√˚>		McXmlBeanDefinitionReader.h
- <œÍœ∏Àµ√˜>		Ω‚ŒˆXMLŒƒº˛£¨≤¢Ω´∆‰◊¢»Îregistry
- <◊˜   ’ﬂ>		mrcao
- <»’   ∆⁄>		2019/4/6
+ <Êñá‰ª∂Âêç>		McXmlBeanDefinitionReader.h
+ <ËØ¶ÁªÜËØ¥Êòé>		Ëß£ÊûêXMLÊñá‰ª∂ÔºåÂπ∂Â∞ÜÂÖ∂Ê≥®ÂÖ•registry
+ <‰Ωú   ËÄÖ>		mrcao
+ <Êó•   Êúü>		2019/4/6
 ********************************************************************/
 
 #pragma once
@@ -15,6 +15,7 @@ QT_BEGIN_NAMESPACE
 class QIODevice;
 class QDomDocument;
 class QDomNodeList;
+class QDomElement;
 QT_END_NAMESPACE
 
 class IMcBeanDefinition;
@@ -23,18 +24,25 @@ struct McXmlBeanDefinitionReaderData;
 
 class MCIOCCONTAINER_EXPORT McXmlBeanDefinitionReader : public McAbstractBeanDefinitionReader {
     Q_OBJECT
-
 public:
     explicit McXmlBeanDefinitionReader(const QString &location, QObject *parent = nullptr);
+    explicit McXmlBeanDefinitionReader(const QStringList &locations, QObject *parent = nullptr);
     virtual ~McXmlBeanDefinitionReader() Q_DECL_OVERRIDE;
 
     void readBeanDefinition(const QSharedPointer<IMcBeanDefinitionRegistry>& registry) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 
 private:
-    void readBeanDefinition(QIODevice *source) noexcept;
-    void readBeanDefinition(const QDomDocument &doc) noexcept;
+    void readBeanDefinition(const QString &location, QIODevice *source) noexcept;
+    void readBeanDefinition(const QString &location, const QDomDocument &doc) noexcept;
     void readBeanDefinition(const QDomNodeList &nodes) noexcept;
-    void readBeanDefinition(const QDomNodeList &propNodes,const QSharedPointer<IMcBeanDefinition>& beanDefinition) noexcept;
+    void readBeanDefinition(const QDomNodeList &propNodes
+                            , const QSharedPointer<IMcBeanDefinition>& beanDefinition) noexcept;
+    void readBeanDefinitionForProperty(const QDomElement &propEle
+                                       , const QSharedPointer<IMcBeanDefinition>& beanDefinition) noexcept;
+    void readBeanDefinitionForConnect(const QDomElement &propEle
+                                       , const QSharedPointer<IMcBeanDefinition>& beanDefinition) noexcept;
+    Qt::ConnectionType getConnectionType(const QString &typeStr) noexcept;
+    Qt::ConnectionType connectionTypeStrToEnum(const QString &typeStr) noexcept;
 
 private:
 	QScopedPointer<McXmlBeanDefinitionReaderData> d;

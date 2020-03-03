@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core xml
+QT += core xml quick concurrent
 CONFIG += c++11
 
 TARGET = McIocContainer

@@ -15,3 +15,6 @@ McDefaultApplicationContext::McDefaultApplicationContext(const QSharedPointer<IM
 
 McDefaultApplicationContext::~McDefaultApplicationContext(){
 }
+
+void McDefaultApplicationContext::doRefresh() noexcept {
+}

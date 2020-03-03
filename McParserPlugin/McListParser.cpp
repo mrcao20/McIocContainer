@@ -2,9 +2,14 @@
 
 #include <qdom.h>
 #include <qregularexpression.h>
+#include <QDir>
+#include <QLibrary>
+#include <QCoreApplication>
 #include <qdebug.h>
 
+#include "McMacroGlobal.h"
 #include "BeanDefinition/IMcBeanDefinition.h"
+#include "BeanFactory/impl/McBeanReference.h"
 
 McListParser::McListParser(QObject *parent)
 	: QObject(parent)
@@ -17,21 +22,40 @@ McListParser::McListParser(QObject *parent)
 McListParser::~McListParser(){
 }
 
-bool McListParser::parseProperty(const QDomElement &propEle, const QList<QSharedPointer<IMcPropertyParser>> &parsers, QVariant &value) const noexcept {
-	QDomNode childNode = propEle.firstChild();
+bool McListParser::parseProperty(
+        const QDomElement &propEle
+        , const QList<QSharedPointer<IMcPropertyParser>> &parsers
+        , QVariant &value) const noexcept {
+    
+    if(propEle.tagName() != MC_PROPERTY && !m_listType.contains(propEle.tagName())) {
+        return false;       // æ­¤è§£æå™¨åªèƒ½è§£æå±æ€§
+    }
+    QDomNode childNode = propEle.firstChild();
 	if (m_listType.contains(propEle.nodeName()))
 		childNode = propEle;
 	if (childNode.isNull() || !childNode.isElement() || !m_listType.contains(childNode.nodeName()))
-		return false;		// ²»´æÔÚlist£¬±¾¶ÔÏó²»½âÎö
+		return false;		// ä¸å­˜åœ¨listï¼Œæœ¬å¯¹è±¡ä¸è§£æ
 
 	QVariantList list;
+    
+    auto childEle = childNode.toElement();
+    if(childEle.hasAttribute("plugins")) {
+        QString pluginsPath = childEle.attribute("plugins").simplified();
+        pluginsPath = QDir::toNativeSeparators(pluginsPath);
+        if(pluginsPath.startsWith(QString("%1%2").arg(".", QDir::separator()))) {
+            pluginsPath = pluginsPath.remove(0, 1);   // ç§»é™¤æœ€å‰é¢çš„.
+            pluginsPath = qApp->applicationDirPath() + pluginsPath;   // è¡¥å…¨ä¸ºå…¨è·¯å¾„
+        }
+        list = getList(pluginsPath);
+    }
+    
 	QDomNodeList nodes = childNode.childNodes();
 	for (int i = 0; i < nodes.size(); ++i) {
 		QDomElement ele = nodes.at(i).toElement();
 		if (ele.isNull())
 			continue;
 		QVariant listValue;
-		for (auto parser : parsers) {	// ´Ë´¦Îªµİ¹é½âÎö£¬¼´µ÷ÓÃÒÑ´æÔÚµÄ½âÎöÆ÷½âÎölistÄÚÈİ
+		for (auto parser : parsers) {	// æ­¤å¤„ä¸ºé€’å½’è§£æï¼Œå³è°ƒç”¨å·²å­˜åœ¨çš„è§£æå™¨è§£ælistå†…å®¹
 			if (parser->parseProperty(ele, parsers, listValue)) {
 				if (listValue.isValid())
 					list << listValue;
@@ -45,22 +69,45 @@ bool McListParser::parseProperty(const QDomElement &propEle, const QList<QShared
 }
 
 bool McListParser::convertProperty(const QSharedPointer<QObject>& bean, const char *propTypeName, const QList<QSharedPointer<IMcPropertyParser>>& parsers, IMcBeanReferenceResolver* refResolver, QVariant &value) const noexcept {
-	// ÅĞ¶ÏÊôĞÔÖµÊÇ·ñÊÇÒ»¸ölist
+	// åˆ¤æ–­å±æ€§å€¼æ˜¯å¦æ˜¯ä¸€ä¸ªlist
 	if (!value.canConvert<QVariantList>())
-		return false;	// ±¾½âÎöÆ÷ÎŞ·¨½âÎö£¬´«µİ¸øÆäËû½âÎöÆ÷½âÎö
-	// Èç¹ûÊÇ¾Í½«Æä×ª»»
+		return false;	// æœ¬è§£æå™¨æ— æ³•è§£æï¼Œä¼ é€’ç»™å…¶ä»–è§£æå™¨è§£æ
+	// å¦‚æœæ˜¯å°±å°†å…¶è½¬æ¢
 	QString childTypeName;
 	getChildTypeName(propTypeName, childTypeName);
 	auto list = value.value<QVariantList>();
-	value.clear();	// Çå¿Õvalue£¬Ê¹ÆäÎŞĞ§
-	for (auto &var : list) {	// ´Ë´¦±éÀúlistÖĞQVariantµÄÒıÓÃ£¬¼´Ö±½ÓĞŞ¸ÄlistÖĞµÄÖµ
-		for (auto parser : parsers) {	// µİ¹é£¬Ê¹ÓÃËùÓĞ½âÎöÆ÷Ñ­»·½âÎö
+	value.clear();	// æ¸…ç©ºvalueï¼Œä½¿å…¶æ— æ•ˆ
+	for (auto &var : list) {	// æ­¤å¤„éå†listä¸­QVariantçš„å¼•ç”¨ï¼Œå³ç›´æ¥ä¿®æ”¹listä¸­çš„å€¼
+		for (auto parser : parsers) {	// é€’å½’ï¼Œä½¿ç”¨æ‰€æœ‰è§£æå™¨å¾ªç¯è§£æ
 			if (parser->convertProperty(bean, childTypeName.toLocal8Bit().data(), parsers, refResolver, var))
 				break;
 		}
 	}
-	value = list;	// ½«×ª»»Íê³ÉµÄlistÔÙ´«»ØÈ¥
+	value = list;	// å°†è½¬æ¢å®Œæˆçš„listå†ä¼ å›å»
 	return true;
+}
+
+QVariantList McListParser::getList(const QString &dirPath) const noexcept {
+    QVariantList list;
+    
+    QDir dir(dirPath);
+    if(!dir.exists()) {
+        qCritical() << dirPath << "not exists";
+        return list;
+    }
+    QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files);
+    for(auto fileInfo : fileInfoList) {
+        QString pluginPath = fileInfo.absoluteFilePath();
+        if(!QLibrary::isLibrary(pluginPath)) {
+            qCritical() << pluginPath << "not a plugin";
+            continue;
+        }
+        QSharedPointer<McBeanReference> beanRef = QSharedPointer<McBeanReference>::create();
+        beanRef->setPluginPath(pluginPath);
+		list << QVariant::fromValue(beanRef);
+    }
+    
+    return list;
 }
 
 void McListParser::getChildTypeName(const QString &parentTypeName, QString &childTypeName) const noexcept {

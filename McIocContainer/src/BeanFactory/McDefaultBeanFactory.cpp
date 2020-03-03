@@ -6,6 +6,7 @@
 
 #include "include/BeanDefinition/IMcBeanDefinition.h"
 #include "include/BeanFactory/impl/McBeanReference.h"
+#include "include/BeanFactory/impl/McBeanConnector.h"
 #include "include/PropertyParser/impl/McPropertyParserPlugins.h"
 #include "include/PropertyParser/IMcPropertyParser.h"
 
@@ -36,12 +37,22 @@ QVariant McDefaultBeanFactory::doCreate(const QSharedPointer<IMcBeanDefinition>&
         }
         bean.reset(beanMetaObj->newInstance());
     }
-	if (!addPropertyValue(bean, beanDefinition)) {
-		qCritical() << QString("failed to init definition '%1'").arg(beanDefinition->getClassName());
+    if (!bean) {
+		qCritical() << QString("bean '%1' cannot instantiation, please make sure that have a non-parameter constructor and declared by Q_INVOKABLE")
+			.arg(beanDefinition->getClassName());
+		return QVariant();
+	}
+    QVariantMap proValues;
+	if (!addPropertyValue(bean, beanDefinition, proValues)) {
+		qCritical() << QString("failed to init definition '%1'").arg(bean->metaObject()->className());
         return QVariant();
 	}
+    if(!addObjectConnect(bean, beanDefinition, proValues)) {
+        qCritical() << QString("failed to add object connect '%1'").arg(bean->metaObject()->className());
+        return QVariant();
+    }
     var.setValue(bean);
-    QString typeName = QString("QSharedPointer<%1>").arg(beanDefinition->getClassName());
+    QString typeName = QString("QSharedPointer<%1>").arg(bean->metaObject()->className());
     if(!var.convert(QMetaType::type(typeName.toLocal8Bit()))) {
         qCritical() << QString("failed convert QSharedPointer<QObject> to '%1'").arg(typeName);
         return QVariant();
@@ -49,29 +60,118 @@ QVariant McDefaultBeanFactory::doCreate(const QSharedPointer<IMcBeanDefinition>&
     return var;
 }
 
-bool McDefaultBeanFactory::addPropertyValue(const QSharedPointer<QObject>& bean, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT {
-	if (!bean) {
-		qCritical() << QString("bean '%1' cannot instantiation, please make sure that have a non-parameter constructor and declared by Q_INVOKABLE")
-			.arg(beanDefinition->getClassName());
-		return false;
-	}
-	// Ñ­»·¸ø¶¨ bean µÄÊôÐÔ¼¯ºÏ
+bool McDefaultBeanFactory::addPropertyValue(
+        const QSharedPointer<QObject> &bean
+        , const QSharedPointer<IMcBeanDefinition> &beanDefinition
+        , QVariantMap &proValues) Q_DECL_NOEXCEPT {
+    
+	// å¾ªçŽ¯ç»™å®š bean çš„å±žæ€§é›†åˆ
 	auto props = beanDefinition->getProperties();
 	for (auto itr = props.cbegin(); itr != props.cend(); ++itr) {
-		// ¸ù¾Ý¸ø¶¨ÊôÐÔÃû³Æ»ñÈ¡ ¸ø¶¨µÄbeanÖÐµÄÊôÐÔ¶ÔÏó
-		auto metaProperty = bean->metaObject()->property(bean->metaObject()
-			->indexOfProperty(itr.key().toLocal8Bit()));
-		// »ñÈ¡¶¨ÒåµÄÊôÐÔÖÐµÄ¶ÔÏó
+		// æ ¹æ®ç»™å®šå±žæ€§åç§°èŽ·å– ç»™å®šçš„beanä¸­çš„å±žæ€§å¯¹è±¡
+        auto index = bean->metaObject()->indexOfProperty(itr.key().toLocal8Bit());
+        if(index == -1) {
+            qCritical() << QString("bean '%1' æ²¡æœ‰æ‰¾åˆ°å±žæ€§åä¸º '%2' çš„å±žæ€§")
+                           .arg(bean->metaObject()->className(), itr.key());
+            return false;
+        }
+		auto metaProperty = bean->metaObject()->property(index);
+		// èŽ·å–å®šä¹‰çš„å±žæ€§ä¸­çš„å¯¹è±¡
 		auto value = itr.value();
-
-		// ½âÎövalue
+        
+		// è§£æžvalue
         const auto& parsers = McPropertyParserPlugins::getInstance()->getParsers();
 		for (auto parser : parsers) {
 			if (parser->convertProperty(bean, metaProperty.typeName(), parsers, this, value))
 				break;
 		}
-
+        
+        proValues.insert(itr.key(), value);
         metaProperty.write(bean.data(), value);
 	}
 	return true;
+}
+
+bool McDefaultBeanFactory::addObjectConnect(
+        const QSharedPointer<QObject> &bean
+        , const QSharedPointer<IMcBeanDefinition> &beanDefinition
+        , const QVariantMap &proValues) Q_DECL_NOEXCEPT {
+    
+    auto connectors = beanDefinition->getConnectors();
+    for(auto connector : connectors) {
+        McBeanConnectorPtr con = connector.value<McBeanConnectorPtr>();
+        if(!con) {
+            qCritical() << QString("bean '%1' å­˜åœ¨ä¸€ä¸ªconnectorï¼Œä½†ä¸èƒ½è½¬æ¢ä¸ºQSharedPointer<McBeanConnector>")
+                           .arg(bean->metaObject()->className());
+            return false;
+        }
+        QObject *sender = nullptr;
+        QMetaMethod signal;
+        QObject *receiver = nullptr;
+        QMetaMethod slot;
+        Qt::ConnectionType type;
+        
+        QString senderProName = con->getSender();
+        sender = getPropertyObject(bean, senderProName, proValues);
+        if(sender == nullptr) {
+            return false;
+        }
+        auto signalMetaObj = sender->metaObject();
+        
+        QString signalStr = con->getSignal();
+        if(signalStr.isEmpty()) {
+            qCritical() << "ä¿¡å·åä¸èƒ½ä¸ºç©º";
+            return false;
+        }
+        int signalIndex = signalMetaObj->indexOfSignal(signalStr.toLocal8Bit());
+        if(signalIndex == -1) {
+            qCritical() << QString("bean '%1' ä¸å­˜åœ¨åä¸º '%2' çš„ä¿¡å·").arg(signalMetaObj->className(), signalStr);
+            return false;
+        }
+        signal = signalMetaObj->method(signalIndex);
+        
+        QString receiverProName = con->getReceiver();
+        receiver = getPropertyObject(bean, receiverProName, proValues);
+        if(receiver == nullptr) {
+            return false;
+        }
+        auto slotMetaObj = receiver->metaObject();
+        
+        QString slotStr = con->getSlot();
+        if(slotStr.isEmpty()) {
+            qCritical() << "æ§½åä¸èƒ½ä¸ºç©º";
+            return false;
+        }
+        int slotIndex = slotMetaObj->indexOfMethod(slotStr.toLocal8Bit());
+        if(slotIndex == -1) {
+            qCritical() << QString("bean '%1' ä¸å­˜åœ¨åä¸º '%2' çš„æ§½").arg(slotMetaObj->className(), slotStr);
+            return false;
+        }
+        slot = slotMetaObj->method(slotIndex);
+        
+        type = con->getType();
+        
+        QObject::connect(sender, signal, receiver, slot, type);
+    }
+    return true;
+}
+
+QObject *McDefaultBeanFactory::getPropertyObject(
+        const QSharedPointer<QObject> &bean
+        , const QString &proName
+        , const QVariantMap &proValues) Q_DECL_NOEXCEPT {
+    
+    QObject *obj = nullptr;
+    if(proName == MC_THIS) {
+        obj = bean.data();
+    }else{
+        if(!proValues.contains(proName)) {
+            qCritical() << QString("bean '%1' æ²¡æœ‰æ‰¾åˆ°å±žæ€§åä¸º '%2' çš„å±žæ€§")
+                           .arg(bean->metaObject()->className(), proName);
+            return nullptr;
+        }
+        auto varPro = proValues[proName];
+        obj = varPro.value<QSharedPointer<QObject>>().data();
+    }
+    return obj;
 }

@@ -1,13 +1,14 @@
 #include "include/ApplicationContext/impl/McAbstractApplicationContext.h"
 
 #include "include/BeanFactory/IMcBeanFactory.h"
+#include "include/BeanDefinition/IMcBeanDefinition.h"
 
 struct McAbstractApplicationContextData {
     QSharedPointer<IMcConfigurableBeanFactory> configurableBeanFactory;
 };
 
 McAbstractApplicationContext::McAbstractApplicationContext(const QSharedPointer<IMcConfigurableBeanFactory>& factory
-    , QObject *parent)
+        , QObject *parent)
     : QObject(parent)
     , d(new McAbstractApplicationContextData())
 {
@@ -33,6 +34,23 @@ void McAbstractApplicationContext::registerBeanDefinition(const QString &name, c
     d->configurableBeanFactory->registerBeanDefinition(name, beanDefinition);
 }
 
+bool McAbstractApplicationContext::isContained(const QString &name) noexcept {
+    return d->configurableBeanFactory->isContained(name);
+}
+
 QMap<QString, QSharedPointer<IMcBeanDefinition>> McAbstractApplicationContext::getBeanDefinitions() Q_DECL_NOEXCEPT {
     return d->configurableBeanFactory->getBeanDefinitions();
+}
+
+void McAbstractApplicationContext::refresh() noexcept {
+    doRefresh();
+    
+    auto beanDefinitions = getBeanDefinitions();
+    auto beanNames = beanDefinitions.keys();    // 获取所有beanName
+    for(auto beanName : beanNames) {
+        auto beanDefinition = beanDefinitions.value(beanName);
+        if(beanDefinition->isSingleton()) {         // 如果不是单例对象则不需要获取，因为非单例对象无法预存
+            getBean(beanName);                      // 获取一次bean，让bean预加载
+        }
+    }
 }

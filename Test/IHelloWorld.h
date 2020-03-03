@@ -1,10 +1,12 @@
 #pragma once
 
 #include <qmetaobject.h>
-#include "BeanFactory/McBeanGlobal.h"
+#include "ApplicationContext/McContainerGlobal.h"
 
 class IHelloWorld {
-
+    Q_GADGET
+    Q_CLASSINFO("ss", "aa")
+    MC_DEFINE_TYPELIST()
 public:
 	virtual ~IHelloWorld() = default;
 

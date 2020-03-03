@@ -1,30 +1,36 @@
 /*******************************************************************
- <ÎÄ¼şÃû>		McBeanReference.h
- <ÏêÏ¸ËµÃ÷>		ÓÃÓÚ´æ·ÅbeanµÄÒıÓÃµÄÏà¹ØÊı¾İ
- <×÷   Õß>		mrcao
- <ÈÕ   ÆÚ>		2019/4/3
+ <æ–‡ä»¶å>		McBeanReference.h
+ <è¯¦ç»†è¯´æ˜>		ç”¨äºå­˜æ”¾beançš„å¼•ç”¨çš„ç›¸å…³æ•°æ®
+ <ä½œ   è€…>		mrcao
+ <æ—¥   æœŸ>		2019/4/3
 ********************************************************************/
 
 #pragma once
 
 #include <qobject.h>
 #include "../../McMacroGlobal.h"
+#include "../../BeanFactory/McBeanGlobal.h"
 
 class MCIOCCONTAINER_EXPORT McBeanReference : public QObject {
     Q_OBJECT
+    MC_DECL_STATIC(McBeanReference)
 
 public:
-    // ¹¹ÔìÆ÷£¬ ±ØĞë°üº¬Ò»¸öbeanÃû³Æ
-    explicit McBeanReference(const QString &name, QObject *parent = nullptr)
+    // æ„é€ å™¨ï¼Œ å¿…é¡»åŒ…å«ä¸€ä¸ªbeanåç§°
+    explicit McBeanReference(QObject *parent = nullptr)
         : QObject(parent)
-        , m_name(name){}
+    {}
     virtual ~McBeanReference() = default;
+    
+    QString getName() const;
+    void setName(const QString &name);
 
-    QString getName() { return m_name; }
-    void setName(const QString &name) { m_name = name; }
-
+    QString getPluginPath() const;
+    void setPluginPath(const QString &pluginPath);
+    
 private:
-    QString m_name;						// ±»ÒıÓÃbeanµÄÃû³Æ
+    QString m_name;						// è¢«å¼•ç”¨beançš„åç§°
+    QString m_pluginPath;               // è¢«å¼•ç”¨çš„æ’ä»¶è·¯å¾„ï¼Œè¿™ä¸ªå‚æ•°å’Œm_nameåªèƒ½æœ‰ä¸€ä¸ªå­˜åœ¨
 };
 
-Q_DECLARE_METATYPE(McBeanReference*)
+MC_DECLARE_METATYPE(McBeanReference)

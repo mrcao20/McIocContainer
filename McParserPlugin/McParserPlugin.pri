@@ -8,12 +8,14 @@ message("You are running qmake on a generated .pro file. This may not work!")
 
 
 HEADERS += ./mcparserplugin_global.h \
+    $$PWD/McMapParser.h \
     $$PWD/McParserVersion.h \
     ./McPropertyParsers.h \
     ./McValueParser.h \
     ./McRefParser.h \
     ./McListParser.h
 SOURCES += ./McPropertyParsers.cpp \
+    $$PWD/McMapParser.cpp \
     ./McValueParser.cpp \
     ./McRefParser.cpp \
     ./McListParser.cpp

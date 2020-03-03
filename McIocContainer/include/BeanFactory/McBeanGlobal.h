@@ -4,6 +4,8 @@
 #include <QVariant>
 #include <QSharedPointer>
 
+#include "../McMacroGlobal.h"
+
 #define MC_DECLARE_METATYPE(Class)  \
     Q_DECLARE_METATYPE(QSharedPointer<Class>)
 
@@ -13,7 +15,7 @@
 #define MC_STATIC(Class)	\
 	const int Class::Class##_Static_Init = []() -> int {
 
-#define MC_STATIC_END	\
+#define MC_STATIC_END()	\
 	return 0;}();
 
 #define MC_DEFINE_TYPELIST(...)    \
@@ -26,8 +28,6 @@ private:
 
 #define MC_DECL_TYPELIST(Class) MC_TYPELIST(Class)
 
-void mcInitContainer();
-
 namespace McPrivate {
 
 template <typename...> struct McTypeList;
@@ -38,7 +38,7 @@ struct McTypeList<T, U...> {
     using Tails = McTypeList<U...>;
 };
 
-// Õë¶Ô¿ÕlistµÄÌØ»¯
+// é’ˆå¯¹ç©ºlistçš„ç‰¹åŒ–
 template <>
 struct McTypeList<> {};
 
@@ -88,12 +88,12 @@ int mcRegisterBeanFactory(const char *typeName = Q_NULLPTR) {
     if (!QMetaType::hasRegisteredConverterFunction<QSharedPointer<QObject>, QSharedPointer<T>>()) {
         QMetaType::registerConverter<QSharedPointer<QObject>, QSharedPointer<T>>(mcConverterQSharedPointerObject<QSharedPointer<QObject>, QSharedPointer<T>>);
     }
-	if (typeName == Q_NULLPTR) {
+    if (typeName == Q_NULLPTR) {
         return qRegisterMetaType<T*>();
-	}
-	else {
+    }
+    else {
         return qRegisterMetaType<T*>(typeName);
-	}
+    }
 }
 
 template<typename From, typename To>
@@ -169,4 +169,40 @@ void mcRegisterQVariantMapConverter() {
 template<typename T>
 void mcRegisterQVariantMapConverter() {
 	mcRegisterQVariantMapConverter<QMap<QVariant, QVariant>, T>();
+}
+
+namespace Mc {
+namespace Ioc {
+
+template<typename From, typename To>
+struct McRegisterConverterHelper {
+    static void registerConverter() {
+    }
+};
+
+template<typename From, typename To>
+void mcRegisterConverter() {
+    McRegisterConverterHelper<From, To>::registerConverter();
+}
+
+template<typename T>
+void mcRegisterListConverter() {
+	mcRegisterConverter<QVariantList, T>();
+}
+
+template<typename T>
+void mcRegisterMapConverter() {
+	mcRegisterConverter<QMap<QVariant, QVariant>, T>();
+}
+
+MCIOCCONTAINER_EXPORT void mcInitContainer() noexcept;
+
+MCIOCCONTAINER_EXPORT void connect(const QString &beanName
+                                   , const QString &sender
+                                   , const QString &signal
+                                   , const QString &receiver
+                                   , const QString &slot
+                                   , Qt::ConnectionType type = Qt::AutoConnection) noexcept;
+
+}
 }

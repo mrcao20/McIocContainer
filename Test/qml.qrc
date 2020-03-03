@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>myspring.xml</file>
+        <file>xmltest2.xml</file>
     </qresource>
 </RCC>

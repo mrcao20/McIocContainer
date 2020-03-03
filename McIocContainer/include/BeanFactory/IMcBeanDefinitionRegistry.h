@@ -1,9 +1,9 @@
 /*******************************************************************
- <ÎÄ¼şÃû>		IMcBeanDefinitionRegistry.h
- <ÏêÏ¸ËµÃ÷>		ĞèÒªÒ»¸öbeanDefinitionRegistry ¶¨Òå¹ØÓÚbeanDefinitionµÄÒ»Ğ©ĞĞÎª
-				±ÈÈç×¢²ábeanDefinition
- <×÷   Õß>		mrcao
- <ÈÕ   ÆÚ>		2019/4/3
+ <æ–‡ä»¶å>		IMcBeanDefinitionRegistry.h
+ <è¯¦ç»†è¯´æ˜>		éœ€è¦ä¸€ä¸ªbeanDefinitionRegistry å®šä¹‰å…³äºbeanDefinitionçš„ä¸€äº›è¡Œä¸º
+				æ¯”å¦‚æ³¨å†ŒbeanDefinition
+ <ä½œ   è€…>		mrcao
+ <æ—¥   æœŸ>		2019/4/3
 ********************************************************************/
 
 #pragma once
@@ -22,22 +22,31 @@ public:
 	virtual ~IMcBeanDefinitionRegistry() = default;
 
 	/*************************************************
-	 <º¯ÊıÃû³Æ>		registerBeanDefinition
-	 <º¯ÊıËµÃ÷>		½«beanµÄ¶¨Òå×¢²áµ½ÈİÆ÷ÖĞ.
-	 <²ÎÊıËµÃ÷>		name beanÃû³Æ
-					bean bean¶¨ÒåÊµÀı£¬ÓÉÓÚbean¶¨Òå¿ÉÄÜ³¤Ê±¼ä±£´æÔÚ¹¤³§ÖĞ£¬ËùÒÔ²»ÒªÎªËüÉèÖÃ¸¸¶ÔÏó£¬ÈİÆ÷»á×Ô¶¯É¾³ı
-	 <·µ»ØÖµ>
-	 <×÷    Õß>		mrcao
-	 <Ê±    ¼ä>		2019/4/3
+	 <å‡½æ•°åç§°>		registerBeanDefinition
+	 <å‡½æ•°è¯´æ˜>		å°†beançš„å®šä¹‰æ³¨å†Œåˆ°å®¹å™¨ä¸­, å¦‚æœå·²ç»å­˜åœ¨åˆ™æ›¿æ¢
+	 <å‚æ•°è¯´æ˜>		name beanåç§°
+					bean beanå®šä¹‰å®ä¾‹ï¼Œç”±äºbeanå®šä¹‰å¯èƒ½é•¿æ—¶é—´ä¿å­˜åœ¨å·¥å‚ä¸­ï¼Œæ‰€ä»¥ä¸è¦ä¸ºå®ƒè®¾ç½®çˆ¶å¯¹è±¡ï¼Œå®¹å™¨ä¼šè‡ªåŠ¨åˆ é™¤
+	 <è¿”å›å€¼>
+	 <ä½œ    è€…>		mrcao
+	 <æ—¶    é—´>		2019/4/3
 	**************************************************/
     virtual void registerBeanDefinition(const QString &name, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT = 0;
+    /*************************************************
+     @Funcname  isContained
+     @Brief     æ£€æµ‹è¯¥beanæ˜¯å¦å·²ç»å­˜åœ¨
+     @Params
+     @Return    bool: trueå­˜åœ¨ï¼Œfalseä¸å­˜åœ¨
+     @Author    mrcao
+     @Date      2020-02-23
+    **************************************************/
+    virtual bool isContained(const QString &name) noexcept = 0;
 	/*************************************************
-	 <º¯ÊıÃû³Æ>		getBeanDefinitions
-	 <º¯ÊıËµÃ÷>		»ñÈ¡ËùÓĞbean¶¨Òå
-	 <²ÎÊıËµÃ÷>		
-	 <·µ»ØÖµ>		¼üÎªbeanµÄÃû³Æ£¬ÖµÎªbean¶¨Òå
-	 <×÷    Õß>		mrcao
-	 <Ê±    ¼ä>		2019/5/6
+	 <å‡½æ•°åç§°>		getBeanDefinitions
+	 <å‡½æ•°è¯´æ˜>		è·å–æ‰€æœ‰beanå®šä¹‰
+	 <å‚æ•°è¯´æ˜>		
+	 <è¿”å›å€¼>		é”®ä¸ºbeançš„åç§°ï¼Œå€¼ä¸ºbeanå®šä¹‰
+	 <ä½œ    è€…>		mrcao
+	 <æ—¶    é—´>		2019/5/6
 	**************************************************/
     virtual QMap<QString, QSharedPointer<IMcBeanDefinition>> getBeanDefinitions() Q_DECL_NOEXCEPT = 0;
 };

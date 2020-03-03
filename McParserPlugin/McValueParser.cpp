@@ -3,6 +3,8 @@
 #include <qdom.h>
 #include <qdebug.h>
 
+#include "McMacroGlobal.h"
+
 McValueParser::McValueParser(QObject *parent)
 	: QObject(parent)
 {
@@ -13,9 +15,12 @@ McValueParser::~McValueParser(){
 
 bool McValueParser::parseProperty(const QDomElement &propEle, const QList<QSharedPointer<IMcPropertyParser>> &parsers, QVariant &value) const noexcept {
     Q_UNUSED(parsers)
+    if(propEle.tagName() != MC_PROPERTY && propEle.tagName() != "value") {
+        return false;       // æ­¤è§£æå™¨åªèƒ½è§£æå±æ€§
+    }
     QDomElement childEle = propEle.firstChildElement("value");
 	if (propEle.elementsByTagName("value").size() > 1 || (!propEle.hasAttribute("value") && propEle.tagName() != "value" && childEle.isNull()))
-		return false;		// ²»´æÔÚvalue£¬±¾¶ÔÏó²»½âÎö
+		return false;		// ä¸å­˜åœ¨valueï¼Œæœ¬å¯¹è±¡ä¸è§£æ
 	
 	QString str = "";
 	if (propEle.hasAttribute("value"))
@@ -36,5 +41,5 @@ bool McValueParser::convertProperty(const QSharedPointer<QObject>& bean, const c
     Q_UNUSED(parsers)
     Q_UNUSED(refResolver)
     Q_UNUSED(value)
-    return false;	// ±¾¶ÔÏó²»½âÎö£¬´«µİ¸øÆäËû½âÎöÆ÷½âÎö
+    return false;	// æœ¬å¯¹è±¡ä¸è§£æï¼Œä¼ é€’ç»™å…¶ä»–è§£æå™¨è§£æ
 }

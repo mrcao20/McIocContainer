@@ -1,8 +1,8 @@
 /*******************************************************************
- <ÎÄ¼şÃû>		McDefaultBeanFactory.h
- <ÏêÏ¸ËµÃ÷>		ÊµÏÖbean×¢ÈëµÄ»ù±¾¹¦ÄÜ
- <×÷   Õß>		mrcao
- <ÈÕ   ÆÚ>		2019/4/5
+ <æ–‡ä»¶å>		McDefaultBeanFactory.h
+ <è¯¦ç»†è¯´æ˜>		å®ç°beanæ³¨å…¥çš„åŸºæœ¬åŠŸèƒ½
+ <ä½œ   è€…>		mrcao
+ <æ—¥   æœŸ>		2019/4/5
 ********************************************************************/
 
 #pragma once
@@ -18,24 +18,34 @@ public:
 
 protected:
     /*************************************************
-     <º¯ÊıÃû³Æ>		doCreate
-     <º¯ÊıËµÃ÷>		¸ù¾İbean ¶¨Òå´´½¨ÊµÀı£¬ ²¢½«ÊµÀı×÷Îªkey£¬ bean¶¨Òå×÷Îªvalue´æ·Å£¬
-                                    ²¢µ÷ÓÃ addPropertyValue ·½·¨ Îª¸ø¶¨µÄbeanµÄÊôĞÔ½øĞĞ×¢Èë¡£
-     <²ÎÊıËµÃ÷>		name bean Ãû³Æ
-     <·µ»ØÖµ>		·µ»Ø´´½¨³É¹¦µÄbean¶ÔÏó£¬Ê§°Ü·µ»Ønull
-     <×÷    Õß>		mrcao
-     <Ê±    ¼ä>		2019/4/3
+     <å‡½æ•°åç§°>		doCreate
+     <å‡½æ•°è¯´æ˜>		æ ¹æ®bean å®šä¹‰åˆ›å»ºå®ä¾‹ï¼Œ å¹¶å°†å®ä¾‹ä½œä¸ºkeyï¼Œ beanå®šä¹‰ä½œä¸ºvalueå­˜æ”¾ï¼Œ
+                                    å¹¶è°ƒç”¨ addPropertyValue æ–¹æ³• ä¸ºç»™å®šçš„beançš„å±æ€§è¿›è¡Œæ³¨å…¥ã€‚
+     <å‚æ•°è¯´æ˜>		name bean åç§°
+     <è¿”å›å€¼>		è¿”å›åˆ›å»ºæˆåŠŸçš„beanå¯¹è±¡ï¼Œå¤±è´¥è¿”å›null
+     <ä½œ    è€…>		mrcao
+     <æ—¶    é—´>		2019/4/3
     **************************************************/
     QVariant doCreate(const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 
 private:
     /*************************************************
-     <º¯ÊıÃû³Æ>		addPropertyValue
-     <º¯ÊıËµÃ÷>		¸ø¶¨Ò»¸öbean¶¨ÒåºÍÒ»¸öbeanÊµÀı£¬Îª¸ø¶¨µÄbeanÖĞµÄÊôĞÔ×¢ÈëÊµÀı¡£
-     <²ÎÊıËµÃ÷>		name bean Ãû³Æ
-     <·µ»ØÖµ>		³É¹¦·µ»Øtrue£¬³ö´í·µ»Øfalse£¬²¢¼ÇÂ¼´íÎó
-     <×÷    Õß>		mrcao
-     <Ê±    ¼ä>		2019/4/3
+     <å‡½æ•°åç§°>		addPropertyValue
+     <å‡½æ•°è¯´æ˜>		ç»™å®šä¸€ä¸ªbeanå®šä¹‰å’Œä¸€ä¸ªbeanå®ä¾‹ï¼Œä¸ºç»™å®šçš„beanä¸­çš„å±æ€§æ³¨å…¥å®ä¾‹ã€‚
+     <å‚æ•°è¯´æ˜>		name bean åç§°
+     <è¿”å›å€¼>		æˆåŠŸè¿”å›trueï¼Œå‡ºé”™è¿”å›falseï¼Œå¹¶è®°å½•é”™è¯¯
+     <ä½œ    è€…>		mrcao
+     <æ—¶    é—´>		2019/4/3
     **************************************************/
-    bool addPropertyValue(const QSharedPointer<QObject>& bean, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT;
+    bool addPropertyValue(const QSharedPointer<QObject> &bean
+                          , const QSharedPointer<IMcBeanDefinition> &beanDefinition
+                          , QVariantMap &proValues) Q_DECL_NOEXCEPT;
+    
+    bool addObjectConnect(const QSharedPointer<QObject> &bean
+                          , const QSharedPointer<IMcBeanDefinition> &beanDefinition
+                          , const QVariantMap &proValues) Q_DECL_NOEXCEPT;
+    
+    QObject *getPropertyObject(const QSharedPointer<QObject> &bean
+                               , const QString &proName
+                               , const QVariantMap &proValues) Q_DECL_NOEXCEPT;
 };

@@ -17,6 +17,7 @@ public:
     bool convertProperty(const QSharedPointer<QObject>& bean, const char *propTypeName, const QList<QSharedPointer<IMcPropertyParser>>& parsers, IMcBeanReferenceResolver* refResolver, QVariant &value) const noexcept override;
 
 private:
+    QVariantList getList(const QString &dirPath) const noexcept;
 	void getChildTypeName(const QString &parentTypeName, QString &childTypeName) const noexcept;
 
 private:

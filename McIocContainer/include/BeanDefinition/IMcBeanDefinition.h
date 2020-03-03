@@ -1,8 +1,8 @@
 /*******************************************************************
- <ÎÄ¼şÃû>		IMcBeanDefinition.h
- <ÏêÏ¸ËµÃ÷>		½Ó¿Ú£¬Ìá¹©beanDefinitionµÄ¹¦ÄÜ
- <×÷   Õß>		mrcao
- <ÈÕ   ÆÚ>		2019/4/3
+ <æ–‡ä»¶å>		IMcBeanDefinition.h
+ <è¯¦ç»†è¯´æ˜>		æ¥å£ï¼Œæä¾›beanDefinitionçš„åŠŸèƒ½
+ <ä½œ   è€…>		mrcao
+ <æ—¥   æœŸ>		2019/4/3
 ********************************************************************/
 
 #pragma once
@@ -31,13 +31,16 @@ public:
 	virtual void setBeanMetaObject(QMetaObject *o) Q_DECL_NOEXCEPT = 0;
 
 	virtual QString getClassName() const Q_DECL_NOEXCEPT = 0;
-	// Ê¹ÓÃ´Ëº¯ÊıÉèÖÃclassNameÖ®ºó£¬»á×Ô¶¯Éú³ÉQMetaObject
+	// ä½¿ç”¨æ­¤å‡½æ•°è®¾ç½®classNameä¹‹åï¼Œä¼šè‡ªåŠ¨ç”ŸæˆQMetaObject
 	virtual void setClassName(const QString &name) Q_DECL_NOEXCEPT = 0;
 
     virtual QString getPluginPath() const Q_DECL_NOEXCEPT = 0;
     virtual void setPluginPath(const QString &path) Q_DECL_NOEXCEPT = 0;
 
 	virtual QVariantHash getProperties() const Q_DECL_NOEXCEPT = 0;
-	// ÓÉÓÚQVariantÔÚÎö¹¹Ê±»á×Ô¶¯É¾³ı°üº¬µÄ¶ÔÏó£¬ËùÒÔ¸Ã¶ÔÏó²»ÓÃÉèÖÃ¸¸¶ÔÏó
+	// ç”±äºQVariantåœ¨ææ„æ—¶ä¼šè‡ªåŠ¨åˆ é™¤åŒ…å«çš„å¯¹è±¡ï¼Œæ‰€ä»¥è¯¥å¯¹è±¡ä¸ç”¨è®¾ç½®çˆ¶å¯¹è±¡
 	virtual void addProperty(const QString &name, const QVariant &value) Q_DECL_NOEXCEPT = 0;
+    
+    virtual QVariantList getConnectors() const Q_DECL_NOEXCEPT = 0;
+    virtual void addConnector(const QVariant &val) Q_DECL_NOEXCEPT = 0;
 };

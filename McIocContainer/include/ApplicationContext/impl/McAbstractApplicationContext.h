@@ -13,55 +13,63 @@ MC_ABSTRACT_CLASS MCIOCCONTAINER_EXPORT McAbstractApplicationContext
 	Q_OBJECT
 
 public:
-    /*	¹¹Ôìº¯Êı£¬ĞèÒªÒ»¸öconfigurableBeanFactoryÀ´Ìá¹©beanµÄ²Ù×÷¹¦ÄÜ
-            ±¾ÀàÎö¹¹Ê±»á×Ô¶¯Îö¹¹configurableBeanFactory£¬¹ÊÎŞĞèÎªÆäÖ¸¶¨¸¸¶ÔÏó
+    /*	æ„é€ å‡½æ•°ï¼Œéœ€è¦ä¸€ä¸ªconfigurableBeanFactoryæ¥æä¾›beançš„æ“ä½œåŠŸèƒ½
+            æœ¬ç±»ææ„æ—¶ä¼šè‡ªåŠ¨ææ„configurableBeanFactoryï¼Œæ•…æ— éœ€ä¸ºå…¶æŒ‡å®šçˆ¶å¯¹è±¡
     */
     McAbstractApplicationContext(const QSharedPointer<IMcConfigurableBeanFactory>& factory, QObject *parent = nullptr);
     virtual ~McAbstractApplicationContext() Q_DECL_OVERRIDE;
 
     /*************************************************
-     <º¯ÊıÃû³Æ>		getBean
-     <º¯ÊıËµÃ÷>		¸ù¾İbeanµÄÃû³Æ»ñÈ¡bean£¬Èç¹ûÃ»ÓĞ£¬Ôò·µ»Ø¿Õ£¬²¢ÉèÖÃ´íÎóĞÅÏ¢£¬
-                                    Èç¹ûÓĞ£¬Ôò´Óbean¶¨Òå¶ÔÏó»ñÈ¡beanÊµÀı¡£
-     <²ÎÊıËµÃ÷>		name bean Ãû³Æ
-                                    parent beanµÄ¸¸¶ÔÏó
-     <·µ»ØÖµ>
-     <×÷    Õß>		mrcao
-     <Ê±    ¼ä>		2019/4/77
+     <å‡½æ•°åç§°>		getBean
+     <å‡½æ•°è¯´æ˜>		æ ¹æ®beançš„åç§°è·å–beanï¼Œå¦‚æœæ²¡æœ‰ï¼Œåˆ™è¿”å›ç©ºï¼Œå¹¶è®¾ç½®é”™è¯¯ä¿¡æ¯ï¼Œ
+                                    å¦‚æœæœ‰ï¼Œåˆ™ä»beanå®šä¹‰å¯¹è±¡è·å–beanå®ä¾‹ã€‚
+     <å‚æ•°è¯´æ˜>		name bean åç§°
+                                    parent beançš„çˆ¶å¯¹è±¡
+     <è¿”å›å€¼>
+     <ä½œ    è€…>		mrcao
+     <æ—¶    é—´>		2019/4/77
     **************************************************/
     QSharedPointer<QObject> getBean(const QString &name) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
     /*************************************************
-     <º¯ÊıÃû³Æ>		getBeanToVariant
-     <º¯ÊıËµÃ÷>		¸ù¾İbeanµÄÃû³Æ»ñÈ¡°üº¬beanÊµÀıµÄQVariant£¬Èç¹ûÃ»ÓĞ£¬Ôò·µ»ØÎŞĞ§Öµ£¬²¢ÉèÖÃ´íÎóĞÅÏ¢£¬
-                                    Èç¹ûÓĞ£¬Ôò´Óbean¶¨Òå¶ÔÏó»ñÈ¡°üº¬beanÊµÀıµÄQVariant¡£
-     <²ÎÊıËµÃ÷>		name bean Ãû³Æ
-                                    parent beanµÄ¸¸¶ÔÏó
-     <·µ»ØÖµ>
-     <×÷    Õß>		mrcao
-     <Ê±    ¼ä>		2019/12/18
+     <å‡½æ•°åç§°>		getBeanToVariant
+     <å‡½æ•°è¯´æ˜>		æ ¹æ®beançš„åç§°è·å–åŒ…å«beanå®ä¾‹çš„QVariantï¼Œå¦‚æœæ²¡æœ‰ï¼Œåˆ™è¿”å›æ— æ•ˆå€¼ï¼Œå¹¶è®¾ç½®é”™è¯¯ä¿¡æ¯ï¼Œ
+                                    å¦‚æœæœ‰ï¼Œåˆ™ä»beanå®šä¹‰å¯¹è±¡è·å–åŒ…å«beanå®ä¾‹çš„QVariantã€‚
+     <å‚æ•°è¯´æ˜>		name bean åç§°
+                                    parent beançš„çˆ¶å¯¹è±¡
+     <è¿”å›å€¼>
+     <ä½œ    è€…>		mrcao
+     <æ—¶    é—´>		2019/12/18
     **************************************************/
     QVariant getBeanToVariant(const QString &name)  Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
     /*************************************************
-     <º¯ÊıÃû³Æ>		containsBean
-     <º¯ÊıËµÃ÷>		¼ì²âÈİÆ÷ÖĞÊÇ·ñ´æÔÚ¸Ãbean
-     <²ÎÊıËµÃ÷>		name beanÃû³Æ
-     <·µ»ØÖµ>		true´æÔÚ£¬false²»´æÔÚ
-     <×÷    Õß>		mrcao
-     <Ê±    ¼ä>		2019/4/7
+     <å‡½æ•°åç§°>		containsBean
+     <å‡½æ•°è¯´æ˜>		æ£€æµ‹å®¹å™¨ä¸­æ˜¯å¦å­˜åœ¨è¯¥bean
+     <å‚æ•°è¯´æ˜>		name beanåç§°
+     <è¿”å›å€¼>		trueå­˜åœ¨ï¼Œfalseä¸å­˜åœ¨
+     <ä½œ    è€…>		mrcao
+     <æ—¶    é—´>		2019/4/7
     **************************************************/
     bool containsBean(const QString &name) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
     /*************************************************
-     <º¯ÊıÃû³Æ>		registerBeanDefinition
-     <º¯ÊıËµÃ÷>		×¢²á bean¶¨ÒåµÄ³éÏó·½·¨ÊµÏÖ¡£
-     <²ÎÊıËµÃ÷>		name beanÃû³Æ
-                    beandefinition bean¶¨ÒåÊµÀı
-     <·µ»ØÖµ>
-     <×÷    Õß>		mrcao
-     <Ê±    ¼ä>		2019/4/3
+     <å‡½æ•°åç§°>		registerBeanDefinition
+     <å‡½æ•°è¯´æ˜>		æ³¨å†Œ beanå®šä¹‰çš„æŠ½è±¡æ–¹æ³•å®ç°ã€‚
+     <å‚æ•°è¯´æ˜>		name beanåç§°
+                    beandefinition beanå®šä¹‰å®ä¾‹
+     <è¿”å›å€¼>
+     <ä½œ    è€…>		mrcao
+     <æ—¶    é—´>		2019/4/3
     **************************************************/
     void registerBeanDefinition(const QString &name, const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
-    // »ñÈ¡beanµÄ¶¨Òå¼¯ºÏ
+    // æ˜¯å¦å·²ç»æ³¨å†Œè¿‡è¯¥bean
+    bool isContained(const QString &name) noexcept override;
+    // è·å–beançš„å®šä¹‰é›†åˆ
     QMap<QString, QSharedPointer<IMcBeanDefinition>> getBeanDefinitions() Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    
+    // åˆå§‹åŒ–ä¸Šä¸‹æ–‡æ‰€æœ‰å†…å®¹
+    void refresh() noexcept override;
+    
+protected:
+    virtual void doRefresh() noexcept = 0;
 
 private:
     QScopedPointer<McAbstractApplicationContextData> d;
