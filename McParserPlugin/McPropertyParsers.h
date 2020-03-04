@@ -1,8 +1,7 @@
-#ifndef _MC_PROPERTY_PARSERS_H_
-#define _MC_PROPERTY_PARSERS_H_
+#pragma once
 
 #include <QObject>
-#include "../include/IMcPropertyParserCollection.h"
+#include "PropertyParser/IMcPropertyParserCollection.h"
 
 class McPropertyParsers : public QObject, public IMcPropertyParserCollection {
 	Q_OBJECT
@@ -10,13 +9,11 @@ class McPropertyParsers : public QObject, public IMcPropertyParserCollection {
 	Q_INTERFACES(IMcPropertyParserCollection)
 
 public:
-	explicit McPropertyParsers(QObject *parent = 0);
-	virtual ~McPropertyParsers();
+    explicit McPropertyParsers(QObject *parent = nullptr);
+    virtual ~McPropertyParsers() override;
 
-	QList<IMcPropertyParser *> customParsers() const noexcept override;
+    QList<QSharedPointer<IMcPropertyParser>> customParsers() const noexcept override;
 
 private:
-	QList<IMcPropertyParser *> m_parsers;
+    QList<QSharedPointer<IMcPropertyParser>> m_parsers;
 };
-
-#endif // !_MC_PROPERTY_PARSERS_H_

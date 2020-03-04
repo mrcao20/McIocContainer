@@ -4,47 +4,76 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://www.springframework.org/schema/beans ">
 
-  <bean name="hello" class="HelloWorld">
-    <property name="text" value="Hello World!"></property>
-  </bean>
-  <bean name="referenceBean" class="ReferenceBean">
-    <property name="helloWorld" ref="hello"></property>
-	<!-- <property name="listData"> -->
-		<!-- <list> -->
-			<!-- <value>于嵩楠</value> -->
-			<!-- <value>曾卫</value> -->
-			<!-- <value>杨煜</value> -->
-			<!-- <value>曾小贤</value> -->
-		<!-- </list> -->
-	<!-- </property> -->
-	<property name="listData">
-		<vector>
-			<ref bean="hello"></ref>
-			<ref bean="hello"></ref>
-			<value>停封</value>
-			<value>薄纸</value>
-			<value>关系</value>
-		</vector>
-	</property>
-
-	<!-- <property name="mapData"> -->
-		<!-- <map> -->
-			<!-- <entry key="jack" value="杰克"></entry> -->
-			<!-- <entry> -->
-				<!-- <key><value>rose</value></key> -->
-				<!-- <value>肉丝</value> -->
-			<!-- </entry> -->
-		<!-- </map> -->
-	<!-- </property> -->
-	<!-- <property name="hashData"> -->
-		<!-- <hash> -->
-			<!-- <entry key="zero" value="凌"></entry> -->
-			<!-- <entry> -->
-				<!-- <key><value>one</value></key> -->
-				<!-- <value>壹</value> -->
-			<!-- </entry> -->
-		<!-- </hash> -->
-	<!-- </property> -->
-  </bean>
-
+    <bean name="hello" class="HelloWorld" isSingleton="true">
+        <property name="text" value="Hello World!"></property>
+    </bean>
+    <bean name="plugin1" plugin="./plugins/McIocContainer/McParserPlugind.dll">
+    </bean>
+    <bean name="aaa" class="ReferenceBean" isSingleton="true">
+        <property name="helloWorld" ref="hello"></property>
+        <connect>
+            <sender> this </sender>
+            <signal>signal_bean(QSharedPointer &lt;A&gt;)</signal>
+            <receiver> helloWorld </receiver>
+            <slot>slot_hello(QSharedPointer&lt; A&gt;)</slot>
+            <ConnectionType>Qt::DirectConnection | Qt::UniqueConnection</ConnectionType>
+        </connect>
+    </bean>
+    <bean name="referenceBean" class="ReferenceBean">
+        <property name="helloWorld" ref="hello"></property>
+        <property name="text" value="hello"></property>
+        <!-- <property name="listData"> -->
+                <!-- <list> -->
+                        <!-- <value>于嵩楠</value> -->
+                        <!-- <value>曾卫</value> -->
+                        <!-- <value>杨煜</value> -->
+                        <!-- <value>曾小贤</value> -->
+                <!-- </list> -->
+        <!-- </property> -->
+        <property name="listData0">
+            <vector>
+                    <ref bean="hello"></ref>
+                    <ref bean="hello"></ref>
+            </vector>
+        </property>
+        <vector name="listData">
+                <ref bean="hello"></ref>
+                <ref bean="hello"></ref>
+                <value>停封</value>
+                <value>薄纸</value>
+                <value>关系</value>
+        </vector>
+        <list name="pluginList">
+            <ref bean="plugin1"></ref>
+        </list>
+        
+         <property name="mapData">
+             <map>
+                 <entry key="jack" value="杰克"></entry>
+                 <entry>
+                     <key><value>rose</value></key>
+                     <value>肉丝</value>
+                 </entry>
+             </map>
+         </property>
+         <map name="mapData1">
+             <entry>
+                 <key><value>jack</value></key>
+                 <value><ref bean="hello"></ref></value>
+             </entry>
+             <entry>
+                 <key><value>rose</value></key>
+                 <value><ref bean="hello"></ref></value>
+             </entry>
+         </map>
+        <!-- <property name="hashData"> -->
+                <!-- <hash> -->
+                        <!-- <entry key="zero" value="凌"></entry> -->
+                        <!-- <entry> -->
+                                <!-- <key><value>one</value></key> -->
+                                <!-- <value>壹</value> -->
+                        <!-- </entry> -->
+                <!-- </hash> -->
+        <!-- </property> -->
+    </bean>
 </beans>

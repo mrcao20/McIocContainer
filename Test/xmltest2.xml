@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean name="bbb" class="ReferenceBean" isSingleton="true">
+        <list name="pluginList">
+            <ref bean="plugin1"></ref>
+        </list>
+    </bean>
+</beans>

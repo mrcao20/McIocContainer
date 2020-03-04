@@ -1,19 +1,16 @@
-#ifndef _MC_VALUE_PARSER_H_
-#define _MC_VALUE_PARSER_H_
+#pragma once
 
 #include <QObject>
-#include "../include/IMcPropertyParser.h"
+#include "PropertyParser/IMcPropertyParser.h"
 
 class McValueParser : public QObject, public IMcPropertyParser {
 	Q_OBJECT
 	Q_INTERFACES(IMcPropertyParser)
 
 public:
-	explicit McValueParser(QObject *parent = 0);
-	virtual ~McValueParser();
+    explicit McValueParser(QObject *parent = nullptr);
+    virtual ~McValueParser() override;
 
-	bool parseProperty(const QDomElement &propEle, const QList<IMcPropertyParser *> &parsers, QVariant &value) const noexcept override;
-	bool convertProperty(QObject *bean, const char *propTypeName, const QList<IMcPropertyParser *> &parsers, IMcBeanReferenceResolver *refResolver, QVariant &value) const noexcept override;
+    bool parseProperty(const QDomElement &propEle, const QList<QSharedPointer<IMcPropertyParser>> &parsers, QVariant &value) const noexcept override;
+    bool convertProperty(const QSharedPointer<QObject>& bean, const char *propTypeName, const QList<QSharedPointer<IMcPropertyParser>>& parsers, IMcBeanReferenceResolver* refResolver, QVariant &value) const noexcept override;
 };
-
-#endif // !_MC_VALUE_PARSER_H_

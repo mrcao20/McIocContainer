@@ -4,9 +4,10 @@
 #include <qdebug.h>
 #include <qmetaobject.h>
 
-#include "../include/IMcBeanDefinition.h"
-#include "../include/McBeanReference.h"
-#include "../include/IMcBeanReferenceResolver.h"
+#include "BeanDefinition/IMcBeanDefinition.h"
+#include "BeanFactory/impl/McBeanReference.h"
+#include "BeanFactory/IMcBeanReferenceResolver.h"
+#include "McMacroGlobal.h"
 
 McRefParser::McRefParser(QObject *parent)
 	: QObject(parent)
@@ -16,13 +17,16 @@ McRefParser::McRefParser(QObject *parent)
 McRefParser::~McRefParser(){
 }
 
-bool McRefParser::parseProperty(const QDomElement &propEle, const QList<IMcPropertyParser *> &parsers, QVariant &value) const noexcept {
+bool McRefParser::parseProperty(const QDomElement &propEle, const QList<QSharedPointer<IMcPropertyParser>>& parsers, QVariant &value) const noexcept {
     Q_UNUSED(parsers)
+    if(propEle.tagName() != MC_PROPERTY && propEle.tagName() != "ref") {
+        return false;       // æ­¤è§£æå™¨åªèƒ½è§£æå±æ€§
+    }
     QDomElement childEle = propEle.firstChildElement("ref");
     if (propEle.elementsByTagName("ref").size() > 1 || (!propEle.hasAttribute("ref") && propEle.tagName() != "ref" && childEle.isNull()))
-		return false;		// ²»´æÔÚref£¬±¾¶ÔÏó²»½âÎö
+		return false;		// ä¸å­˜åœ¨refï¼Œæœ¬å¯¹è±¡ä¸è§£æ
 
-	// ´æÔÚref£¬¿ªÊ¼½âÎö
+	// å­˜åœ¨refï¼Œå¼€å§‹è§£æ
 	QString ref = "";
 	if (propEle.hasAttribute("ref"))
 		ref = propEle.attribute("ref");
@@ -36,56 +40,55 @@ bool McRefParser::parseProperty(const QDomElement &propEle, const QList<IMcPrope
 	}
 
 	if (!ref.isEmpty()) {
-		// Èç¹û²»Îª¿Õ£¬Ôò´´½¨Ò»¸ö ¡°beanµÄÒıÓÃ¡± ÊµÀı£¬¹¹Ôì²ÎÊıÎªÃû³Æ£¬ÊµÀıÔİÊ±Îª¿Õ
-		McBeanReference *beanRef = new McBeanReference(ref);
+		// å¦‚æœä¸ä¸ºç©ºï¼Œåˆ™åˆ›å»ºä¸€ä¸ª â€œbeançš„å¼•ç”¨â€ å®ä¾‹ï¼Œæ„é€ å‚æ•°ä¸ºåç§°ï¼Œå®ä¾‹æš‚æ—¶ä¸ºç©º
+        QSharedPointer<McBeanReference> beanRef = QSharedPointer<McBeanReference>::create();
+        beanRef->setName(ref);
 		value = QVariant::fromValue(beanRef);
 	}
 	return true;
 }
 
-bool McRefParser::convertProperty(QObject *bean, const char *propTypeName, const QList<IMcPropertyParser *> &parsers, IMcBeanReferenceResolver *refResolver, QVariant &value) const noexcept {
+bool McRefParser::convertProperty(const QSharedPointer<QObject>& bean, const char *propTypeName, const QList<QSharedPointer<IMcPropertyParser>>& parsers, IMcBeanReferenceResolver* refResolver, QVariant &value) const noexcept {
     Q_UNUSED(parsers)
-    // ÅĞ¶ÏÊôĞÔÖµÊÇ·ñÊÇÒ»¸öbeanReference
-	if (!value.canConvert<QObject *>())
-		return false;	// ±¾½âÎöÆ÷ÎŞ·¨½âÎö£¬´«µİ¸øÆäËû½âÎöÆ÷½âÎö
-	// Èç¹ûÊÇ¾Í½«Æä×ª»»
-	auto obj = value.value<QObject *>();
-	if (!obj->inherits("McBeanReference")) {	// µÚ¶ş²½ÅĞ¶ÏÕâ¸ö¶ÔÏóÊÇ·ñÊÇ BeanReference ¶ÔÏó
-		// Ê§°Ü£¬¼ÇÂ¼´íÎóĞÅÏ¢
+    Q_UNUSED(bean)
+    Q_UNUSED(propTypeName)
+    // åˆ¤æ–­å±æ€§å€¼æ˜¯å¦æ˜¯ä¸€ä¸ªbeanReference
+    if (!value.canConvert<QSharedPointer<QObject>>())
+		return false;	// æœ¬è§£æå™¨æ— æ³•è§£æï¼Œä¼ é€’ç»™å…¶ä»–è§£æå™¨è§£æ
+    // å¦‚æœæ˜¯å°±å°†å…¶è½¬æ¢
+    auto beanReference = value.value<QSharedPointer<McBeanReference>>();
+    if (!beanReference) {	// åˆ¤æ–­æ˜¯å¦èƒ½å¤ŸæˆåŠŸè½¬æ¢
+		// å¤±è´¥ï¼Œè®°å½•é”™è¯¯ä¿¡æ¯
 		qCritical() << "cannot inject beanReference";
 		return true;
 	}
-	// ½«ÊôĞÔ¶ÔÏó×ªÎªBeanReference¶ÔÏó£¬ÒòÎªÉÏÒ»²½ÅĞ¶ÏÁËobjÊÇ·ñÊµÏÖÖÁMcBeanReference£¬¹Ê´Ë´¦Ò»¶¨³É¹¦
-	auto beanReference = qobject_cast<McBeanReference *>(obj);
-	// µ÷ÓÃ¸¸ÀàµÄAbstractBeanFactoryµÄresolveBeanReference·½·¨£¬¸ù¾İbean»ñÈ¡ÊµÀı£¬´Ë´¦¼´ÊÇµİ¹é
-	obj = refResolver->resolveBeanReference(beanReference);
-	if (!obj) {
-		// Ê§°Ü£¬¼ÇÂ¼´íÎóĞÅÏ¢
+    // è°ƒç”¨AbstractBeanFactoryçš„resolveBeanReferenceToQVariantæ–¹æ³•ï¼Œæ ¹æ®beanè·å–å®ä¾‹ï¼Œæ­¤å¤„å³æ˜¯é€’å½’
+    auto objVar = refResolver->resolveBeanReferenceToQVariant(beanReference);
+    if (!objVar.isValid()) {
+		// å¤±è´¥ï¼Œè®°å½•é”™è¯¯ä¿¡æ¯
 		qCritical() << "cannot get bean from beanReference";
 		return true;
 	}
-	// ·´Éä×¢ÈëbeanµÄÊôĞÔ£¬ĞÂµÃµ½µÄbeanÊÇµ±Ç°beanµÄ×Ó¶ÔÏó£¬ËùÒÔÉèÖÃĞÂbeanµÄ¸¸¶ÔÏóÎªµ±Ç°bean
-	obj->setParent(bean);
-	value = QVariant::fromValue(obj);
-	QString oldTypeName = value.typeName();
-	// ÏÈ½«value×ª»»Îª¾ßÌåÊµÏÖÀà
-	if (!value.convert(QMetaType::type(obj->metaObject()->className()))) {
-		qCritical() << QString("ÎŞ·¨½«%1×ª»»Îª%2£¬Çë±£Ö¤ËûÃÇÎª¼Ì³Ğ¹ØÏµ»òÊ¹ÓÃmcRegisterBeanFactory<%3, %4>()×¢²á¹ı").arg(
-			oldTypeName, propTypeName, oldTypeName, propTypeName);
-		return true;
-	}
-	oldTypeName = value.typeName();
-	if (qstrcmp(value.typeName(), propTypeName) == 0)
-		return true;
-//#if !defined(Q_NO_TEMPLATE_FRIENDS) && !defined(Q_CC_MSVC)
-//	value = QVariant(value.userType(), value.constData());
-//#else
-//	value.d.is_null = false;
-//#endif
-	value.data_ptr().is_null = false;
-	// ÔÙ½«ÊµÏÖÀà×ª»»ÎªÀàÖĞËùĞèÒªµÄ½Ó¿Ú
-	if (!value.convert(QMetaType::type(propTypeName)))
-		qCritical() << QString("ÎŞ·¨½«%1×ª»»Îª%2£¬Çë±£Ö¤ËûÃÇÎª¼Ì³Ğ¹ØÏµ»òÊ¹ÓÃmcRegisterBeanFactory<%3, %4>()×¢²á¹ı").arg(
-			oldTypeName, propTypeName, oldTypeName, propTypeName);
+    value = objVar;
+//	QString oldTypeName = value.typeName();
+//	// å…ˆå°†valueè½¬æ¢ä¸ºå…·ä½“å®ç°ç±»
+////	if (!value.convert(QMetaType::type(obj->metaObject()->className()))) {
+////		qCritical() << QString("æ— æ³•å°†%1è½¬æ¢ä¸º%2ï¼Œè¯·ä¿è¯ä»–ä»¬ä¸ºç»§æ‰¿å…³ç³»æˆ–ä½¿ç”¨mcRegisterBeanFactory<%3, %4>()æ³¨å†Œè¿‡").arg(
+////			oldTypeName, propTypeName, oldTypeName, propTypeName);
+////		return true;
+////	}
+////	oldTypeName = value.typeName();
+//	if (qstrcmp(value.typeName(), propTypeName) == 0)
+//		return true;
+////#if !defined(Q_NO_TEMPLATE_FRIENDS) && !defined(Q_CC_MSVC)
+////	value = QVariant(value.userType(), value.constData());
+////#else
+////	value.d.is_null = false;
+////#endif
+////	value.data_ptr().is_null = false;
+//	// å†å°†å®ç°ç±»è½¬æ¢ä¸ºç±»ä¸­æ‰€éœ€è¦çš„æ¥å£
+//    if (qstrcmp("QVariant", propTypeName) != 0 && !value.convert(QMetaType::type(propTypeName)))
+//        qCritical() << QString("cannot convert %1 to %2. Please make sure they are inheriting or use registered for mcRegisterBeanFactory<%3, %4>()").arg(
+//			oldTypeName, propTypeName, oldTypeName, propTypeName);
 	return true;
 }
