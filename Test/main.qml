@@ -105,8 +105,8 @@ Window {
 //        }
 //        $.post();
 
-//        $.get("referenceBean.o").then(function(result) {
-//            console.log(result, result.text);
-//        });
+        $.get("referenceBean.o").then(function(result) {
+            console.log(result, result.text);
+        });
     }
 }

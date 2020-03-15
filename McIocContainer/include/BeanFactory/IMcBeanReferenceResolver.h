@@ -1,9 +1,9 @@
 /*******************************************************************
- <ÎÄ¼şÃû>		IMcBeanReferenceResolver.h
- <ÏêÏ¸ËµÃ÷>		ĞèÒªÒ»¸öbeanReferenceResolver ¶¨Òå¹ØÓÚbeanReferenceµÄÒ»Ğ©ĞĞÎª 
-				±ÈÈç¸ù¾İbeanReferenceÉú³ÉÊµÀı¶ÔÏó
- <×÷   Õß>		mrcao
- <ÈÕ   ÆÚ>		2019/4/3
+ <æ–‡ä»¶å>		IMcBeanReferenceResolver.h
+ <è¯¦ç»†è¯´æ˜>		éœ€è¦ä¸€ä¸ªbeanReferenceResolver å®šä¹‰å…³äºbeanReferenceçš„ä¸€äº›è¡Œä¸º 
+				æ¯”å¦‚æ ¹æ®beanReferenceç”Ÿæˆå®ä¾‹å¯¹è±¡
+ <ä½œ   è€…>		mrcao
+ <æ—¥   æœŸ>		2019/4/3
 ********************************************************************/
 
 #pragma once
@@ -20,22 +20,22 @@ public:
 	virtual ~IMcBeanReferenceResolver() = default;
 
 	/*************************************************
-	 <º¯ÊıÃû³Æ>		resolveBeanReference
-	 <º¯ÊıËµÃ÷>		¸ù¾İbeanReferenceÉú³ÉÊµÀı¶ÔÏó¡£
-	 <²ÎÊıËµÃ÷>		beanRef beanReference
-     <·µ»ØÖµ>        Éú³ÉµÄreferenceÊµÀı
-	 <×÷    Õß>		mrcao
-	 <Ê±    ¼ä>		2019/4/3
+	 <å‡½æ•°åç§°>		resolveBeanReference
+	 <å‡½æ•°è¯´æ˜>		æ ¹æ®beanReferenceç”Ÿæˆå®ä¾‹å¯¹è±¡ã€‚
+	 <å‚æ•°è¯´æ˜>		beanRef beanReference
+     <è¿”å›å€¼>        ç”Ÿæˆçš„referenceå®ä¾‹
+	 <ä½œ    è€…>		mrcao
+	 <æ—¶    é—´>		2019/4/3
 	**************************************************/
     virtual QSharedPointer<QObject> resolveBeanReference(const QSharedPointer<McBeanReference>& beanRef) Q_DECL_NOEXCEPT = 0;
     /*************************************************
-     <º¯ÊıÃû³Æ>		resolveBeanReferenceToQVariant
-     <º¯ÊıËµÃ÷>		¸ù¾İbeanReferenceÉú³É°üº¬ÊµÀı¶ÔÏóµÄQVariant¡£
-     <²ÎÊıËµÃ÷>		beanRef beanReference
-     <·µ»ØÖµ>        Éú³É°üº¬referenceÊµÀıµÄQVariant
-                    ×¢£ºQVariantÖĞ°üº¬µÄÀàĞÍÎªQSharedPointer<McBeanReference::getName()>£¬¼´×îµ×²ãÀàĞÍ
-     <×÷    Õß>		mrcao
-     <Ê±    ¼ä>		2019/12/22
+     <å‡½æ•°åç§°>		resolveBeanReferenceToQVariant
+     <å‡½æ•°è¯´æ˜>		æ ¹æ®beanReferenceç”ŸæˆåŒ…å«å®ä¾‹å¯¹è±¡çš„QVariantã€‚
+     <å‚æ•°è¯´æ˜>		beanRef beanReference
+     <è¿”å›å€¼>        ç”ŸæˆåŒ…å«referenceå®ä¾‹çš„QVariant
+                    æ³¨ï¼šQVariantä¸­åŒ…å«çš„ç±»å‹ä¸ºQSharedPointer<McBeanReference::getName()>ï¼Œå³æœ€åº•å±‚ç±»å‹
+     <ä½œ    è€…>		mrcao
+     <æ—¶    é—´>		2019/12/22
     **************************************************/
     virtual QVariant resolveBeanReferenceToQVariant(const QSharedPointer<McBeanReference>& beanRef) Q_DECL_NOEXCEPT = 0;
 };

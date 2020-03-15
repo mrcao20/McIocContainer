@@ -18,7 +18,7 @@ McDefaultBeanFactory::McDefaultBeanFactory(QObject *parent)
 McDefaultBeanFactory::~McDefaultBeanFactory(){
 }
 
-QVariant McDefaultBeanFactory::doCreate(const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT {
+QVariant McDefaultBeanFactory::doCreate(const QSharedPointer<IMcBeanDefinition>& beanDefinition, QThread *thread) Q_DECL_NOEXCEPT {
     QVariant var;
     QSharedPointer<QObject> bean;
     auto pluginPath = beanDefinition->getPluginPath();
@@ -50,6 +50,9 @@ QVariant McDefaultBeanFactory::doCreate(const QSharedPointer<IMcBeanDefinition>&
     if(!addObjectConnect(bean, beanDefinition, proValues)) {
         qCritical() << QString("failed to add object connect '%1'").arg(bean->metaObject()->className());
         return QVariant();
+    }
+    if(thread != nullptr && thread != bean->thread()) {
+        bean->moveToThread(thread);
     }
     var.setValue(bean);
     QString typeName = QString("QSharedPointer<%1>").arg(bean->metaObject()->className());

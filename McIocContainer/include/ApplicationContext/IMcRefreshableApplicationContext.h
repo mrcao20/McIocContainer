@@ -14,5 +14,5 @@ public:
      @Author    mrcao
      @Date      2020-02-23
     **************************************************/
-    virtual void refresh() noexcept = 0;
+    virtual void refresh(QThread *thread = nullptr) noexcept = 0;
 };

@@ -1,5 +1,7 @@
 #include "ReferenceBean.h"
 
+#include <QThread>
+
 #include "ApplicationContext/McContainerGlobal.h"
 #include "ApplicationContext/impl/McXmlApplicationContext.h"
 
@@ -41,6 +43,8 @@ QJsonObject ReferenceBean::b() noexcept {
 }
 
 QObject *ReferenceBean::o() noexcept {
+    auto a = m_hello.dynamicCast<HelloWorld>();
+    qDebug() << "-------------" << thread() << a->thread() << QThread::currentThread();
     HelloWorld *h = new HelloWorld();
     h->setText("apaspkf");
     return h;

@@ -26,7 +26,7 @@ protected:
      <作    者>		mrcao
      <时    间>		2019/4/3
     **************************************************/
-    QVariant doCreate(const QSharedPointer<IMcBeanDefinition>& beanDefinition) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    QVariant doCreate(const QSharedPointer<IMcBeanDefinition>& beanDefinition, QThread *thread) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
 
 private:
     /*************************************************

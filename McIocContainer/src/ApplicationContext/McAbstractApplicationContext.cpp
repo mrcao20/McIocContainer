@@ -18,12 +18,12 @@ McAbstractApplicationContext::McAbstractApplicationContext(const QSharedPointer<
 McAbstractApplicationContext::~McAbstractApplicationContext(){
 }
 
-QSharedPointer<QObject> McAbstractApplicationContext::getBean(const QString &name) Q_DECL_NOEXCEPT {
-    return d->configurableBeanFactory->getBean(name);
+QSharedPointer<QObject> McAbstractApplicationContext::getBean(const QString &name, QThread *thread) Q_DECL_NOEXCEPT {
+    return d->configurableBeanFactory->getBean(name, thread);
 }
 
-QVariant McAbstractApplicationContext::getBeanToVariant(const QString &name) Q_DECL_NOEXCEPT {
-    return d->configurableBeanFactory->getBeanToVariant(name);
+QVariant McAbstractApplicationContext::getBeanToVariant(const QString &name, QThread *thread) Q_DECL_NOEXCEPT {
+    return d->configurableBeanFactory->getBeanToVariant(name, thread);
 }
 
 bool McAbstractApplicationContext::containsBean(const QString &name) Q_DECL_NOEXCEPT {
@@ -42,7 +42,7 @@ QMap<QString, QSharedPointer<IMcBeanDefinition>> McAbstractApplicationContext::g
     return d->configurableBeanFactory->getBeanDefinitions();
 }
 
-void McAbstractApplicationContext::refresh() noexcept {
+void McAbstractApplicationContext::refresh(QThread *thread) noexcept {
     doRefresh();
     
     auto beanDefinitions = getBeanDefinitions();
@@ -50,7 +50,7 @@ void McAbstractApplicationContext::refresh() noexcept {
     for(auto beanName : beanNames) {
         auto beanDefinition = beanDefinitions.value(beanName);
         if(beanDefinition->isSingleton()) {         // 如果不是单例对象则不需要获取，因为非单例对象无法预存
-            getBean(beanName);                      // 获取一次bean，让bean预加载
+            getBeanToVariant(beanName, thread);                      // 获取一次bean，让bean预加载
         }
     }
 }

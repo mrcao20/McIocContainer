@@ -29,7 +29,7 @@ public:
      <作    者>		mrcao
      <时    间>		2019/4/77
     **************************************************/
-    QSharedPointer<QObject> getBean(const QString &name) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    QSharedPointer<QObject> getBean(const QString &name, QThread *thread = nullptr) Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
     /*************************************************
      <函数名称>		getBeanToVariant
      <函数说明>		根据bean的名称获取包含bean实例的QVariant，如果没有，则返回无效值，并设置错误信息，
@@ -40,7 +40,7 @@ public:
      <作    者>		mrcao
      <时    间>		2019/12/18
     **************************************************/
-    QVariant getBeanToVariant(const QString &name)  Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
+    QVariant getBeanToVariant(const QString &name, QThread *thread = nullptr)  Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
     /*************************************************
      <函数名称>		containsBean
      <函数说明>		检测容器中是否存在该bean
@@ -66,7 +66,7 @@ public:
     QMap<QString, QSharedPointer<IMcBeanDefinition>> getBeanDefinitions() Q_DECL_NOEXCEPT Q_DECL_OVERRIDE;
     
     // 初始化上下文所有内容
-    void refresh() noexcept override;
+    void refresh(QThread *thread = nullptr) noexcept override;
     
 protected:
     virtual void doRefresh() noexcept = 0;

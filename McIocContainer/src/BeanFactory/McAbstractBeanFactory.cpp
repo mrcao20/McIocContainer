@@ -10,6 +10,7 @@
 struct McAbstractBeanFactoryData {
     QMap<QString, QSharedPointer<IMcBeanDefinition>> map;			// 容器
 	QMutex mtx{ QMutex::Recursive };				// 递归互斥锁
+    QThread *targetThread{nullptr};         // 生成对象的目标线程
 };
 
 McAbstractBeanFactory::McAbstractBeanFactory(QObject *parent)
@@ -21,15 +22,16 @@ McAbstractBeanFactory::McAbstractBeanFactory(QObject *parent)
 McAbstractBeanFactory::~McAbstractBeanFactory() {
 }
 
-QSharedPointer<QObject> McAbstractBeanFactory::getBean(const QString &name) Q_DECL_NOEXCEPT {
-    auto var = getBeanToVariant(name);
+QSharedPointer<QObject> McAbstractBeanFactory::getBean(const QString &name, QThread *thread) Q_DECL_NOEXCEPT {
+    auto var = getBeanToVariant(name, thread);
     if(!var.isValid())
         return QSharedPointer<QObject>();
     return var.value<QSharedPointer<QObject>>();
 }
 
-QVariant McAbstractBeanFactory::getBeanToVariant(const QString &name)  Q_DECL_NOEXCEPT {
+QVariant McAbstractBeanFactory::getBeanToVariant(const QString &name, QThread *thread)  Q_DECL_NOEXCEPT {
     QMutexLocker locker(&d->mtx);
+    d->targetThread = thread;
     auto beanDefinition = d->map.value(name);
     if (beanDefinition == Q_NULLPTR) {
         qCritical() << "No bean named " << name << " is defined";
@@ -37,13 +39,16 @@ QVariant McAbstractBeanFactory::getBeanToVariant(const QString &name)  Q_DECL_NO
     }
     auto beanVar = beanDefinition->getBean();
     if (!beanVar.isValid()) {	// 如果bean不存在
-        beanVar = doCreate(beanDefinition);	// 创建
+        beanVar = doCreate(beanDefinition, d->targetThread);	// 创建
         if (!beanVar.isValid()) {
             qWarning() << QString("failed to create bean '%1'").arg(name);
             return QVariant();
         }
         if(beanDefinition->isSingleton())
             beanDefinition->setBean(beanVar);		// 如果为单例时，则放进beanDefinition，以达到复用。
+    } else if(thread != nullptr) {
+        qWarning() << "the bean of name '" << name << "' is already create."
+                   << "specified target thread not be used";
     }
     return beanVar;
 }
@@ -81,7 +86,7 @@ QVariant McAbstractBeanFactory::resolveBeanReferenceToQVariant(const QSharedPoin
     if(!pluginPath.isEmpty()) {
         McRootBeanDefinitionPtr def = McRootBeanDefinitionPtr::create();
         def->setPluginPath(pluginPath);
-        auto beanVar = doCreate(def);
+        auto beanVar = doCreate(def, d->targetThread);
         if (!beanVar.isValid()) {
             qWarning() << QString("failed to create bean of plugin '%1'").arg(pluginPath);
             return QVariant();
@@ -89,6 +94,6 @@ QVariant McAbstractBeanFactory::resolveBeanReferenceToQVariant(const QSharedPoin
         return beanVar;
     }else{
         // 调用getBeanToVariant方法，根据bean引用的名称获取实例
-        return getBeanToVariant(beanRef->getName());
+        return getBeanToVariant(beanRef->getName(), d->targetThread);
     }
 }

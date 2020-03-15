@@ -14,6 +14,10 @@
 #include <QObject>
 #include <QVariant>
 
+QT_BEGIN_NAMESPACE
+class QThread;
+QT_END_NAMESPACE
+
 MC_INTERFACE IMcBeanFactory {
 
 public:
@@ -23,22 +27,25 @@ public:
 	 <函数名称>		getBean
 	 <函数说明>		根据bean的名称从容器中获取bean对象，此函数是线程安全的。
 	 <参数说明>		name bean名称
+                    thread 将要生存的目标线程
      <返回值>        bean实例。
                     注意：此函数可能返回空
 	 <作    者>		mrcao
      <时    间>		2019/12/22
 	**************************************************/
-    virtual QSharedPointer<QObject> getBean(const QString &name) Q_DECL_NOEXCEPT = 0;
+    virtual QSharedPointer<QObject> getBean(const QString &name, QThread *thread = nullptr) Q_DECL_NOEXCEPT = 0;
     /*************************************************
      <函数名称>		getBeanToVariant
      <函数说明>		根据bean的名称从容器中获取bean对象，此函数是线程安全的。
      <参数说明>		name bean名称
+                    thread 将要生存的目标线程，当前获取的bean和bean中的QObject属性都将
+                    存在于该线程，如果指定为null，则目标线程为调用该函数时的线程
      <返回值>        包含bean实例的QVariant。
                     注意：此函数可能返回无效的QVariant
      <作    者>		mrcao
      <时    间>		2019/12/22
     **************************************************/
-    virtual QVariant getBeanToVariant(const QString &name)  Q_DECL_NOEXCEPT = 0;
+    virtual QVariant getBeanToVariant(const QString &name, QThread *thread = nullptr)  Q_DECL_NOEXCEPT = 0;
 	/*************************************************
 	 <函数名称>		containsBean
 	 <函数说明>		检测容器中是否存在该bean
