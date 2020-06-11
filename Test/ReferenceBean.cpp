@@ -5,8 +5,16 @@
 #include "ApplicationContext/McContainerGlobal.h"
 #include "ApplicationContext/impl/McXmlApplicationContext.h"
 
+#define AAA(str) #str
+#define TEST_IMPL(Class, ...) AAA(Class##ConstPtrRef)
+
+#define TEST(...) \
+    qDebug() << TEST_IMPL(__VA_ARGS__);
+    //mcRegisterComponent<__VA_ARGS__>(TEST_IMPL(__VA_ARGS__));
+
 MC_STATIC(ReferenceBean)
-mcRegisterComponent<MC_DECL_TYPELIST(ReferenceBean)>("ReferenceBean");
+//mcRegisterComponent<MC_DECL_TYPELIST(ReferenceBean)>("ReferenceBean");
+TEST(MC_DECL_TYPELIST(ReferenceBean))
 Mc::Ioc::connect("referenceBean", "this", "signal_bean(QSharedPointer<A>)"
                  , "helloWorld", "slot_hello(QSharedPointer<A>)");
 //mcRegisterComponent<ReferenceBean, IReferenceBean>("ReferenceBean");

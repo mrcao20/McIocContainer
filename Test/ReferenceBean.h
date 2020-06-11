@@ -16,6 +16,8 @@
 #include "ListModel.h"
 //#include "PropertyParser/IMcPropertyParserCollection.h"
 
+MC_DECLARE_POINTER(HelloWorld)
+
 class ReferenceBean : public QObject, public IRR, public QEnableSharedFromThis<ReferenceBean> {
     Q_OBJECT
     Q_CLASSINFO(MC_COMPONENT, MC_CONTROLLER)
@@ -81,3 +83,5 @@ public:
 };
 
 MC_DECLARE_METATYPE(ReferenceBean)
+
+class ReferenceBean;

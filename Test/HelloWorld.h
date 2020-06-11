@@ -53,4 +53,5 @@ public:
     HelloWorld *h;
 };
 
+MC_DECLARE_POINTER(HelloWorld)
 MC_DECLARE_METATYPE(HelloWorld)

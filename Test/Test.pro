@@ -15,6 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         HelloWorld.cpp \
         ListModel.cpp \
+        MacroTest.cpp \
         QmlSocketTest.cpp \
         ReferenceBean.cpp \
         a.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     IRR.h \
     IReferenceBean.h \
     ListModel.h \
+    MacroTest.h \
     QmlSocketTest.h \
     ReferenceBean.h \
     a.h
