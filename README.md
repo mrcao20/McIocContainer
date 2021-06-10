@@ -130,4 +130,4 @@ MC_STATIC_END
 
 # 后续
 由于部分的接口和代码需要做调整，再加上后面的功能超出了IOC功能的范畴，所以整理过后的代码放在新仓库中<br/>
-见新项目McIocBoot
+见新项目McQuickBoot
